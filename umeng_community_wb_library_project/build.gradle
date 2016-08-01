@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+apply plugin: 'com.android.library'
+
+
+ext{
+    bintrayRepo = 'maven'
+    bintrayName = 'umengdiscuss'
+
+    publishedGroupId = 'com.umeng.wsq'
+    libraryName = 'umengdiscuss'
+    artifact = 'umeng_community_wb_library_project'
+
+    libraryDescription = 'wb'
+
+    siteUrl = 'https://github.com/umeng/community_discuss'
+    gitUrl = 'https://github.com/umeng/community_discuss.git'
+    libraryVersion = '2.6.1'
+    developerId = 'mymdeep'
+    developerName = 'wangfei'
+    developerEmail = 'mymdeep@vip.qq.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 android {
     compileSdkVersion 22
     buildToolsVersion '22.0.1'
