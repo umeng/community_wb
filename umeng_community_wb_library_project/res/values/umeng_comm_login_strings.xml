@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="umeng_comm_not_support">暂不支持该平台登录</string>
+    <string name="umeng_socialize_3rdparty_login">使用第三方账户登录</string>
+    <string name="umeng_socialize_login_statement">我们不会在未经同意的情况下在任何社交媒体发布消息</string>
+    <string name="umeng_socialize_load_userinfo">获取用户信息中...</string>
+    <string name="umeng_socialize_fetch_info_failed">获取用户信息失败...</string>
+
+    <string name="umeng_comm_l_nickname">昵称</string>
+    <string name="umeng_comm_l_login">登录</string>
+    <string name="umeng_comm_l_secret">密码</string>
+    <string name="umeng_comm_l_register">注册</string>
+    <string name="umeng_comm_l_forget"><u>忘记密码</u></string>
+    <string name="umeng_simplify_l_login">登 录</string>
+    <string name="umeng_simplify_l_register">注 册</string>
+    <string name="umeng_comm_login_l_quick">立即登录</string>
+    <string name="umeng_comm_login_l_num">请输入账号/邮箱</string>
+    <string name="umeng_comm_login_num_l_hint">请输有效邮箱，便于找回密码</string>
+    <string name="umeng_comm_l_id">账号</string>
+    <string name="umeng_comm_login_l_secret">请输入密码</string>
+    <string name="umeng_comm_secret_l_style">2-20个中英文字符</string>
+    <string name="umeng_comm_finish_l_register">完成注册</string>
+    <string name="umeng_comm_other_l_login">其他登录方式</string>
+</resources>

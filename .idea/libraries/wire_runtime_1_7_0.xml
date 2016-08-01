@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="wire-runtime-1.7.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/umeng_community_wb_library_project/libs/wire-runtime-1.7.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

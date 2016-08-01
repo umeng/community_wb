@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="x86,armeabi-v7a"
+    api-level="19"
+    density="xhdpi"
+    format="7"
+    timestamp="43868665245764"
+    token="-8238957063469152884" >
+
+    <task
+        name="javac"
+        duration="4449" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="549" />
+    <task
+        name="verifier"
+        duration="109" />
+
+    <artifact
+        location="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/outputs/apk/app-debug.apk"
+        type="MAIN" />
+
+    <build timestamp="43868665245764" >
+        <artifact
+            location="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/outputs/apk/app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>

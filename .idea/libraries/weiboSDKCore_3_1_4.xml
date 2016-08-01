@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="weiboSDKCore_3.1.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/umeng_community_wb_library_project/libs/weiboSDKCore_3.1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

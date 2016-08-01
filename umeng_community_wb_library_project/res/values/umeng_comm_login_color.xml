@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="umeng_comm_l_e8">#e8eaee</color>
+    <color name="umeng_comm_white_l_color">#ffffff</color>
+    <color name="umeng_comm_color_l_33">#333333</color>
+    <color name="umeng_comm_l_f6f7f9">#f6f7f9</color>
+    <color name="umeng_comm_color_l_99">#999999</color>
+    <color name="umeng_comm_black_l_color">#000000</color>
+    <color name="umeng_comm_l_3f">#3f8edf</color>
+
+    <color name="umeng_comm_l_469ef8">#469ef8</color>
+</resources>
