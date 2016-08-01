@@ -1,18 +1,18 @@
 [
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/layout-sw550dp-large-v13/umeng_socialize_post_share.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/umeng_community_demo_weibo/umeng_community_wb_library_project/unspecified/res/layout-sw550dp-large-v13/umeng_socialize_post_share.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/layout-sw550dp-large-v13/umeng_socialize_post_share.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/layout-sw550dp-large-v13/umeng_socialize_full_alert_dialog.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/umeng_community_demo_weibo/umeng_community_wb_library_project/unspecified/res/layout-sw550dp-large-v13/umeng_socialize_full_alert_dialog.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/layout-sw550dp-large-v13/umeng_socialize_full_alert_dialog.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/layout-sw550dp-large-v13/umeng_socialize_titile_bar.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/umeng_community_demo_weibo/umeng_community_wb_library_project/unspecified/res/layout-sw550dp-large-v13/umeng_socialize_titile_bar.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/layout-sw550dp-large-v13/umeng_socialize_titile_bar.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/layout-sw550dp-large-v13/umeng_socialize_oauth_dialog.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/umeng_community_demo_weibo/umeng_community_wb_library_project/unspecified/res/layout-sw550dp-large-v13/umeng_socialize_oauth_dialog.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/layout-sw550dp-large-v13/umeng_socialize_oauth_dialog.xml"
     }
 ]

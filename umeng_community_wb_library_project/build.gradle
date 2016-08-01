@@ -15,7 +15,7 @@ ext{
 
     siteUrl = 'https://github.com/umeng/community_discuss'
     gitUrl = 'https://github.com/umeng/community_discuss.git'
-    libraryVersion = '2.6.1'
+    libraryVersion = '2.6.2'
     developerId = 'mymdeep'
     developerName = 'wangfei'
     developerEmail = 'mymdeep@vip.qq.com'
@@ -54,4 +54,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:22.0.0'
 }
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

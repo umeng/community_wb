@@ -19,7 +19,7 @@ ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/ma
 		ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:2:11-69
 uses-sdk
 ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:8:5-10:41
-MERGED from [umeng_community_demo_weibo:umeng_community_wb_library_project:unspecified] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/umeng_community_demo_weibo/umeng_community_wb_library_project/unspecified/AndroidManifest.xml:7:5-9:41
+MERGED from [com.umeng.wsq:umeng_community_wb_library_project:2.6.2] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/AndroidManifest.xml:7:5-9:41
 	android:targetSdkVersion
 		ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:10:9-38
 		INJECTED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml
@@ -136,7 +136,7 @@ ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/ma
 		ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:67:22-64
 application
 ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:69:5-382:19
-MERGED from [umeng_community_demo_weibo:umeng_community_wb_library_project:unspecified] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/umeng_community_demo_weibo/umeng_community_wb_library_project/unspecified/AndroidManifest.xml:11:5-12:19
+MERGED from [com.umeng.wsq:umeng_community_wb_library_project:2.6.2] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/AndroidManifest.xml:11:5-12:19
 	android:label
 		ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:74:9-41
 	android:hardwareAccelerated
