@@ -1,18 +1,18 @@
 [
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/color/umeng_comm_location_text.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/color/umeng_comm_location_text.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.6/res/color/umeng_comm_location_text.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/color/umeng_comm_topic_toogle_color.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/color/umeng_comm_topic_toogle_color.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.6/res/color/umeng_comm_topic_toogle_color.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/color/umeng_comm_toogle_color.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/color/umeng_comm_toogle_color.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.6/res/color/umeng_comm_toogle_color.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/color/umeng_switch_textcolor.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/color/umeng_switch_textcolor.xml"
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.6/res/color/umeng_switch_textcolor.xml"
     }
 ]

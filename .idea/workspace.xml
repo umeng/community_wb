@@ -32,11 +32,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="umeng_socialize_strings.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="umeng_socialize_strings.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/umeng_community_wb_library_project/res/values/umeng_socialize_strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28417265">
+            <state vertical-scroll-proportion="-2.051948">
               <caret line="72" column="38" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/umeng_community_wb_library_project/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.42079207">
+              <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -545,9 +565,9 @@
                 <option name="name" value="prepareComAndroidSupportSupportV42200Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.umeng.wsq:umeng_community_wb_library_project:2.6.2" />
+                <option name="description" value="Prepare com.umeng.wsq:umeng_community_wb_library_project:2.6.6" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComUmengWsqUmeng_community_wb_library_project262Library" />
+                <option name="name" value="prepareComUmengWsqUmeng_community_wb_library_project266Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1252,9 +1272,9 @@
                 <option name="name" value="prepareComAndroidSupportSupportV42200Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.umeng.wsq:umeng_community_wb_library_project:2.6.2" />
+                <option name="description" value="Prepare com.umeng.wsq:umeng_community_wb_library_project:2.6.6" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComUmengWsqUmeng_community_wb_library_project262Library" />
+                <option name="name" value="prepareComUmengWsqUmeng_community_wb_library_project266Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -2100,7 +2120,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="5880097616000" />
+        <entry key="$PROJECT_DIR$" value="5880691356000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -2622,12 +2642,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/umeng_community_wb_library_project/res/values/umeng_socialize_strings.xml" />
+        <option value="$PROJECT_DIR$/umeng_community_wb_library_project/build.gradle" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1357" />
-    <option name="y" value="-2" />
+    <option name="x" value="40" />
+    <option name="y" value="23" />
     <option name="width" value="1245" />
     <option name="height" value="777" />
   </component>
@@ -2725,6 +2746,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="umeng_community_demo_weibo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="umeng_community_demo_weibo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2934,7 +2969,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1357" y="-2" width="1245" height="777" extended-state="0" />
+    <frame x="40" y="23" width="1245" height="777" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -2981,8 +3016,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/umeng_community_wb_library_project/res/values/umeng_socialize_strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28417265">
+        <state vertical-scroll-proportion="-2.051948">
           <caret line="72" column="38" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/umeng_community_wb_library_project/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42079207">
+          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
           <folding />
         </state>
       </provider>

@@ -13,9 +13,9 @@ ext{
 
     libraryDescription = 'wb'
 
-    siteUrl = 'https://github.com/umeng/community_discuss'
-    gitUrl = 'https://github.com/umeng/community_discuss.git'
-    libraryVersion = '2.6.2'
+    siteUrl = 'https://github.com/umeng/community_wb'
+    gitUrl = 'https://github.com/umeng/community_wb.git'
+    libraryVersion = '2.6.6'
     developerId = 'mymdeep'
     developerName = 'wangfei'
     developerEmail = 'mymdeep@vip.qq.com'
