@@ -38,12 +38,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.umeng.comm.core.beans.ImageItem;
+import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.imageloader.ImgDisplayOption;
 import com.umeng.comm.core.imageloader.LocalImageLoader;
 import com.umeng.comm.core.imageloader.UMImageLoader;
 import com.umeng.comm.core.imageloader.UMImageLoader.ImageLoadingListener;
 import com.umeng.comm.core.imageloader.cache.ImageCache;
 import com.umeng.comm.core.sdkmanager.ImageLoaderManager;
+import com.umeng.comm.core.utils.DeviceUtils;
+import com.umeng.comm.core.utils.Log;
 import com.umeng.comm.core.utils.Md5Helper;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.common.ui.presenter.impl.ImageBrowserPresenter;
@@ -230,7 +233,6 @@ public class ImagePagerAdapter extends PagerAdapter {
                         if (view == null) {
                             return;
                         }
-
                         ScaleImageView imageView = (ScaleImageView) view;
                         if (isUriEqualsWithImageViewTag(imageView.getTag(), imageUri)
                                 && loadedImage != null) {
@@ -250,10 +252,11 @@ public class ImagePagerAdapter extends PagerAdapter {
     private Point getSize(ImageView imageView) {
         Point size = new Point();
         if (imageView.getWidth() > 0) {
+            Log.e("xxxxxx=",">0");
             size.x = imageView.getWidth();
             size.y = imageView.getHeight();
         } else {
-            size.x = size.y = 500;
+            size.x = size.y = Constants.DEFAULT_DISPLAYSIZE;
         }
         return size;
     }

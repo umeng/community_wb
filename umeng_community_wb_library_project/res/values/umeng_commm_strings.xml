@@ -225,6 +225,7 @@
     <string name="umeng_comm_recommend">推荐</string>
     <string name="umeng_comm_other">其它</string>
     <string name="umeng_comm_myself">我的</string>
+    <string name="umeng_comm_message">消息</string>
     <string name="umeng_comm_no_recommend_user">暂时没有推荐用户咯</string>
     <!-- empty tips start-->
     <string name="umeng_comm_no_data">！！！！！！！</string>

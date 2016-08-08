@@ -128,6 +128,7 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
             if (mFeedView != null) {
                 FeedItem item = getFeed(intent);
                 List<FeedItem> items = mFeedView.getBindDataSource();
+
                 for (FeedItem feed : items) {
                     if (feed.id.equals(item.id)) {
                         // feed = item;
@@ -139,9 +140,13 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
                         feed.forwardCount = item.forwardCount;
                         feed.isCollected = item.isCollected;
                         feed.category = item.category;
+                        if (item.category != FeedItem.CATEGORY.FAVORITES || !item.isCollected) {
+                            onCancelFavoritesFeed(feed);
+                        }
                         break;
                     }
                 }
+
                 // 此处不可直接调用adapter.notifyDataSetChanged，其他地方在notifyDataSetChanged（）方法中又逻辑处理
                 mFeedView.notifyDataSetChanged();
             }
@@ -260,6 +265,15 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
     }
 
     /**
+     * hook mothed
+     * 处理取消收藏的逻辑（收藏列表）
+     *
+     * @return
+     */
+    protected void onCancelFavoritesFeed(FeedItem feedItem) {
+    }
+
+    /**
      * 判断是不是当前登录用户的feed列表
      *
      * @return
@@ -270,11 +284,12 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
 
     // TODO 此处对于invalidate需要重构
     private void postFeedComplete(FeedItem feedItem) {
-        if (isAddToFeedList()) {
+        if (isAddToFeedList(feedItem)) {
             mFeedView.getBindDataSource().add(feedItem);
             sortFeedItems(mFeedView.getBindDataSource());
             mFeedView.notifyDataSetChanged();
             mFeedView.scrollToTop();
+            checkToShowEmptyView();
         }
         updateForwardCount(feedItem, 1);
     }
@@ -284,7 +299,7 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
      *
      * @return
      */
-    protected boolean isAddToFeedList() {
+    protected boolean isAddToFeedList(FeedItem feedItem) {
         return false;
     }
 
@@ -296,6 +311,7 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
     private void deleteFeedComplete(FeedItem feedItem) {
         if (isReomveFeedOnDeleteComplete()) {
             mFeedView.getBindDataSource().remove(feedItem);
+            checkToShowEmptyView();
         }
 
         int len = mFeedView.getBindDataSource().size();
@@ -317,8 +333,24 @@ public class FeedListPresenter extends BaseFeedListPresenter implements Filter<F
         updateForwardCount(feedItem, -1);
     }
 
+    /**
+     * 删除feed后，是否在列表里移除（收藏列表）
+     *
+     * @return
+     */
     protected boolean isReomveFeedOnDeleteComplete() {
         return true;
+    }
+
+    /**
+     * 判断是否是否显示空白页
+     */
+    protected final void checkToShowEmptyView() {
+        if (mFeedView.getBindDataSource().isEmpty()) {
+            mFeedView.showEmptyView();
+        } else {
+            mFeedView.hideEmptyView();
+        }
     }
 
     /**

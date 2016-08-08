@@ -524,6 +524,10 @@
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_comm_feed_detail_yellow_p.xml"
     },
     {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_animation_right_to_left.xml",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_animation_right_to_left.xml"
+    },
+    {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_comm_qq_pressed.png",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_comm_qq_pressed.png"
     },
@@ -540,12 +544,12 @@
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_comm_image_save_bg.xml"
     },
     {
-        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_comm_button_text_color.xml",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_comm_button_text_color.xml"
-    },
-    {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_comm_toastbg.xml",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_comm_toastbg.xml"
+    },
+    {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_comm_button_text_color.xml",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_comm_button_text_color.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_socialize_title_tab_button_right.xml",
@@ -610,6 +614,10 @@
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_socialize_title_tab_left_normal.png",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_socialize_title_tab_left_normal.png"
+    },
+    {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_animation_left_to_right.xml",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/res/drawable/umeng_animation_left_to_right.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/res/merged/debug/drawable/umeng_socialize_title_right_bt_normal.png",

@@ -35,11 +35,12 @@ import android.widget.TextView;
 import com.umeng.comm.core.beans.CommConfig;
 import com.umeng.comm.core.beans.MessageCount;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.colortheme.ColorQueque;
 
 public abstract class NewMsgBaseActivity extends BaseFragmentActivity implements OnClickListener {
 
-    public MessageCount mUnreadMsg = CommConfig.getConfig().mMessageCount;
+    public MessageCount mUnreadMsg;
 
     private TextView mTitleView;
 
@@ -49,11 +50,20 @@ public abstract class NewMsgBaseActivity extends BaseFragmentActivity implements
     public View mFragmentContainerView;
     public View mBtnContainerView;
 
+    protected NavigationCommand mNavigationCommand;
+
+    /**
+     * title str
+     */
+    private String mTitleStr;
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(ResFinder.getLayout("umeng_commm_my_msg_layout"));
         setFragmentContainerId(ResFinder.getId("umeng_comm_my_msg_fragment"));
+
+        mUnreadMsg = CommConfig.getConfig().mMessageCount;
 
         initParams();
         initTitle();
@@ -77,17 +87,19 @@ public abstract class NewMsgBaseActivity extends BaseFragmentActivity implements
      *
      */
     private void initTitle() {
-        int backButtonResId = ResFinder.getId("umeng_comm_title_back_btn");
+        int backButtonResId = ResFinder.getId("umeng_comm_setting_back");
         findViewById(backButtonResId).setOnClickListener(this);
 
-        int titleResId = ResFinder.getId("umeng_comm_title_tv");
+        mTitleStr = ResFinder.getString("umeng_comm_message");
+
+        int titleResId = ResFinder.getId("umeng_comm_setting_title");
         mTitleView = (TextView)findViewById(titleResId);
-        mTitleView.setText("消息");
+        mTitleView.setText(mTitleStr);
 
         mFragmentContainerView = findViewById(ResFinder.getId("umeng_comm_my_msg_fragment"));
         mFragmentContainerView.setVisibility(View.GONE);
         mBtnContainerView = findViewById(ResFinder.getId("umeng_comm_my_msg_item_content"));
-        findViewById(ResFinder.getId("umeng_comm_title_setting_btn")).setVisibility(View.GONE);
+        findViewById(ResFinder.getId("umeng_comm_save_bt")).setVisibility(View.GONE);
         settingBtnViews();
     }
 
@@ -198,7 +210,7 @@ public abstract class NewMsgBaseActivity extends BaseFragmentActivity implements
         if(mFragmentContainerView.getVisibility() == View.VISIBLE){
             mFragmentContainerView.setVisibility(View.GONE);
             mBtnContainerView.setVisibility(View.VISIBLE);
-            mTitleView.setText("消息");
+            mTitleView.setText(mTitleStr);
             return true;
         }else{
             return false;

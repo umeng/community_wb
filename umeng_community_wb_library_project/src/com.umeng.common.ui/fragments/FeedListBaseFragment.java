@@ -16,12 +16,14 @@ import com.umeng.comm.core.beans.CommUser;
 import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.imageloader.UMImageLoader;
 import com.umeng.comm.core.sdkmanager.ImageLoaderManager;
+import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.common.ui.adapters.CommonAdapter;
 import com.umeng.common.ui.dialogs.CustomCommomDialog;
 import com.umeng.common.ui.mvpview.MvpFeedView;
 import com.umeng.common.ui.presenter.impl.FeedListPresenter;
+import com.umeng.common.ui.util.BroadcastUtils;
 import com.umeng.common.ui.util.Filter;
 import com.umeng.common.ui.widgets.BaseView;
 import com.umeng.common.ui.widgets.RefreshLayout;
@@ -75,6 +77,13 @@ public abstract class FeedListBaseFragment<P extends FeedListPresenter, T extend
     private BaseView mBaseView;
 
 //    protected boolean isVisit = true;
+
+    private boolean isSetPaddingToListView = false;
+
+    /**
+     * feedlistview的dividerHeight
+     */
+    private int mFeedListDividerHeight = -1;
 
     @Override
     protected int getFragmentLayout() {
@@ -169,6 +178,12 @@ public abstract class FeedListBaseFragment<P extends FeedListPresenter, T extend
         mFeedsListView.setAnimationCacheEnabled(false);
         // 开启smooth scrool bar
         mFeedsListView.setSmoothScrollbarEnabled(true);
+        if (mFeedListDividerHeight != -1) {
+            mFeedsListView.setDividerHeight(mFeedListDividerHeight);
+        }
+        if (isSetPaddingToListView) {
+            setPaddingToListView();
+        }
     }
 
     /**
@@ -177,9 +192,17 @@ public abstract class FeedListBaseFragment<P extends FeedListPresenter, T extend
     protected void showPostButtonWithAnim() {
     }
 
-    protected abstract void deleteInvalidateFeed(FeedItem feedItem);
+    protected void deleteInvalidateFeed(FeedItem feedItem) {
+        mFeedLvAdapter.getDataSource().remove(feedItem);
+        mFeedLvAdapter.notifyDataSetChanged();
+    }
 
-    protected abstract void updateAfterDelete(FeedItem feedItem);
+    protected void updateAfterDelete(FeedItem feedItem) {
+        mFeedLvAdapter.getDataSource().remove(feedItem);
+        mFeedLvAdapter.notifyDataSetChanged();
+        // 发送删除广播
+        BroadcastUtils.sendFeedDeleteBroadcast(getActivity(), feedItem);
+    }
 
     /**
      * 加载更多数据</br>
@@ -272,20 +295,18 @@ public abstract class FeedListBaseFragment<P extends FeedListPresenter, T extend
         }
         mRefreshLayout.setRefreshing(false);
         mRefreshLayout.setLoading(false);
-        if (mBaseView != null && mFeedLvAdapter != null) {
-            if (mFeedLvAdapter.isEmpty()) {
-                mBaseView.showEmptyView();
-            } else {
-                mBaseView.hideEmptyView();
-            }
-        }
+        checkToShowEmptyView();
     }
 
     @Override
-    public abstract List<FeedItem> getBindDataSource();
+    public List<FeedItem> getBindDataSource() {
+        return mFeedLvAdapter.getDataSource();
+    }
 
     @Override
-    public abstract void notifyDataSetChanged();
+    public void notifyDataSetChanged() {
+        mFeedLvAdapter.notifyDataSetChanged();
+    }
 
     /**
      * 判断是否需要展示最热在推荐帖子界面
@@ -366,4 +387,65 @@ public abstract class FeedListBaseFragment<P extends FeedListPresenter, T extend
         }
         mFeedsListView.setSelection(0);
     }
+
+    /**
+     * 判断是否是否显示空白页
+     */
+    protected void checkToShowEmptyView() {
+        if (mBaseView != null && mFeedLvAdapter != null) {
+            if (mFeedLvAdapter.isEmpty()) {
+                showEmptyView();
+            } else {
+                hideEmptyView();
+            }
+        }
+    }
+
+    /**
+     * 显示空白页面
+     */
+    @Override
+    public void showEmptyView() {
+        if (mBaseView != null) {
+            mBaseView.showEmptyView();
+        }
+    }
+
+    /**
+     * 隐藏空白页面
+     */
+    @Override
+    public void hideEmptyView() {
+        if (mBaseView != null) {
+            mBaseView.hideEmptyView();
+        }
+    }
+
+    /**
+     * 设置list的top padding
+     */
+    private void setPaddingToListView() {
+        mFeedsListView.setClipToPadding(false);
+        mFeedsListView.setPadding(0, CommonUtils.dip2px(getActivity(), 6), 0, 0);
+    }
+
+    /**
+     * 是否设置listview的top padding，间距为item的间距
+     *
+     * @param isSetPaddingToListView
+     */
+    public void isSetPaddingToListView(boolean isSetPaddingToListView) {
+        this.isSetPaddingToListView = isSetPaddingToListView;
+    }
+
+    /**
+     * 设置listview dividerHeight
+     *
+     * @param height
+     */
+    public void setFeedListDividerHeight(int height) {
+        mFeedListDividerHeight = height;
+    }
+
+
 }

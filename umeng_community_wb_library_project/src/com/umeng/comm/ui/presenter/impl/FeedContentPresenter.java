@@ -34,16 +34,18 @@ import com.umeng.comm.core.beans.ImageItem;
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.utils.ToastMsg;
 import com.umeng.comm.ui.activities.FeedDetailActivity;
+import com.umeng.comm.ui.activities.ForwardActivity;
 import com.umeng.comm.ui.activities.UserInfoActivity;
 import com.umeng.common.ui.dialogs.ImageBrowser;
+import com.umeng.common.ui.presenter.impl.BaseFeedPresenter;
 
 import java.util.List;
 
 
 /**
- * @author mrsimple
+ * @author wangfei
  */
-public class FeedContentPresenter extends BaseFeedWeiboPresenter {
+public class FeedContentPresenter extends BaseFeedPresenter {
     ImageBrowser mImageBrowser;
     FeedItem mFeedItem;
 
@@ -62,7 +64,12 @@ public class FeedContentPresenter extends BaseFeedWeiboPresenter {
         intent.putExtra(Constants.FEED, feedItem);
         mContext.startActivity(intent);
     }
-
+    public void gotoForwardActivity(FeedItem item) {
+        Intent intent = new Intent(mContext,
+                ForwardActivity.class);
+        intent.putExtra(Constants.FEED, item);
+        mContext.startActivity(intent);
+    }
     public void clickFeedItem() {
         gotoFeedDetailActivity(mFeedItem);
     }

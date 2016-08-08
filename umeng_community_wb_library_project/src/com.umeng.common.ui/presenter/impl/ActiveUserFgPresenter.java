@@ -33,19 +33,18 @@ import com.umeng.common.ui.util.BroadcastUtils;
 
 import java.util.List;
 
-
 /**
  *
  */
 public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>> {
 
     protected MvpActiveUserFgView mActiveUserFgView;
-    private Topic mTopic;
-    private String mNextPageUrl;
+    protected Topic mTopic;
+    protected String mNextPageUrl;
 
-    private boolean isRegisterReceiver = true;
+    protected boolean isRegisterReceiver = true;
 
-    private boolean isGuestMode = true;
+    protected boolean isGuestMode = true;
 
     public ActiveUserFgPresenter(MvpActiveUserFgView activeUserFgView) {
         this.mActiveUserFgView = activeUserFgView;
@@ -139,8 +138,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
         dealNextpageUrl(response.nextPageUrl, fromRefresh);
         List<CommUser> users = response.result;
         if (CommonUtils.isListEmpty(users)) {
-            // 加载用户为空
-//            ToastMsg.showShortMsgByResName("umeng_comm_no_recommend_user");
+
             if (mActiveUserFgView.getBindDataSource().isEmpty()) {
                 mActiveUserFgView.showEmptyView();
             } else {
@@ -166,7 +164,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
         dealGuestMode(response.isVisit);
     }
 
-    private void dealNextpageUrl(String url, boolean fromRefersh) {
+    protected void dealNextpageUrl(String url, boolean fromRefersh) {
         if (fromRefersh && TextUtils.isEmpty(mNextPageUrl)) {
             mNextPageUrl = url;
         } else if (!fromRefersh) {
@@ -202,7 +200,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
         }
     }
 
-    private void followUser(final CommUser user) {
+    protected void followUser(final CommUser user) {
         mCommunitySDK.followUser(user, new SimpleFetchListener<Response>() {
 
             @Override
@@ -213,7 +211,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
                 }
                 if (response.errCode == ErrorCode.NO_ERROR) {
                     ToastMsg.showShortMsgByResName("umeng_comm_follow_user_success");
-                    user.fansCount += 1;
+//                    user.fansCount += 1;
                     user.isFollowed = true;
 
                     DatabaseAPI.getInstance().getFollowDBAPI().follow(user);
@@ -223,7 +221,9 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
                     int index = dataSource.indexOf(user);
                     dataSource.get(index).extraData.putBoolean(Constants.IS_FOCUSED, true);
                     mActiveUserFgView.notifyDataSetChanged();
-
+                    CommUser loginuser = CommonUtils.getLoginUser(mContext);
+                    loginuser.followCount += 1;
+                    CommonUtils.saveLoginUserInfo(mContext, loginuser);
                     // 发送关注用户的广播
                     BroadcastUtils.sendUserFollowBroadcast(mContext, user);
                     BroadcastUtils.sendCountUserBroadcast(mContext, 1);
@@ -274,7 +274,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
         }
     }
 
-    private void cancelFollowUser(final CommUser user) {
+    protected void cancelFollowUser(final CommUser user) {
         mCommunitySDK.cancelFollowUser(user, new SimpleFetchListener<Response>() {
 
             @Override
@@ -286,7 +286,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
                 if (response.errCode == ErrorCode.NO_ERROR) {
                     ToastMsg.showShortMsgByResName("umeng_comm_follow_cancel_success");
 
-                    user.fansCount -= 1;
+//                    user.fansCount -= 1;
                     user.isFollowed = false;
 
                     DatabaseAPI.getInstance().getFollowDBAPI().unfollow(user);
@@ -296,7 +296,9 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
                     int Index = mActiveUserFgView.getBindDataSource().indexOf(user);
                     mActiveUserFgView.getBindDataSource().get(Index).extraData.putBoolean(Constants.IS_FOCUSED, false);
                     mActiveUserFgView.notifyDataSetChanged();
-
+                    CommUser loginuser = CommonUtils.getLoginUser(mContext);
+                    loginuser.followCount -= 1;
+                    CommonUtils.saveLoginUserInfo(mContext, loginuser);
                     // 发送取消关注的广播
                     BroadcastUtils.sendUserCancelFollowBroadcast(mContext, user);
                     BroadcastUtils.sendCountUserBroadcast(mContext, -1);
@@ -317,7 +319,7 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
         });
     }
 
-    private boolean isMySelf(CommUser user) {
+    protected boolean isMySelf(CommUser user) {
         if (user.id.equals(CommConfig.getConfig().loginedUser.id)) {
             ToastMsg.showShortMsgByResName("umeng_comm_no_follow_unfollow_myself");
             return true;
@@ -326,7 +328,9 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
     }
 
     protected BroadcastUtils.DefalutReceiver mReceiver = new BroadcastUtils.DefalutReceiver() {
+
         public void onReceiveUser(Intent intent) {
+
             BroadcastUtils.BROADCAST_TYPE type = getType(intent);
             if (type == BroadcastUtils.BROADCAST_TYPE.TYPE_USER_LOGOUT) {
                 afterUserLogout();
@@ -339,11 +343,20 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
             if (index < 0) {
                 return;
             }
+            CommUser tempUser = dataSource.get(index);
+            int fansCount = tempUser.fansCount;
             if (type == BroadcastUtils.BROADCAST_TYPE.TYPE_USER_FOLLOW) {
-                dataSource.get(index).extraData.putBoolean(Constants.IS_FOCUSED, true);
+                fansCount += 1;
+                tempUser.extraData.putBoolean(Constants.IS_FOCUSED, true);
             } else if (type == BroadcastUtils.BROADCAST_TYPE.TYPE_USER_CANCEL_FOLLOW) {
-                dataSource.get(index).extraData.putBoolean(Constants.IS_FOCUSED, false);
+                fansCount -= 1;
+                tempUser.extraData.putBoolean(Constants.IS_FOCUSED, false);
             }
+            // 避免出现粉丝数为负数的情况
+            if (fansCount < 0) {
+                fansCount = 0;
+            }
+            tempUser.fansCount = fansCount;
             mActiveUserFgView.notifyDataSetChanged();
         }
     };
@@ -355,13 +368,13 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
     /**
      * 注册登录成功时的广播</br>
      */
-    private void registerLoginSuccessBroadcast() {
+    protected void registerLoginSuccessBroadcast() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ACTION_LOGIN_SUCCESS);
         mContext.registerReceiver(mLoginReceiver, filter);
     }
 
-    private BroadcastReceiver mLoginReceiver = new BroadcastReceiver() {
+    protected BroadcastReceiver mLoginReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -388,17 +401,17 @@ public class ActiveUserFgPresenter extends BaseFragmentPresenter<List<CommUser>>
      *
      * @return
      */
-    private boolean isCanLoadMore() {
+    protected boolean isCanLoadMore() {
         // 访客模式或者已登录
         boolean isLogin = (mContext != null) && CommonUtils.isLogin(mContext);
         return isGuestMode || isLogin;
     }
 
-    private void afterUserLogout() {
+    protected void afterUserLogout() {
         updateFollowStateAfterLogout();
     }
 
-    private void updateFollowStateAfterLogout() {
+    protected void updateFollowStateAfterLogout() {
         int size = mActiveUserFgView.getBindDataSource().size();
         for (int i = 0; i < size; i++) {
             mActiveUserFgView.getBindDataSource().get(i).extraData.putBoolean(Constants.IS_FOCUSED, false);

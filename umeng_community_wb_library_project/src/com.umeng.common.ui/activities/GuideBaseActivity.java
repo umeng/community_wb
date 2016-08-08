@@ -62,7 +62,7 @@ public abstract class GuideBaseActivity extends FragmentActivity {
      * 显示话题引导页面</br>
      */
 //    protected void showTopicFragment() {
-//        RecommendTopicBaseFragment topicRecommendDialog =RecommendTopicBaseFragment.newRecommendTopicFragment();
+//        RecommendTopicFragment topicRecommendDialog =RecommendTopicFragment.newRecommendTopicFragment();
 //        topicRecommendDialog.setOnDismissListener(new OnDismissListener() {
 //
 //            @Override

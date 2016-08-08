@@ -29,8 +29,9 @@ import android.support.v4.app.Fragment;
 
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.utils.ResFinder;
-import com.umeng.comm.ui.fragments.FollowedTopicFragment;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
 import com.umeng.common.ui.activities.BaseTitleActivity;
+import com.umeng.common.ui.fragments.FollowedTopicFragment;
 
 /**
  * 用户关注的话题列表
@@ -58,6 +59,8 @@ public class FollowedTopicActivity extends BaseTitleActivity {
 
     private Fragment createFragment(Intent intent) {
         String uid = intent.getStringExtra(Constants.USER_ID_KEY);
-        return FollowedTopicFragment.newFollowedTopicFragment(uid);
+        FollowedTopicFragment followedTopicFragment = FollowedTopicFragment.newFollowedTopicFragment(uid);
+        followedTopicFragment.setNavigation(new NavigationCommandImpl(this));
+        return followedTopicFragment;
     }
 }

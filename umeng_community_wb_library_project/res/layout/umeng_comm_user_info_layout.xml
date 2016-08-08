@@ -5,75 +5,15 @@
     android:background="?attr/umeng_comm_userinfo_bg">
 
     <!-- action bar -->
-    <RelativeLayout
-        android:id="@+id/umeng_comm_title_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/umeng_comm_dimen_100px"
-
-        android:background="?attr/default_background_color">
-
-
-
-        <ImageView
-            android:id="@+id/umeng_comm_title_back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="@dimen/umeng_comm_dimen_28px"
-            android:paddingRight="@dimen/umeng_comm_dimen_20px"
-            android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:src="?attr/umeng_comm_backbutton_src" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="个人中心"
-            android:textColor="?attr/umeng_feed_button_text_bg"
-            android:textSize="@dimen/umeng_comm_dimen_40px" />
-
-
-        <LinearLayout
-            android:id="@+id/umeng_comm_title_more_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/umeng_comm_dimen_10px"
-                android:layout_marginRight="@dimen/umeng_comm_dimen_30px"
-                android:src="?attr/umeng_comm_more_icon" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/umeng_comm_title_chat_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/umeng_comm_title_more_btn"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/umeng_comm_favourite_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/umeng_comm_dimen_10px"
-                android:layout_marginRight="@dimen/umeng_comm_dimen_30px"
-                android:src="?attr/umeng_comm_chat_icon" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/umeng_comm_actionbar_fixed_id"
+        layout="@layout/umeng_comm_setting_title_bar"/>
 
     <View
         android:id="@+id/umeng_comm_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/umeng_comm_dimen_1px"
-        android:layout_below="@id/umeng_comm_title_layout"
+        android:layout_below="@id/umeng_comm_actionbar_fixed_id"
         android:background="?attr/umeng_comm_divider" />
 
     <RelativeLayout

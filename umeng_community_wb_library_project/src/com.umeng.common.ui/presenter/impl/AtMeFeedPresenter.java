@@ -39,7 +39,8 @@ public class AtMeFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchBeAtFeeds(0, mRefreshListener);
     }
 

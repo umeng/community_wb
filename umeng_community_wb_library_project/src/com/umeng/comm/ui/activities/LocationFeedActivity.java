@@ -29,8 +29,9 @@ import android.os.Bundle;
 import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.utils.ResFinder;
-import com.umeng.comm.ui.fragments.LocationFeedFragment;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
 import com.umeng.common.ui.activities.BaseFragmentActivity;
+import com.umeng.common.ui.fragments.LocationFeedFragment;
 
 
 /**
@@ -45,6 +46,7 @@ public class LocationFeedActivity extends BaseFragmentActivity {
         FeedItem feedItem = getIntent().getParcelableExtra(Constants.FEED);
         LocationFeedFragment locationFeedFragment = LocationFeedFragment
                 .newLocationFeedFragment(feedItem);
+        locationFeedFragment.setNavigation(new NavigationCommandImpl(this));
         int container = ResFinder.getId("umeng_comm_main_container");
         setFragmentContainerId(container);
         addFragment(container, locationFeedFragment);

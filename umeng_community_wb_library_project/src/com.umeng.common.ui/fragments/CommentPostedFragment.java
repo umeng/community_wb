@@ -39,9 +39,6 @@ public class CommentPostedFragment extends CommentReceivedFragment {
 
     protected ReceivedCommentAdapter createListViewAdapter() {
         ReceivedCommentAdapter adapter = new ReceivedCommentAdapter(getActivity(), false);
-        adapter.setUserInfoClassName(mUserInfoClass);
-        adapter.setTopicDetailClassName(mTopicDetailClassName);
-        adapter.setFeedDetailClassName(mFeedDetailClassName);
         return adapter;
     }
 }

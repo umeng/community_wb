@@ -30,9 +30,8 @@ import android.view.View;
 import com.umeng.comm.core.beans.CommUser;
 import com.umeng.comm.core.constants.HttpProtocol;
 import com.umeng.comm.core.utils.CommonUtils;
-import com.umeng.comm.core.utils.ResFinder;
-import com.umeng.common.ui.adapters.viewholders.FollowedUserViewHolder;
-import com.umeng.common.ui.adapters.viewholders.NearByUserViewHolder;
+import com.umeng.common.ui.adapters.viewholders.ActiveUserViewHolder;
+
 
 
 /**
@@ -45,37 +44,19 @@ public class NearByUserAdapter extends FollowedUserAdapter {
     }
 
     @Override
-    protected FollowedUserViewHolder createViewHolder() {
-        FollowedUserViewHolder holder = new NearByUserViewHolder(mContext, mIsCurrentUser);
+    protected ActiveUserViewHolder createViewHolder() {
+        ActiveUserViewHolder holder = new ActiveUserViewHolder();
         return holder;
     }
 
     @Override
-    protected void setItemData(int position, FollowedUserViewHolder holder, View rootView) {
+    protected void setItemData(int position, ActiveUserViewHolder holder, View rootView) {
         super.setItemData(position, holder, rootView);
         final CommUser user = getItem(position);
-        NearByUserViewHolder viewHolder = (NearByUserViewHolder) holder;
-        if (user.gender != null) {
-            viewHolder.mUserGender.setVisibility(View.VISIBLE);
-            if (user.gender == CommUser.Gender.FEMALE) {
-                viewHolder.mUserGender.setImageResource(ResFinder.getResourceId(
-                        ResFinder.ResType.DRAWABLE, "umeng_comm_gender_female"));
-            } else if (user.gender == CommUser.Gender.MALE) {
-                viewHolder.mUserGender.setImageResource(ResFinder.getResourceId(
-                        ResFinder.ResType.DRAWABLE, "umeng_comm_gender_male"));
-            }
-        } else {
-            viewHolder.mUserGender.setVisibility(View.GONE);
-        }
-
+        holder.mUserDistance.setVisibility(View.VISIBLE);
         int distance = (int)user.extraData.getDouble(HttpProtocol.DISTANCE_KEY);
         String formatDistance = CommonUtils.formatDistance(distance);
-        viewHolder.mUserDistance.setText(formatDistance);
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startUserInfoActivity(user);
-            }
-        });
+        holder.mUserDistance.setText(formatDistance);
+
     }
 }

@@ -12,13 +12,11 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by umeng on 12/1/15.
+ * Created by pei on 12/1/15.
  */
 public class HottestFeedPresenter extends FeedListPresenter {
 
     private int mDays = 30;
-
-    private boolean isRefreshing;
 
     public HottestFeedPresenter(MvpFeedView view) {
         super(view);
@@ -78,33 +76,9 @@ public class HottestFeedPresenter extends FeedListPresenter {
 //        mDatabaseAPI.getFeedDBAPI().clearHotFeed(HOT_DAYS);
     }
 
-
     @Override
-    public void loadDataFromServer() {
-        isRefreshing = true;
-        mCommunitySDK.fetchTopFeeds(new Listeners.FetchListener<FeedsResponse>() {
-            @Override
-            public void onStart() {
-                mFeedView.onRefreshStart();
-                if (mTopFeeds != null) {
-                    mTopFeeds.clear();
-                }
-            }
-
-            @Override
-            public void onComplete(FeedsResponse response) {
-                if (response.errCode == ErrorCode.NO_ERROR) {
-                    mTopFeeds = response.result;
-                    for (int i = 0; i < mTopFeeds.size(); i++) {
-                        mTopFeeds.get(i).isTop = 1;
-                    }
-                }
-                loadHotFeed();
-            }
-        });
-    }
-
-    private void loadHotFeed() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchHotestFeeds(new Listeners.FetchListener<FeedsResponse>() {
             @Override
             public void onStart() {
@@ -113,9 +87,11 @@ public class HottestFeedPresenter extends FeedListPresenter {
 
             @Override
             public void onComplete(FeedsResponse response) {
-                isRefreshing = false;
+                // 更新加载状态
+                setLoadingState(false);
+
                 // 根据response进行Toast
-                if (NetworkUtils.handleResponseAll(response) && (mTopFeeds == null || mTopFeeds.isEmpty())) {
+                if (NetworkUtils.handleResponseAll(response) && !isHasTopFeed()) {
                     mFeedView.onRefreshEnd();
                     return;
                 }
@@ -146,9 +122,14 @@ public class HottestFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    protected void fetchDataFromServerByLogin() {
-//        mCommunitySDK.fetchHotestFeeds(mLoginRefreshListener, HOT_DAYS, 0);
-//        loadDataFromServer();
+    protected void loadDataAfterLogin(Listeners.FetchListener<FeedsResponse> mLoginRefreshListener) {
+        super.loadDataAfterLogin(mLoginRefreshListener);
+        mCommunitySDK.fetchHotestFeeds(mLoginRefreshListener, mDays, 0);
+    }
+
+    @Override
+    public boolean isRefreshDataAfterLogin() {
+        return true;
     }
 
     @Override
@@ -156,7 +137,11 @@ public class HottestFeedPresenter extends FeedListPresenter {
         return null;
     }
 
-    public boolean isRefreshing(){
-        return isRefreshing;
+    /**
+     * 该方法已弃用，替代方法为isLoading()
+     */
+    @Deprecated
+    public boolean isRefreshing() {
+        return isLoading();
     }
 }

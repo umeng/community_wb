@@ -2,17 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/default_background_color"
     android:orientation="vertical">
 
     <include
-        android:id="@+id/umeng_comm_divider"
+        android:id="@+id/umeng_comm_actionbar_fixed_id"
         layout="@layout/umeng_comm_setting_title_bar" />
 
     <com.umeng.common.ui.widgets.RefreshLvLayout
         android:id="@+id/umeng_comm_topic_refersh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/umeng_comm_divider">
+        android:layout_below="@+id/umeng_comm_actionbar_fixed_id">
 
         <ListView
             android:id="@+id/umeng_comm_topic_listview"

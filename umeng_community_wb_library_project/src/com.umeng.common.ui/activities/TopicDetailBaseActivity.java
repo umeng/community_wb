@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.umeng.comm.core.beans.CommConfig;
+import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.beans.Topic;
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.constants.ErrorCode;
@@ -19,10 +20,22 @@ import com.umeng.comm.core.listeners.Listeners;
 import com.umeng.comm.core.nets.responses.LoginResponse;
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.colortheme.ColorQueque;
+import com.umeng.common.ui.configure.TopicItem;
+import com.umeng.common.ui.fragments.ActiveUserFragment;
+import com.umeng.common.ui.fragments.BaseFragment;
+import com.umeng.common.ui.fragments.HotTopicFeedFragment;
+import com.umeng.common.ui.fragments.LastestTopicFeedFragment;
+import com.umeng.common.ui.fragments.RecommendTopicFeedFragment;
+import com.umeng.common.ui.fragments.TopicFeedFragment;
 import com.umeng.common.ui.mvpview.MvpTopicDetailView;
 import com.umeng.common.ui.presenter.impl.TopicDetailPresenter;
+import com.umeng.common.ui.presenter.impl.TopicFeedPresenter;
 import com.umeng.common.ui.widgets.TopicIndicator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,6 +53,8 @@ public abstract class TopicDetailBaseActivity extends BaseFragmentActivity imple
     protected ToggleButton favouriteBtn;
     protected boolean isClick = true;
     protected TextView titleTextView;
+    protected NavigationCommand command;
+    protected ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>();
     @Override
     public void setToggleButtonStatus(boolean status) {
         favouriteBtn.setClickable(true);
@@ -49,7 +64,7 @@ public abstract class TopicDetailBaseActivity extends BaseFragmentActivity imple
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == ResFinder.getId("umeng_comm_title_back_btn")) {
+        if (id == ResFinder.getId("umeng_comm_setting_back")) {
             finish();
         }
     }
@@ -100,12 +115,12 @@ public abstract class TopicDetailBaseActivity extends BaseFragmentActivity imple
     protected abstract int getLayout();
     protected abstract Fragment getFragment(int pos) ;
     protected void initTitle() {
-        findViewById(ResFinder.getId("umeng_comm_title_back_btn")).setOnClickListener(this);
-        titleTextView = (TextView) findViewById(ResFinder.getId("umeng_comm_title_tv"));
+        findViewById(ResFinder.getId("umeng_comm_setting_back")).setOnClickListener(this);
+        titleTextView = (TextView) findViewById(ResFinder.getId("umeng_comm_setting_title"));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         titleTextView.setTextColor(ColorQueque.getColor("umeng_comm_category_title_color"));
         titleTextView.setText(mTopic.name);
-        findViewById(ResFinder.getId("umeng_comm_title_setting_btn")).setVisibility(View.GONE);
+        findViewById(ResFinder.getId("umeng_comm_save_bt")).setVisibility(View.GONE);
         favouriteBtn = (ToggleButton) findViewById(ResFinder.getId("umeng_comm_favourite_btn"));
         favouriteBtn.setVisibility(View.VISIBLE);
         postBtn = findViewById(ResFinder.getId("umeng_comm_post_btn"));
@@ -184,5 +199,49 @@ public abstract class TopicDetailBaseActivity extends BaseFragmentActivity imple
         }
         com.umeng.comm.core.utils.Log.d("topic","is focused"+mTopic.isFocused);
         favouriteBtn.setChecked(mTopic.isFocused);
+    }
+    public BaseFragment getFragmentByname(TopicItem item){
+        String name = item.style;
+        if (name.equals("topicnew")){
+            TopicFeedFragment fragment = TopicFeedFragment.newTopicFeedFrmg(mTopic);
+            fragment.setNavigation(command);
+            fragment.isShowPostButton(item.isPostBtn);
+            fragment.isShowSearchBar(item.isSearch);
+            fragment.setShowtopFeed(item.isShowTop);
+            return fragment;
+        }else if (name.equals("topiclastreply")){
+            LastestTopicFeedFragment fragment = LastestTopicFeedFragment.newTopicFeedFrmg(mTopic);
+            fragment.setNavigation(command);
+            fragment.isShowPostButton(item.isPostBtn);
+            fragment.isShowSearchBar(item.isSearch);
+            fragment.setShowtopFeed(item.isShowTop);
+            return fragment;
+        }else if(name.equals("topicrecommend")){
+            RecommendTopicFeedFragment fragment = RecommendTopicFeedFragment.newTopicFeedFrmg(mTopic);
+            fragment.setNavigation(command);
+            fragment.isShowPostButton(item.isPostBtn);
+            fragment.isShowSearchBar(item.isSearch);
+            fragment.setShowtopFeed(item.isShowTop);
+            return fragment;
+        }else if(name.equals("topichot")){
+            HotTopicFeedFragment fragment = HotTopicFeedFragment.newTopicFeedFrmg(mTopic);
+            fragment.setNavigation(command);
+            fragment.isShowPostButton(item.isPostBtn);
+            fragment.isShowSearchBar(item.isSearch);
+            fragment.setHotList(item.hotIems);
+            fragment.setShowtopFeed(item.isShowTop);
+            return fragment;
+        }else if(name.equals("active")){
+            ActiveUserFragment fragment = ActiveUserFragment.newActiveUserFragment(mTopic);
+            fragment.setNavigation(command);
+            return fragment;
+        }else {
+            TopicFeedFragment fragment = TopicFeedFragment.newTopicFeedFrmg(mTopic);
+            fragment.setNavigation(command);
+            fragment.isShowPostButton(item.isPostBtn);
+            fragment.isShowSearchBar(item.isSearch);
+            fragment.setShowtopFeed(item.isShowTop);
+            return fragment;
+        }
     }
 }

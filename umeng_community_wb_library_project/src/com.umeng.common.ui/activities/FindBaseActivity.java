@@ -7,17 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.umeng.comm.core.beans.CommConfig;
 import com.umeng.comm.core.beans.CommUser;
@@ -33,8 +34,26 @@ import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.Log;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.common.ui.adapters.MyAdapterInFind;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.colortheme.ColorQueque;
+import com.umeng.common.ui.configure.FindCell;
+import com.umeng.common.ui.configure.FindItem;
+import com.umeng.common.ui.configure.parseJson;
 import com.umeng.common.ui.dialogs.CustomCommomDialog;
+import com.umeng.common.ui.fragments.AtMeFeedFragment;
+import com.umeng.common.ui.fragments.CommentTabFragment;
+import com.umeng.common.ui.fragments.FavoritesFragment;
+import com.umeng.common.ui.fragments.FriendsFragment;
+import com.umeng.common.ui.fragments.LikedMeFragment;
+import com.umeng.common.ui.fragments.MessageSessionFragment;
+import com.umeng.common.ui.fragments.NearByUserFragment;
+import com.umeng.common.ui.fragments.NearbyFeedFragment;
+import com.umeng.common.ui.fragments.NotificationFragment;
+import com.umeng.common.ui.fragments.RealTimeFeedFragment;
+import com.umeng.common.ui.fragments.RecommendTopicFragment;
+import com.umeng.common.ui.fragments.RecommendUserFragment;
+import com.umeng.common.ui.fragments.SettingFragment;
+import com.umeng.common.ui.util.BroadcastUtils;
 import com.umeng.common.ui.util.UserTypeUtil;
 import com.umeng.common.ui.widgets.RoundImageView;
 
@@ -47,145 +66,214 @@ import java.util.ArrayList;
 public abstract class FindBaseActivity extends BaseFragmentActivity implements View.OnClickListener {
     protected CommUser mUser;
     protected String mContainerClass;
-    //    protected RecommendTopicBaseFragment mRecommendTopicFragment;
-//    protected RecommendUserFragment mRecommendUserFragment;
-//    protected FriendsFragment mFriendsFragment;
-//    protected NearbyFeedFragment mNearbyFeedFragment;
-//    protected FavoritesFragment mFavoritesFragment;
-//    protected RealTimeFeedFragment mRealTimeFeedFragment;
     protected MessageCount mUnReadMsg;
     protected View mMsgBadgeView;
-//    protected View mNotifyBadgeView;
     protected LinearLayout typeContainer;
     protected Dialog processDialog;
     protected LinearLayout listContainer;
-//    protected ArrayList<String> titles = new ArrayList<>();
     protected MyAdapterInFind msgAdapter;
+    protected Button mSettingBtn;
+    protected TextView mTitleTextView;
+    protected Handler mFindActivityHandler = new Handler();
+
+    protected RecommendTopicFragment mRecommendTopicFragment;
+    protected RecommendUserFragment mRecommendUserFragment;
+    protected FriendsFragment mFriendsFragment;
+    protected SettingFragment mSettingFragment;
+    protected NearbyFeedFragment mNearbyFeedFragment;
+    protected FavoritesFragment mFavoritesFragment;
+    protected RealTimeFeedFragment mRealTimeFeedFragment;
+    protected NearByUserFragment mNearByUserFragment;
+    protected NavigationCommand command;
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         getLayout();
         initViews();
     }
-    protected void initViews(){
+
+    protected void initViews() {
         getLayout();
-        processDialog = new CustomCommomDialog(this,ResFinder.getString("umeng_comm_logining"));
-        findViewById(ResFinder.getId("umeng_comm_title_back_btn")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_topic_recommend")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_user_recommend")).setOnClickListener(this);
+        processDialog = new CustomCommomDialog(this, ResFinder.getString("umeng_comm_logining"));
+        findViewById(ResFinder.getId("umeng_comm_setting_back")).setOnClickListener(this);
+
         findViewById(ResFinder.getId("user_have_login")).setOnClickListener(this);
         findViewById(ResFinder.getId("user_haveno_login")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_setting_recommend")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_friends")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_myfocustopic")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_mypics")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_favortes")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_notification")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_nearby_recommend")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_nearby_user")).setOnClickListener(this);
-//        findViewById(ResFinder.getId("umeng_comm_realtime")).setOnClickListener(this);
+
         typeContainer = (LinearLayout) findViewById(ResFinder.getId("user_type_icon_container"));
-        // 右上角的通知
-        //findViewById(ResFinder.getId("umeng_comm_title_notify_btn")).setOnClickListener(this);
-        findViewById(ResFinder.getId("umeng_comm_title_setting_btn")).setOnClickListener(this);
-        // 未读消息红点
-//        mMsgBadgeView = findViewById(ResFinder.getId("umeng_comm_notify_badge_view"));
-//        mMsgBadgeView.setVisibility(View.GONE);
 
-        // 未读系统通知的红点
-//        mNotifyBadgeView = findViewById(ResFinder.getId("umeng_comm_badge_view"));
+        mSettingBtn = (Button) findViewById(ResFinder.getId("umeng_comm_save_bt"));
+        mSettingBtn.setOnClickListener(this);
+        mSettingBtn.setCompoundDrawablesWithIntrinsicBounds(ResFinder.getDrawable("umeng_comm_setting_bt"), null, null, null);
 
-        TextView textView = (TextView) findViewById(ResFinder.getId("umeng_comm_title_tv"));
-        textView.setText(ResFinder.getString("umeng_comm_mine"));
-//        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        listContainer = (LinearLayout)findViewById(ResFinder.getId("lists"));
+        mTitleTextView = (TextView) findViewById(ResFinder.getId("umeng_comm_setting_title"));
+
+        mTitleTextView.setText(ResFinder.getString("umeng_comm_mine"));
+
+        listContainer = (LinearLayout) findViewById(ResFinder.getId("lists"));
         initList();
         parseIntentData();
-
-
-            setupUnreadFeedMsgBadge();
-
-
+        setupUnreadFeedMsgBadge();
         mUser = CommonUtils.getLoginUser(this);
         registerInitSuccessBroadcast();
 
     }
 
-    protected void initList(){
+    protected void initList() {
+        if (parseJson.findItems.size() == 0 ) {
+            TextView first = new TextView(this);
+            first.setBackgroundColor(ColorQueque.getColor("umeng_comm_feed_list_bg"));
+            first.setTextSize(14);
+            first.setPadding(DeviceUtils.dp2px(this, 10), DeviceUtils.dp2px(this, 5), 0, DeviceUtils.dp2px(this, 5));
+            first.setTextColor(ColorQueque.getColor("umeng_comm_active_user_name_textcolor"));
+            first.setText(ResFinder.getString("umeng_comm_mine"));
+            listContainer.addView(first);
+            View divide = new View(this);
+            divide.setBackgroundColor(ColorQueque.getColor("umeng_comm_divider"));
+            LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtils.dp2px(this, 1));
+            divide.setLayoutParams(dlp);
+            listContainer.addView(divide);
+            ListView listView1 = new ListView(this);
+            listView1.setDividerHeight(0);
+            ArrayList<FindCell> firstlist = new ArrayList<FindCell>();
+            FindCell cell11 = new FindCell(ResFinder.getString("umeng_comm_user_notification"),"umeng_comm_user_notification","umeng_comm_notification_icon");
+            FindCell cell12 = new FindCell(ResFinder.getString("umeng_comm_user_favorites"),"umeng_comm_user_favorites","umeng_comm_favortes_icon");
+            FindCell cell13 = new FindCell(ResFinder.getString("umeng_comm_recommend_friends"),"umeng_comm_recommend_friends","umeng_comm_firends_icon");
+            FindCell cell14 = new FindCell(ResFinder.getString("umeng_comm_myfocus"),"umeng_comm_myfocus","umeng_comm_mytopics_icon");
+            FindCell cell15 = new FindCell(ResFinder.getString("umeng_comm_mypics"),"umeng_comm_mypics","umeng_comm_mypics_icon");
+            firstlist.add(cell11);
+            firstlist.add(cell12);
+            firstlist.add(cell13);
+            firstlist.add(cell14);
+            firstlist.add(cell15);
+            MyAdapterInFind adapterInFind = new MyAdapterInFind(this, firstlist);
+            if (firstlist.contains(ResFinder.getString("umeng_comm_user_notification"))) {
+                msgAdapter = adapterInFind;
+            }
+            listView1.setAdapter(adapterInFind);
+            listView1.setVerticalScrollBarEnabled(false);
+            listView1.setOnItemClickListener(listener);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, firstlist.size() * DeviceUtils.dp2px(this, 48));//每行固定高48
+            listContainer.addView(listView1, lp);
 
-        TextView first = new TextView(this);
-        first.setBackgroundColor(ColorQueque.getColor("umeng_comm_feed_list_bg"));
-        first.setTextSize(14);
-        first.setPadding(DeviceUtils.dp2px(this,10),DeviceUtils.dp2px(this,5),0,DeviceUtils.dp2px(this,5));
-        first.setTextColor(ColorQueque.getColor("umeng_comm_active_user_name_textcolor"));
-        first.setText(ResFinder.getString("umeng_comm_mine"));
-        listContainer.addView(first);
-        View divide = new View(this);
-        divide.setBackgroundColor(ColorQueque.getColor("umeng_comm_divider"));
-        LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,DeviceUtils.dp2px(this,1));
-        divide.setLayoutParams(dlp);
 
-        listContainer.addView(divide);
+            TextView second = new TextView(this);
+            second.setBackgroundColor(ColorQueque.getColor("umeng_comm_feed_list_bg"));
+            second.setTextSize(14);
+            second.setPadding(10, 5, 0, 5);
+            second.setTextColor(ColorQueque.getColor("umeng_comm_active_user_name_textcolor"));
+            second.setText(ResFinder.getString("umeng_comm_recommend"));
+            listContainer.addView(second);
 
-        ListView listView1 = new ListView(this);
-        listView1.setDividerHeight(0);
-        ArrayList<String> firstlist = new ArrayList<String>();
-        firstlist.add(ResFinder.getString("umeng_comm_user_notification"));
-        firstlist.add(ResFinder.getString("umeng_comm_user_favorites"));
-        firstlist.add(ResFinder.getString("umeng_comm_recommend_friends"));
-        firstlist.add(ResFinder.getString("umeng_comm_myfocus"));
-        firstlist.add(ResFinder.getString("umeng_comm_mypics"));
-        MyAdapterInFind adapterInFind = new MyAdapterInFind(this,firstlist);
-        if (firstlist.contains(ResFinder.getString("umeng_comm_user_notification"))){
-            msgAdapter = adapterInFind;
+            View divide2 = new View(this);
+            divide2.setBackgroundColor(ColorQueque.getColor("umeng_comm_divider"));
+            divide2.setLayoutParams(dlp);
+            listContainer.addView(divide2);
+
+            ListView listView2 = new ListView(this);
+            ArrayList<FindCell> secondlist = new ArrayList<FindCell>();
+            FindCell cell21 = new FindCell(ResFinder.getString("umeng_comm_recommend_nearby"),"umeng_comm_recommend_nearby","umeng_comm_nearby_user_icon");
+            FindCell cell22 = new FindCell(ResFinder.getString("umeng_comm_nearby_user"),"umeng_comm_nearby_user","umeng_comm_realtime_icon");
+            FindCell cell23 = new FindCell(ResFinder.getString("umeng_comm_realtime"),"umeng_comm_realtime","umeng_comm_recommend_user_icon");
+            FindCell cell24 = new FindCell(ResFinder.getString("umeng_comm_recommend_user"),"umeng_comm_recommend_user","umeng_comm_recommend_topic_icon");
+            FindCell cell25 = new FindCell(ResFinder.getString("umeng_comm_recommend_topic"),"umeng_comm_recommend_topic","umeng_comm_recommend_topic_icon");
+            secondlist.add(cell21);
+            secondlist.add(cell22);
+            secondlist.add(cell23);
+            secondlist.add(cell24);
+            secondlist.add(cell25);
+            MyAdapterInFind adapterInFind2 = new MyAdapterInFind(this, secondlist);
+            if (secondlist.contains(ResFinder.getString("umeng_comm_user_notification"))) {
+                msgAdapter = adapterInFind2;
+            }
+            listView2.setDividerHeight(0);
+            listView2.setAdapter(adapterInFind2);
+            listView2.setVerticalScrollBarEnabled(false);
+            listView2.setOnItemClickListener(listener);
+            LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, secondlist.size() * DeviceUtils.dp2px(this, 48));//每行固定高48
+            listContainer.addView(listView2, lp2);
+        } else {
+            if (parseJson.findItems.get(0).list.size()!=0) {
+                FindItem item= parseJson.findItems.get(0);
+                TextView first = new TextView(this);
+                first.setBackgroundColor(ColorQueque.getColor("umeng_comm_feed_list_bg"));
+                first.setTextSize(14);
+                first.setPadding(DeviceUtils.dp2px(this, 10), DeviceUtils.dp2px(this, 5), 0, DeviceUtils.dp2px(this, 5));
+                first.setTextColor(ColorQueque.getColor("umeng_comm_active_user_name_textcolor"));
+                first.setText(item.title);
+                listContainer.addView(first);
+                View divide = new View(this);
+                divide.setBackgroundColor(ColorQueque.getColor("umeng_comm_divider"));
+                LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtils.dp2px(this, 1));
+                divide.setLayoutParams(dlp);
+
+                listContainer.addView(divide);
+
+                ListView listView1 = new ListView(this);
+                listView1.setDividerHeight(0);
+             //   ArrayList<FindCell> firstlist = new ArrayList<FindCell>();
+
+                MyAdapterInFind adapterInFind = new MyAdapterInFind(this, item.list);
+                for (FindCell cell:item.list){
+                    if (cell.style.equals("umeng_comm_user_notification") ){
+                        msgAdapter = adapterInFind;
+                    }
+                }
+
+                listView1.setAdapter(adapterInFind);
+                listView1.setVerticalScrollBarEnabled(false);
+                listView1.setOnItemClickListener(listener);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, item.list.size() * DeviceUtils.dp2px(this, 48));//每行固定高48
+                listContainer.addView(listView1, lp);
+            }
+            if (parseJson.findItems.get(1).list.size()!=0) {
+                FindItem item= parseJson.findItems.get(1);
+                TextView second = new TextView(this);
+                second.setBackgroundColor(ColorQueque.getColor("umeng_comm_feed_list_bg"));
+                second.setTextSize(14);
+                second.setPadding(10, 5, 0, 5);
+                second.setTextColor(ColorQueque.getColor("umeng_comm_active_user_name_textcolor"));
+                second.setText(item.title);
+                listContainer.addView(second);
+
+                View divide2 = new View(this);
+                divide2.setBackgroundColor(ColorQueque.getColor("umeng_comm_divider"));
+                LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtils.dp2px(this, 1));
+                divide2.setLayoutParams(dlp);
+                listContainer.addView(divide2);
+
+                ListView listView2 = new ListView(this);
+            //    ArrayList<String> secondlist = new ArrayList<String>();
+
+
+                MyAdapterInFind adapterInFind2 = new MyAdapterInFind(this, item.list);
+                for (FindCell cell:item.list){
+                    if (cell.style.equals("umeng_comm_user_notification") ){
+                        msgAdapter = adapterInFind2;
+                    }
+                }
+                listView2.setDividerHeight(0);
+                listView2.setAdapter(adapterInFind2);
+                listView2.setVerticalScrollBarEnabled(false);
+                listView2.setOnItemClickListener(listener);
+                LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, item.list.size() * DeviceUtils.dp2px(this, 48));//每行固定高48
+                listContainer.addView(listView2, lp2);
+            }
         }
-        listView1.setAdapter(adapterInFind);
-        listView1.setVerticalScrollBarEnabled(false);
-        listView1.setOnItemClickListener(listener);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, firstlist.size()*DeviceUtils.dp2px(this,48));//每行固定高48
-        listContainer.addView(listView1,lp);
-
-
-        TextView second = new TextView(this);
-        second.setBackgroundColor(ColorQueque.getColor("umeng_comm_feed_list_bg"));
-        second.setTextSize(14);
-        second.setPadding(10,5,0,5);
-        second.setTextColor(ColorQueque.getColor("umeng_comm_active_user_name_textcolor"));
-        second.setText(ResFinder.getString("umeng_comm_recommend"));
-        listContainer.addView(second);
-
-        View divide2 = new View(this);
-        divide2.setBackgroundColor(ColorQueque.getColor("umeng_comm_divider"));
-        divide2.setLayoutParams(dlp);
-        listContainer.addView(divide2);
-
-        ListView listView2 = new ListView(this);
-        ArrayList<String> secondlist = new ArrayList<String>();
-        secondlist.add(ResFinder.getString("umeng_comm_recommend_nearby"));
-        secondlist.add(ResFinder.getString("umeng_comm_nearby_user"));
-        secondlist.add(ResFinder.getString("umeng_comm_realtime"));
-        secondlist.add(ResFinder.getString("umeng_comm_recommend_user"));
-        secondlist.add(ResFinder.getString("umeng_comm_recommend_topic"));
-        MyAdapterInFind adapterInFind2 = new MyAdapterInFind(this,secondlist);
-        if (secondlist.contains(ResFinder.getString("umeng_comm_user_notification"))){
-            msgAdapter = adapterInFind2;
-        }
-        listView2.setDividerHeight(0);
-        listView2.setAdapter(adapterInFind2);
-        listView2.setVerticalScrollBarEnabled(false);
-        listView2.setOnItemClickListener(listener);
-        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, secondlist.size()*DeviceUtils.dp2px(this,48));//每行固定高48
-        listContainer.addView(listView2,lp2);
-//        for (String temp:firstlist){
-//            temp.equals(ResFinder.getString("umeng_comm_user_notification"));
-//        }
-
-
     }
+
     AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (view.getTag().equals(ResFinder.getString("umeng_comm_user_notification"))){
+            /**     */
+            final String itemStr = (String) view.getTag();
+            String realTimeStr = "umeng_comm_realtime";
+            String recommendUserStr = "umeng_comm_recommend_user";
+            String recommendTopicStr = "umeng_comm_recommend_topic";
+            if (itemStr.equals(realTimeStr) || itemStr.equals(recommendUserStr) || itemStr.equals(recommendTopicStr)) {
+                showFragment(itemStr);
+            } else {
                 if (!CommonUtils.isLogin(FindBaseActivity.this)) {
                     CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
                         @Override
@@ -197,148 +285,20 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
                         public void onComplete(int stCode, CommUser userInfo) {
                             processDialog.dismiss();
                             if (stCode == 0) {
-                                gotoFeedNewMsgActivity();
+                                showFragment(itemStr);
                             }
                         }
                     });
                 } else {
-
-                    gotoFeedNewMsgActivity();
+                    showFragment(itemStr);
                 }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_user_favorites"))){
-                if (!CommonUtils.isLogin(FindBaseActivity.this)) {
-                    CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
-                        @Override
-                        public void onStart() {
-                            processDialog.show();
-                        }
-
-                        @Override
-                        public void onComplete(int stCode, CommUser userInfo) {
-                            processDialog.dismiss();
-                            if (stCode == 0) {
-                                showFavoritesFeed();
-                            }
-                        }
-                    });
-                } else {
-
-                    showFavoritesFeed();
-                }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_recommend_friends"))){
-                if (!CommonUtils.isLogin(FindBaseActivity.this)) {
-                    CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
-                        @Override
-                        public void onStart() {
-                            processDialog.show();
-                        }
-
-                        @Override
-                        public void onComplete(int stCode, CommUser userInfo) {
-
-                            if (stCode == 0) {
-                                showFriendsFragment();
-                            }
-                            processDialog.dismiss();
-                        }
-                    });
-                } else {
-
-                    showFriendsFragment();
-                }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_myfocus"))){
-                if (!CommonUtils.isLogin(FindBaseActivity.this)) {
-                    CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
-                        @Override
-                        public void onStart() {
-                            processDialog.show();
-                        }
-
-                        @Override
-                        public void onComplete(int stCode, CommUser userInfo) {
-                            processDialog.dismiss();
-                            if (stCode == 0) {
-                                gotoMyFollowActivity();
-                            }
-                        }
-                    });
-                } else {
-                    gotoMyFollowActivity();
-                }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_mypics"))){
-                if (!CommonUtils.isLogin(FindBaseActivity.this)) {
-                    CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
-                        @Override
-                        public void onStart() {
-                            processDialog.show();
-                        }
-
-                        @Override
-                        public void onComplete(int stCode, CommUser userInfo) {
-                            processDialog.dismiss();
-                            if (stCode == 0) {
-                                gotoMyPicActivity();
-                            }
-                        }
-                    });
-                } else {
-
-                    gotoMyPicActivity();
-                }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_recommend_nearby"))){
-                if (!CommonUtils.isLogin(FindBaseActivity.this)) {
-                    CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
-                        @Override
-                        public void onStart() {
-                            processDialog.show();
-                        }
-
-                        @Override
-                        public void onComplete(int stCode, CommUser userInfo) {
-
-                            processDialog.dismiss();
-                            if (stCode == 0) {
-                                showNearbyFeed();
-                            }
-                        }
-                    });
-                } else {
-
-                    showNearbyFeed();
-                }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_nearby_user"))){
-                if (!CommonUtils.isLogin(FindBaseActivity.this)) {
-                    CommunitySDKImpl.getInstance().login(FindBaseActivity.this, new LoginListener() {
-                        @Override
-                        public void onStart() {
-                            processDialog.show();
-                        }
-
-                        @Override
-                        public void onComplete(int stCode, CommUser userInfo) {
-
-                            processDialog.dismiss();
-                            if (stCode == 0) {
-                                showNearByUser();
-                            }
-                        }
-                    });
-                } else {
-                    showNearByUser();
-                }
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_realtime"))){
-                showRealTimeFeed();
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_recommend_user"))){
-                showRecommendUserFragment();
-            }else if (view.getTag().equals(ResFinder.getString("umeng_comm_recommend_topic"))){
-                showRecommendTopic();
             }
         }
     };
+
     protected void initUserInfo() {
         if (CommonUtils.isLogin(this)) {
-            CommUser user = CommonUtils.getLoginUser(this);
-
+            CommUser user = CommConfig.getConfig().loginedUser;
             findViewById(ResFinder.getId("user_have_login")).setVisibility(View.VISIBLE);
             findViewById(ResFinder.getId("user_haveno_login")).setVisibility(View.GONE);
             ((RoundImageView) findViewById(ResFinder.getId("userinfo_headicon"))).setImageDrawable(ColorQueque.getDrawable("umeng_comm_defaul_icon"));
@@ -367,27 +327,27 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
         }
         mUser = CommConfig.getConfig().loginedUser;
         displayUserMedal();
-        if(mUser.medals == null || mUser.medals.isEmpty()){
+        if (mUser.medals == null || mUser.medals.isEmpty()) {
             loadUserFromDB(mUser.id);
         }
     }
 
-    private void displayUserMedal(){
+    private void displayUserMedal() {
         CommUser user = CommConfig.getConfig().loginedUser;
-        if(user.medals == null || user.medals.isEmpty()){
+        if (user.medals == null || user.medals.isEmpty()) {
             typeContainer.setVisibility(View.GONE);
-        }else {
+        } else {
             typeContainer.setVisibility(View.VISIBLE);
             UserTypeUtil.SetUserType(FindBaseActivity.this, user, typeContainer);
         }
     }
 
-    private void loadUserFromDB(final String uId){
+    private void loadUserFromDB(final String uId) {
         DatabaseAPI.getInstance().getUserDBAPI().loadUserFromDB(uId, new Listeners.SimpleFetchListener<CommUser>() {
             @Override
             public void onComplete(CommUser user) {
-                if(!FindBaseActivity.this.isFinishing()){
-                    if(user != null){
+                if (!FindBaseActivity.this.isFinishing()) {
+                    if (user != null) {
                         CommConfig.getConfig().loginedUser.medals = user.medals;
                         displayUserMedal();
                     }
@@ -415,27 +375,18 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
      * 设置消息数红点</br>
      */
     protected void setupUnreadFeedMsgBadge() {
-        if (msgAdapter!=null){
+        if (msgAdapter != null) {
             msgAdapter.setUnReadcount(mUnReadMsg.unReadTotal);
             msgAdapter.notifyDataSetChanged();
         }
 
-//        if (mUnReadMsg.unReadTotal > 0) {
-//            if (CommonUtils.isLogin(this)) {
-//                mMsgBadgeView.setVisibility(View.VISIBLE);
-//            } else {
-//                mMsgBadgeView.setVisibility(View.GONE);
-//            }
-//        } else {
-//            mMsgBadgeView.setVisibility(View.GONE);
-//        }
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == ResFinder.getId("umeng_comm_title_back_btn")) { // 返回事件
-            finish();
+        if (id == ResFinder.getId("umeng_comm_setting_back")) { // 返回事件
+            onBackBtnClick();
         } else if (id == ResFinder.getId("user_have_login")) { // 个人中心
             gotoUserInfoActivity();
         } else if (id == ResFinder.getId("user_haveno_login")) { // 个人中心
@@ -451,7 +402,7 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
                     processDialog.dismiss();
                 }
             });
-        } else if (id == ResFinder.getId("umeng_comm_title_setting_btn")) {
+        } else if (id == ResFinder.getId("umeng_comm_save_bt")) {
             if (!CommonUtils.isLogin(FindBaseActivity.this)) {
                 final ProgressDialog mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setCancelable(true);
@@ -465,6 +416,7 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
                     @Override
                     public void onComplete(int stCode, CommUser userInfo) {
                         if (stCode == 0) {
+                           // showFragment(ResFinder.getString("umeng_comm_setting"));
                             Intent setting = new Intent(FindBaseActivity.this, SettingActivity.class);
                             setting.putExtra(Constants.TYPE_CLASS, mContainerClass);
                             startActivity(setting);
@@ -473,90 +425,190 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
                     }
                 });
             } else {
-                Intent setting = new Intent(this, SettingActivity.class);
+                Intent setting = new Intent(FindBaseActivity.this, SettingActivity.class);
                 setting.putExtra(Constants.TYPE_CLASS, mContainerClass);
                 startActivity(setting);
+               // showFragment(ResFinder.getString("umeng_comm_setting"));
             }
         }
     }
-
-    protected abstract void gotoMyFollowActivity();
-
-    protected abstract void gotoMyPicActivity();
-
-    protected abstract void gotoNotificationActivity();
-
-    protected abstract void gotoFeedNewMsgActivity();
 
     @Override
     protected void onResume() {
         super.onResume();
         initUserInfo();
+        setupUnreadFeedMsgBadge();
+    }
 
-            setupUnreadFeedMsgBadge();
+    /**
+     * 跳转到我关注的话题Activity</br>
+     */
+    protected void gotoMyFollowActivity() {
+    }
 
+    /**
+     * 跳转到我的相册Activity</br>
+     */
+    protected void gotoMyPicActivity() {
+    }
+
+    /**
+     * 跳转到我的消息Activity</br>
+     */
+    protected void gotoFeedNewMsgActivity() {
     }
 
     /**
      * 跳转到用户中心Activity</br>
      */
-    protected abstract void gotoUserInfoActivity();
+    protected void gotoUserInfoActivity() {
+    }
 
     /**
-     * 显示附件推荐Feed</br>
+     * 显示附近推荐Feed</br>
      */
-    protected abstract void showNearbyFeed();
+
+    protected void showNearbyFeed() {
+        if (mNearbyFeedFragment == null) {
+            mNearbyFeedFragment = NearbyFeedFragment.newNearbyFeedRecommend();
+            mNearbyFeedFragment.setShowActionbar(false);
+            mNearbyFeedFragment.setNavigation(command);
+            mNearbyFeedFragment.isShowSearchBar(false);
+        }
+        showCommFragment(mNearbyFeedFragment);
+    }
 
     /**
      * 显示附近用户Feed</br>
      */
-    protected abstract void showNearByUser();
+    protected void showNearByUser() {
+        if (mNearByUserFragment == null) {
+            mNearByUserFragment = NearByUserFragment.newNearbyUserFragment();
+            mNearByUserFragment.setNavigation(command);
+        }
+        showCommFragment(mNearByUserFragment);
+    }
 
     /**
      * 显示实时内容的Fragment</br>
      */
-    protected abstract void showRealTimeFeed();
+    /**
+     * 显示实时内容的Fragment</br>
+     */
+
+    protected void showRealTimeFeed() {
+        if (mRealTimeFeedFragment == null) {
+            mRealTimeFeedFragment = RealTimeFeedFragment.newRealTimeFeedRecommend();
+            mRealTimeFeedFragment.setShowActionbar(false);
+            mRealTimeFeedFragment.setNavigation(command);
+            mRealTimeFeedFragment.isShowSearchBar(false);
+            mRealTimeFeedFragment.isShowPostButton(false);
+        }
+        showCommFragment(mRealTimeFeedFragment);
+    }
 
     /**
      * 显示收藏Feed</br>
      */
-    protected abstract void showFavoritesFeed();
-
-    /**
-     * 显示推荐话题的Dialog</br>
-     */
-    protected abstract void showRecommendTopic();
-
-    /**
-     * 隐藏发现页面，显示fragment</br>
-     *
-     * @param fragment
-     */
-    protected abstract void showCommFragment(Fragment fragment);
-
-    /**
-     * 隐藏fragment，显示发现页面</br>
-     */
-    protected void showFindPage(){
-        initUserInfo();
+    protected void showFavoritesFeed() {
+        if (mFavoritesFragment == null) {
+            mFavoritesFragment = FavoritesFragment.newFavoritesFragment();
+            mFavoritesFragment.setNavigation(command);
+            mFavoritesFragment.setShowActionbar(false);
+            mFavoritesFragment.isShowSearchBar(false);
+        }
+        showCommFragment(mFavoritesFragment);
     }
 
     /**
+     * 显示推荐话题</br>
+     */
+
+    protected void showRecommendTopic() {
+        if (mRecommendTopicFragment == null) {
+            mRecommendTopicFragment = RecommendTopicFragment.newRecommendTopicFragment();
+            mRecommendTopicFragment.setSaveButtonInVisiable();
+            mRecommendTopicFragment.isShowSearchBar(false);
+            mRecommendTopicFragment.setShowActionbar(false);
+            mRecommendTopicFragment.setNavigation(command);
+        }
+        showCommFragment(mRecommendTopicFragment);
+    }
+    protected void showSetting() {
+        if (mSettingFragment == null) {
+            mSettingFragment = new SettingFragment();
+            mSettingFragment.setNavigation(command);
+            mSettingFragment.setLogoutBtnClick(new SettingFragment.LogoutBtnClick() {
+                @Override
+                public void onClick() {
+                    CommConfig.getConfig().loginedUser = CommonUtils.getLoginUser(FindBaseActivity.this);
+                    onBackBtnClick();
+                }
+            });
+            mSettingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mSettingFragment.dealSaveLogic();
+                }
+            });
+        }
+        showCommFragment(mSettingFragment);
+    }
+    /**
      * 显示朋友圈Fragment</br>
      */
-    protected abstract void showFriendsFragment();
+    protected void showFriendsFragment() {
+        if (mFriendsFragment == null) {
+            mFriendsFragment = FriendsFragment.newFriendsFragment();
+            mFriendsFragment.setShowActionbar(false);
+            mFriendsFragment.isShowSearchBar(false);
+            mFriendsFragment.setNavigation(command);
+        }
+        showCommFragment(mFriendsFragment);
+    }
 
     /**
      * 显示推荐用户fragment</br>
      */
-    protected abstract void showRecommendUserFragment();
+    protected void showRecommendUserFragment() {
+        if (mRecommendUserFragment == null) {
+            mRecommendUserFragment = new RecommendUserFragment();
+            mRecommendUserFragment.setSaveButtonInvisiable();
+            mRecommendUserFragment.setShowActionbar(false);
+            mRecommendUserFragment.setNavigation(command);
+        }
+        showCommFragment(mRecommendUserFragment);
+    }
 
+    protected void showMyCommentFragment() {
+        CommentTabFragment f = new CommentTabFragment();
+        f.setNavigationCommand(command);
+        showCommFragment(f);
+    }
+    protected void showLikeMeFragment() {
+        LikedMeFragment f = new LikedMeFragment();
+        f.setNavigationCommand(command);
+        showCommFragment(f);
+    }
+    protected void showNotifyFragment() {
+        NotificationFragment f = new NotificationFragment();
+        f.setNavigationCommand(command);
+        showCommFragment(f);
+    }
+    protected void showMessageFragment() {
+        MessageSessionFragment f = new MessageSessionFragment();
+      //  f.setNavigationCommand(command);
+        showCommFragment(f);
+    }
+    protected void showAtMeFragment() {
+        AtMeFeedFragment f = new AtMeFeedFragment();
+        f.setNavigation(command);
+        showCommFragment(f);
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && findViewById(ResFinder.getId("container")).getVisibility() == View.VISIBLE) {
-            findViewById(ResFinder.getId("umeng_comm_find_base")).setVisibility(View.VISIBLE);
-            findViewById(ResFinder.getId("container")).setVisibility(View.GONE);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackBtnClick();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -570,23 +622,141 @@ public abstract class FindBaseActivity extends BaseFragmentActivity implements V
         filter.addAction(Constants.ACTION_INIT_SUCCESS);
         LocalBroadcastManager.getInstance(this).registerReceiver(mInitConfigReceiver,
                 filter);
+        BroadcastUtils.registerCountBroadcast(getApplicationContext(), mReceiver);
     }
 
+    protected BroadcastUtils.DefalutReceiver mReceiver = new BroadcastUtils.DefalutReceiver() {
+        @Override
+        public void onReceiveCount(Intent intent) {
+            BroadcastUtils.BROADCAST_TYPE type = getType(intent);
+            int count = getCount(intent);
+
+            if (type == BroadcastUtils.BROADCAST_TYPE.TYPE_COUNT_USER) {
+                if (Math.abs(count) <= 1) {// follow or unFollow 情况
+                    CommConfig.getConfig().loginedUser = CommonUtils.getLoginUser(FindBaseActivity.this);
+                    initUserInfo();
+                }
+            }
+        }
+    };
     protected BroadcastReceiver mInitConfigReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             mUnReadMsg = CommConfig.getConfig().mMessageCount;
-
-                setupUnreadFeedMsgBadge();
-
+            setupUnreadFeedMsgBadge();
         }
     };
 
     @Override
     public void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mInitConfigReceiver);
+        BroadcastUtils.unRegisterBroadcast(getApplicationContext(), mReceiver);
         super.onDestroy();
     }
 
+
+    protected void onBackBtnClick() {
+        if (mCurrentFragment != null) {
+            initUserInfo();// update user info
+            mTitleTextView.setText(ResFinder.getString("umeng_comm_mine"));
+            mSettingBtn.setCompoundDrawablesWithIntrinsicBounds(ResFinder.getDrawable("umeng_comm_setting_bt"), null, null, null);
+            mSettingBtn.setText("");
+            mSettingBtn.setVisibility(View.VISIBLE);
+            mSettingBtn.setOnClickListener(this);
+            remove(mCurrentFragment);
+            mCurrentFragment = null;
+        } else {
+            finish();
+        }
+    }
+
+    /**
+     * 处理跳转逻辑
+     *
+     * @param item
+     */
+    protected void showFragment(final String item) {
+        final StringBuffer fragmentTitleResName = new StringBuffer();
+        if (item.equals("umeng_comm_user_notification")) {
+            gotoFeedNewMsgActivity();
+        } else if (item.equals("umeng_comm_user_favorites")) {
+            fragmentTitleResName.append("umeng_comm_favoriets_list");
+            showFavoritesFeed();
+        } else if (item.equals("umeng_comm_recommend_friends")) {
+            fragmentTitleResName.append("umeng_comm_recommend_friends");
+            showFriendsFragment();
+        } else if (item.equals("umeng_comm_myfocus")) {
+            gotoMyFollowActivity();
+        } else if (item.equals("umeng_comm_mypics")) {
+            gotoMyPicActivity();
+        } else if (item.equals("umeng_comm_recommend_nearby")) {
+            fragmentTitleResName.append("umeng_comm_recommend_nearby");
+            showNearbyFeed();
+        } else if (item.equals("umeng_comm_nearby_user")) {
+            fragmentTitleResName.append("umeng_comm_nearby_user");
+            showNearByUser();
+        } else if (item.equals("umeng_comm_realtime")) {
+            fragmentTitleResName.append("umeng_comm_realtime");
+            showRealTimeFeed();
+        } else if (item.equals("umeng_comm_recommend_user")) {
+            fragmentTitleResName.append("umeng_comm_recommend_user");
+            showRecommendUserFragment();
+        } else if (item.equals("umeng_comm_recommend_topic")) {
+            fragmentTitleResName.append("umeng_comm_recommend_topic");
+            showRecommendTopic();
+        }else if (item.equals("umeng_comm_comment")) {
+            fragmentTitleResName.append("umeng_comm_comment");
+            showMyCommentFragment();
+        }else if (item.equals("umeng_comm_like")) {
+            fragmentTitleResName.append("umeng_comm_like");
+           showLikeMeFragment();
+        }else if (item.equals("umeng_comm_notify")) {
+            fragmentTitleResName.append("umeng_comm_notify");
+           showNotifyFragment();
+        }else if (item.equals("umeng_comm_private_letter")) {
+            fragmentTitleResName.append("umeng_comm_private_letter");
+           showMessageFragment();
+        }else if (item.equals("umeng_comm_at_me")) {
+            fragmentTitleResName.append("umeng_comm_at_me");
+           showAtMeFragment();
+        }
+
+
+        mFindActivityHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!TextUtils.isEmpty(fragmentTitleResName.toString())) {
+                    String title = ResFinder.getString(fragmentTitleResName.toString());
+                    mTitleTextView.setText(title);
+                    if (item.equals(ResFinder.getString("umeng_comm_setting"))){
+                        mSettingBtn.setText(ResFinder.getString("umeng_comm_save"));
+                        mSettingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
+                    }else {
+                        mSettingBtn.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 隐藏发现页面，显示fragment</br>
+     *
+     * @param fragment
+     */
+    @Deprecated
+    protected void showCommFragment(Fragment fragment) {
+        setFragmentContainerId(ResFinder.getId("container"));
+        showFragmentInContainer(ResFinder.getId("container"), fragment);
+    }
+
+    /**
+     * 隐藏fragment，显示发现页面</br>
+     */
+    @Deprecated
+    protected void showFindPage() {
+        initUserInfo();
+    }
 }

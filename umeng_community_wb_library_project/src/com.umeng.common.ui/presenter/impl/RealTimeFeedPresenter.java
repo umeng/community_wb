@@ -25,6 +25,7 @@
 package com.umeng.common.ui.presenter.impl;
 
 
+import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.nets.responses.FeedsResponse;
 import com.umeng.common.ui.mvpview.MvpFeedView;
 
@@ -40,13 +41,9 @@ public class RealTimeFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchRealTimeFeed(mRefreshListener);
-    }
-
-
-    public void loadMoreData() {
-        super.loadMoreData();
     }
 
     // no cache
@@ -59,7 +56,7 @@ public class RealTimeFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    protected boolean isAddToFeedList() {
+    protected boolean isAddToFeedList(FeedItem feedItem) {
         return true;
     }
 }

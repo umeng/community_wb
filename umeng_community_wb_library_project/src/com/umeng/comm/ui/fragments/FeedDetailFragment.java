@@ -25,9 +25,7 @@
 package com.umeng.comm.ui.fragments;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
@@ -48,20 +46,19 @@ import com.umeng.comm.core.constants.HttpProtocol;
 import com.umeng.comm.core.listener.Listeners;
 import com.umeng.comm.core.listener.Listeners.LoginOnViewClickListener;
 import com.umeng.comm.core.listeners.Listeners.OnItemViewClickListener;
-import com.umeng.comm.core.receiver.BaseBroadcastReceiver;
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.comm.core.utils.ResFinder.ResType;
+import com.umeng.comm.ui.activities.ForwardActivity;
 import com.umeng.comm.ui.adapters.FeedCommentAdapter;
-import com.umeng.comm.ui.adapters.FeedLikeAdapter;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
+import com.umeng.common.ui.adapters.FeedLikeAdapter;
 import com.umeng.comm.ui.adapters.viewholders.FavouriteFeedItemViewHolder;
-import com.umeng.comm.ui.presenter.impl.FeedDetailWBPresenter;
 import com.umeng.common.ui.colortheme.ColorQueque;
 import com.umeng.common.ui.fragments.CommentEditFragment;
-import com.umeng.common.ui.mvpview.MvpCommentView;
 import com.umeng.common.ui.mvpview.MvpFeedDetailView;
-import com.umeng.common.ui.mvpview.MvpLikeView;
+import com.umeng.common.ui.presenter.impl.FeedDetailPresenter;
 import com.umeng.common.ui.util.BroadcastUtils;
 import com.umeng.common.ui.util.ViewFinder;
 import com.umeng.common.ui.widgets.RefreshLayout;
@@ -74,8 +71,8 @@ import java.util.List;
  * 该类是某条Feed的详情页面,使用FeedItemViewParser解析单项的Feed数据.Feed相关的信息显示在评论列表的Header中,
  * 该页面会展示该条Feed的Like用户以及评论。
  */
-public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, FeedDetailWBPresenter>
-        implements MvpCommentView, MvpLikeView, MvpFeedDetailView {
+public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, FeedDetailPresenter>
+        implements MvpFeedDetailView {
     /**
      * 点击评论某项时的回调。用于在评论的EditView中显示回复XXX
      */
@@ -126,19 +123,17 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
     /**
      * 下拉刷新布局,评论ListView的parent
      */
-    RefreshLvLayout mRefreshLayoutComment,mRefreshLayoutLike;
+    RefreshLvLayout mRefreshLayoutComment, mRefreshLayoutLike;
     /**
      * 评论ListView
      */
-    private ListView mCommentListView,mLikeListView;
+    private ListView mCommentListView, mLikeListView;
     /**
      * 评论ListView Adapter
      */
     FeedCommentAdapter mCommentAdapter;
     FeedLikeAdapter mLikeAdapter;
     Drawable drawableLine;
-    private LoginReceiver mLoginReceiver;
-
     /**
      * 是否弹出评论编辑键盘
      */
@@ -163,9 +158,13 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
     }
 
     @Override
-    protected FeedDetailWBPresenter createPresenters() {
+    protected FeedDetailPresenter createPresenters() {
+//        super.createPresenters();
+//        return new FeedDetailWBPresenter(this, this, this, mFeedItem);
         super.createPresenters();
-        return new FeedDetailWBPresenter(this, this, this, mFeedItem);
+        FeedDetailPresenter presenter = new FeedDetailPresenter(this, mFeedItem);
+        presenter.setPresenterStyle(FeedDetailPresenter.FEED_DETAIL_PRESENTER_STYLE.WEIBO);
+        return presenter;
     }
 
     @Override
@@ -174,9 +173,6 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
         View headerView = initFeedContentView();
         initRefreshLayout(headerView);
         initActionsView();
-        BroadcastUtils.registerFeedBroadcast(getActivity(), mReceiver);
-        mLoginReceiver = new LoginReceiver();
-        getActivity().registerReceiver(mLoginReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
     }
 
     @Override
@@ -194,7 +190,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
             mFeedItem.likeCount = feedItem.likeCount;
             mFeedItem.commentCount = feedItem.commentCount;
             mFeedItem.forwardCount = feedItem.forwardCount;
-            mFeedItem.imageUrls = feedItem.imageUrls ;
+            mFeedItem.imageUrls = feedItem.imageUrls;
             mFeedItem.category = feedItem.category;
             mFeedItem.isRecommended = feedItem.isRecommended;
             mFeedItem.isLiked = feedItem.isLiked;
@@ -211,7 +207,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
         if (!isScroll) {
             return;
         }
-        if (mIsShowComment){
+        if (mIsShowComment) {
             showCommentLayout();
         }
 //        mCommentCountTextView.postDelayed(new Runnable() {
@@ -245,7 +241,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
      */
     private View initFeedContentView() {
         drawableLine = ColorQueque.getDrawable("blue_line_for_tv");
-        drawableLine.setBounds(0,0,drawableLine.getMinimumWidth(), DeviceUtils.dp2px(getActivity(), 2));
+        drawableLine.setBounds(0, 0, drawableLine.getMinimumWidth(), DeviceUtils.dp2px(getActivity(), 2));
         ViewFinder headerViewFinder = new ViewFinder(getActivity(),
                 ResFinder.getLayout("umeng_comm_feed_detail_header"));
 
@@ -279,7 +275,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
         mFeedViewHolder.mLikeCountTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mRefreshLayoutLike.getVisibility()!=View.VISIBLE){
+                if (mRefreshLayoutLike.getVisibility() != View.VISIBLE) {
                     mRefreshLayoutLike.setVisibility(View.VISIBLE);
                     mRefreshLayoutComment.setVisibility(View.GONE);
                     mFeedViewHolder.mLikeCountTextView.setBackgroundResource(ResFinder.getResourceId(ResType.DRAWABLE, "umeng_comm_feed_detail_tab_bg"));
@@ -423,7 +419,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
 //                if (item.creator.id.equals(CommConfig.getConfig().loginedUser.id)) {
 //                    ToastMsg.showShortMsgByResName("umeng_comm_do_not_reply_yourself");
 //                } else {
-                    showCommentLayout(position, item);
+                showCommentLayout(position, item);
 //                }
             }
         }
@@ -467,7 +463,11 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
 
             @Override
             protected void doAfterLogin(View v) {
-                mPresenter.gotoForwardActivity(mFeedItem);
+//                mPresenter.gotoForwardActivity(mFeedItem);
+                Intent intent = new Intent(getActivity(),
+                        ForwardActivity.class);
+                intent.putExtra(Constants.FEED, mFeedItem);
+                getActivity().startActivity(intent);
             }
         });
         mCommentActionLayout = mViewFinder.findViewById(ResFinder
@@ -517,7 +517,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
         mCommentEditText.setHint("");
         mActionsLayout.setVisibility(View.GONE);
         View titleView = getActivity().findViewById(ResFinder.getId("umeng_comm_feed_title_layout"));
-        if(titleView != null){
+        if (titleView != null) {
             titleView.setVisibility(View.GONE);
         }
     }
@@ -526,7 +526,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
         super.hideCommentLayout();
         mActionsLayout.setVisibility(View.VISIBLE);
         View titleView = getActivity().findViewById(ResFinder.getId("umeng_comm_feed_title_layout"));
-        if(titleView != null){
+        if (titleView != null) {
             titleView.setVisibility(View.VISIBLE);
         }
     }
@@ -558,7 +558,6 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
      * 填充消息流ListView每项的数据
      *
      * @param feedItem
-     *
      */
     private void setFeedItemData(final FeedItem feedItem) {
         if (TextUtils.isEmpty(feedItem.id)) {
@@ -576,19 +575,19 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
     }
 
     private void setCommentCount(int count) {
-        StringBuffer str = new  StringBuffer(ResFinder.getString("umeng_comm_comment"));
+        StringBuffer str = new StringBuffer(ResFinder.getString("umeng_comm_comment"));
         str.append(" ").append(CommonUtils.getLimitedCount(count));
         mFeedViewHolder.mCommentCountTextView.setText(str.toString());
     }
 
     private void setLikeCount(int count) {
-        StringBuffer str = new  StringBuffer(ResFinder.getString("umeng_comm_click_like"));
+        StringBuffer str = new StringBuffer(ResFinder.getString("umeng_comm_click_like"));
         str.append(" ").append(CommonUtils.getLimitedCount(mFeedItem.likeCount));
         mFeedViewHolder.mLikeCountTextView.setText(str.toString());
     }
 
     private void setForwardCount(int count) {
-        StringBuffer str = new  StringBuffer(ResFinder.getString("umeng_comm_forward"));
+        StringBuffer str = new StringBuffer(ResFinder.getString("umeng_comm_forward"));
         str.append(" ").append(CommonUtils.getLimitedCount(count));
         mFeedViewHolder.mForwardCountTextView.setText(str);
     }
@@ -597,7 +596,7 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
         mCommentAdapter = new FeedCommentAdapter(getActivity());
         mCommentAdapter.addDatasOnly(item.comments);
         mCommentListView.setAdapter(mCommentAdapter);
-        mLikeAdapter = new FeedLikeAdapter(getActivity());
+        mLikeAdapter = new FeedLikeAdapter(getActivity(), new NavigationCommandImpl(getActivity()));
         mLikeAdapter.addDatasOnly(item.likes);
         mLikeListView.setAdapter(mLikeAdapter);
     }
@@ -724,45 +723,12 @@ public class FeedDetailFragment extends CommentEditFragment<List<FeedItem>, Feed
     }
 
     @Override
-    public void onDestroy() {
-        BroadcastUtils.unRegisterBroadcast(getActivity(), mReceiver);
-        getActivity().unregisterReceiver(mLoginReceiver);
-        super.onDestroy();
-    }
-
-    private BroadcastUtils.DefalutReceiver mReceiver = new BroadcastUtils.DefalutReceiver() {
-        public void onReceiveFeed(android.content.Intent intent) {
-            FeedItem feedItem = getFeed(intent);
-            if (feedItem == null) {
-                return;
-            }
-            BroadcastUtils.BROADCAST_TYPE type = getType(intent);
-            if (BroadcastUtils.BROADCAST_TYPE.TYPE_FEED_POST == type) {
-                updateForwarCount(feedItem, 1);
-            } else if (BroadcastUtils.BROADCAST_TYPE.TYPE_FEED_DELETE == type) {
-                updateForwarCount(feedItem, -1);
-            }
-        }
-    };
-
-    private void updateForwarCount(FeedItem item, int count) {
-        if (TextUtils.isEmpty(item.sourceFeedId)) {
-            return;
-        }
+    public void updateForwardCount(int count) {
         mFeedItem.forwardCount = mFeedItem.forwardCount + count;
         setForwardCount(mFeedItem.forwardCount);
     }
 
     @Override
     public void onRefreshStart() {
-    }
-
-    private class LoginReceiver extends BaseBroadcastReceiver{
-        @Override
-        protected void onReceiveIntent(Context context, Intent intent) {
-            if(Constants.ACTION_LOGIN_SUCCESS.equals(intent.getAction())){
-//                mPresenter.loadCommentFromServer();
-            }
-        }
     }
 }

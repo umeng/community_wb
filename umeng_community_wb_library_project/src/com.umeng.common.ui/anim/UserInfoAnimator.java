@@ -24,6 +24,7 @@
 
 package com.umeng.common.ui.anim;
 
+import android.util.Log;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;

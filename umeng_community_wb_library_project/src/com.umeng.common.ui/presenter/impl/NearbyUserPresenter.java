@@ -6,9 +6,11 @@ import android.text.TextUtils;
 import com.umeng.comm.core.beans.CommUser;
 import com.umeng.comm.core.constants.ErrorCode;
 import com.umeng.comm.core.listeners.Listeners;
+import com.umeng.comm.core.nets.responses.FansResponse;
 import com.umeng.comm.core.nets.responses.NearbyUsersResponse;
 import com.umeng.comm.core.nets.uitls.NetworkUtils;
 import com.umeng.comm.core.sdkmanager.LocationSDKManager;
+import com.umeng.common.ui.mvpview.MvpActiveUserFgView;
 import com.umeng.common.ui.mvpview.MvpFollowedUserView;
 import com.umeng.common.ui.util.BroadcastUtils;
 
@@ -20,7 +22,7 @@ import java.util.List;
 public class NearbyUserPresenter extends FollowedUserFgPresenter {
 
 
-    public NearbyUserPresenter(MvpFollowedUserView followedUserView, String uId) {
+    public NearbyUserPresenter(MvpActiveUserFgView followedUserView, String uId) {
         super(followedUserView, uId);
     }
 
@@ -32,14 +34,17 @@ public class NearbyUserPresenter extends FollowedUserFgPresenter {
             @Override
             public void onComplete(Location result) {
                 if (result != null && result.getLongitude() != 0 && result.getLatitude() != 0) {
+                    mActiveUserFgView.hideVisitView();
                     mCommunitySDK.fetchNearByUser(result.getLongitude(), result.getLatitude(),
                             mRefreshListener);
-                }else{
+                } else {
+                    mActiveUserFgView.showEmptyView();
                     mRefreshListener.onComplete(null);
                 }
+
             }
 
-        } );
+        });
     }
 
     @Override
@@ -49,7 +54,7 @@ public class NearbyUserPresenter extends FollowedUserFgPresenter {
     @Override
     public void loadMoreData() {
         if (TextUtils.isEmpty(nextPageUrl)) {
-            mFollowedUserView.onRefreshEnd();
+            mActiveUserFgView.onRefreshEnd();
             return;
         }
         mCommunitySDK.fetchNextPageData(nextPageUrl, NearbyUsersResponse.class, mLoadMoreListener);
@@ -60,30 +65,31 @@ public class NearbyUserPresenter extends FollowedUserFgPresenter {
 
         @Override
         public void onStart() {
-            mFollowedUserView.onRefreshStart();
+            mActiveUserFgView.onRefreshStart();
         }
 
         @Override
         public void onComplete(NearbyUsersResponse response) {
-            if(response == null){
-                mFollowedUserView.onRefreshEnd();
+            if (response == null) {
+                mActiveUserFgView.onRefreshEnd();
             }
             // 根据response进行Toast
             if (NetworkUtils.handleResponseAll(response)) {
-                mFollowedUserView.onRefreshEnd();
+                mActiveUserFgView.onRefreshEnd();
                 if (response.errCode == ErrorCode.NO_ERROR) {
                     nextPageUrl = "";
                 }
                 return;
             }
             final List<CommUser> followedUsers = response.result;
-            List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+            List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
             dataSource.clear();
             dataSource.addAll(followedUsers);
-            mFollowedUserView.notifyDataSetChanged();
+            mActiveUserFgView.notifyDataSetChanged();
             // 解析下一页地址
             parseNextpageUrl(response, true);
-            mFollowedUserView.onRefreshEnd();
+            dealResult(response, true);
+            mActiveUserFgView.onRefreshEnd();
         }
     };
 
@@ -97,12 +103,13 @@ public class NearbyUserPresenter extends FollowedUserFgPresenter {
                 if (response.errCode == ErrorCode.NO_ERROR) {
                     nextPageUrl = "";
                 }
-                mFollowedUserView.onRefreshEnd();
+                mActiveUserFgView.onRefreshEnd();
                 return;
             }
             appendUsers(response.result);
             parseNextpageUrl(response, false);
-            mFollowedUserView.onRefreshEnd();
+            dealResult(response, false);
+            mActiveUserFgView.onRefreshEnd();
         }
     };
 
@@ -113,7 +120,7 @@ public class NearbyUserPresenter extends FollowedUserFgPresenter {
      * @param type
      */
     protected void onUserFollowStateChange(CommUser user, BroadcastUtils.BROADCAST_TYPE type) {
-        List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+        List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
         boolean followedState;
         if (type == BroadcastUtils.BROADCAST_TYPE.TYPE_USER_FOLLOW) {
             followedState = true;
@@ -123,11 +130,11 @@ public class NearbyUserPresenter extends FollowedUserFgPresenter {
             mFollowDBAPI.unfollow(user);
         }
         int count = dataSource.size();
-        for (int i = 0; i < count; i++){
-            if(dataSource.get(i).id.equals(user.id)){
+        for (int i = 0; i < count; i++) {
+            if (dataSource.get(i).id.equals(user.id)) {
                 CommUser tempUser = dataSource.get(i);
                 tempUser.isFollowed = followedState;
-                mFollowedUserView.notifyDataSetChanged();
+                mActiveUserFgView.notifyDataSetChanged();
                 break;
             }
         }

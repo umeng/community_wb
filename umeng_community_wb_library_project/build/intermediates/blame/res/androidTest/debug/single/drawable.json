@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable/umeng_animation_right_to_left.xml",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable/umeng_animation_right_to_left.xml"
+    },
+    {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable/umeng_login_close.png",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable/umeng_login_close.png"
     },
@@ -322,6 +326,10 @@
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable/umeng_comm_at_friend_bt.xml",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable/umeng_comm_at_friend_bt.xml"
+    },
+    {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable/umeng_animation_left_to_right.xml",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable/umeng_animation_left_to_right.xml"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable/umeng_socialize_share_transparent_corner.xml",

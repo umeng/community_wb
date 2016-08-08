@@ -1,6 +1,7 @@
 package com.umeng.common.ui.widgets;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -12,14 +13,17 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.common.ui.colortheme.ColorQueque;
+import com.umeng.common.ui.configure.parseJson;
 
 /**
  * Created by wangfei on 15/12/4.
@@ -100,23 +104,23 @@ public class MainIndicator extends LinearLayout{
     public MainIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
         // 初始化画笔
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(COLOR_TEXT_HIGHLIGHTCOLOR);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setPathEffect(new CornerPathEffect(10));
-
-        mLinePaint = new Paint();
-        mLinePaint.setAntiAlias(true);
-        mLinePaint.setColor(COLOR_TEXT_HIGHLIGHTCOLOR);
-        mLinePaint.setStyle(Paint.Style.FILL);
-        mLinePaint.setStrokeWidth(CommonUtils.px2dip(getContext(),10));
-
-        mDividerLinePaint = new Paint();
-        mDividerLinePaint.setAntiAlias(true);
-        mDividerLinePaint.setColor(COLOR_TEXT_HIGHLIGHTCOLOR);
-        mDividerLinePaint.setStyle(Paint.Style.FILL);
-        mDividerLinePaint.setStrokeWidth(5);
+//        mPaint = new Paint();
+//        mPaint.setAntiAlias(true);
+//        mPaint.setColor(COLOR_TEXT_HIGHLIGHTCOLOR);
+//        mPaint.setStyle(Paint.Style.FILL);
+//        mPaint.setPathEffect(new CornerPathEffect(10));
+//
+//        mLinePaint = new Paint();
+//        mLinePaint.setAntiAlias(true);
+//        mLinePaint.setColor(COLOR_TEXT_HIGHLIGHTCOLOR);
+//        mLinePaint.setStyle(Paint.Style.FILL);
+//        mLinePaint.setStrokeWidth(CommonUtils.px2dip(getContext(),10));
+//
+//        mDividerLinePaint = new Paint();
+//        mDividerLinePaint.setAntiAlias(true);
+//        mDividerLinePaint.setColor(COLOR_TEXT_HIGHLIGHTCOLOR);
+//        mDividerLinePaint.setStyle(Paint.Style.FILL);
+//        mDividerLinePaint.setStrokeWidth(5);5
 
         COLOR_TEXT_NORMAL = ColorQueque.getColor("umeng_comm_indicator_default");
         COLOR_TEXT_HIGHLIGHTCOLOR = ColorQueque.getColor("umeng_comm_indicator_highlight");
@@ -145,19 +149,19 @@ public class MainIndicator extends LinearLayout{
     /**
      * 初始化三角形的宽度
      */
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        mTriangleWidth = (int) (w / mTabVisibleCount * RADIO_TRIANGEL);// 1/6 of
-        // width
-        mTriangleWidth = Math.min(DIMENSION_TRIANGEL_WIDTH, mTriangleWidth);
-
-        // 初始化三角形
-        initTriangle();
-
-        // 初始时的偏移量
-        mInitTranslationX = getScreenWidth() / mTabVisibleCount / 2 ;
-    }
+//    @Override
+//    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+//        super.onSizeChanged(w, h, oldw, oldh);
+//        mTriangleWidth = (int) (w / mTabVisibleCount * RADIO_TRIANGEL);// 1/6 of
+//        // width
+//        mTriangleWidth = Math.min(DIMENSION_TRIANGEL_WIDTH, mTriangleWidth);
+//
+//        // 初始化三角形
+//        initTriangle();
+//
+//        // 初始时的偏移量
+//        mInitTranslationX = getScreenWidth() / mTabVisibleCount / 2 ;
+//    }
 
     /**
      * 设置可见的tab的数量gene
@@ -166,6 +170,13 @@ public class MainIndicator extends LinearLayout{
      */
     public void setVisibleTabCount(int count) {
         this.mTabVisibleCount = count;
+        if (count<=4){
+            RelativeLayout.LayoutParams layoutParams =new RelativeLayout.LayoutParams(DeviceUtils.dp2px(getContext(), parseJson.titlewidth)*count, ViewGroup.LayoutParams.MATCH_PARENT);
+           // layoutParams.width = DeviceUtils.dp2px(getContext(),65)*count;
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            setLayoutParams(layoutParams);
+            setGravity(Gravity.CENTER);
+        }
     }
 
     /**
@@ -178,7 +189,8 @@ public class MainIndicator extends LinearLayout{
         if (datas != null && datas.length > 0) {
             this.removeAllViews();
             this.mTabTitles = datas;
-
+            this.setWeightSum(mTabTitles.length);
+            Log.e("xxxxxx","dsadasda="+mTabTitles.length);
             for (int i = 0; i <mTabTitles.length;i++) {
                 // 添加view
                 addView(generateView(i,mTabTitles[i]));
@@ -281,21 +293,10 @@ public class MainIndicator extends LinearLayout{
         if (view instanceof TextView) {
             ((TextView) view).setTextColor(COLOR_TEXT_HIGHLIGHTCOLOR);
             Drawable drawableLine = ColorQueque.getDrawable("blue_line_for_tv");
-//            if (position==0 ||position == 3) {
-//                Log.d("draw", "if:" + position);
-//                Drawable drawable = ResFinder.getDrawable("xialalan");
-//                drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-//                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-//                if(displayMetrics.densityDpi<280){
-//                    drawableLine.setBounds(DeviceUtils.dp2px(getContext(),10),0,view.getMeasuredWidth(),DeviceUtils.dp2px(getContext(),2));
-//                }else{
-//                    drawableLine.setBounds(DeviceUtils.dp2px(getContext(),15), 0,view.getMeasuredWidth(),DeviceUtils.dp2px(getContext(),2));
-//                }
-//                ((TextView) view).setCompoundDrawables(null, null, drawable, drawableLine);
-//            }else{
+
                 drawableLine.setBounds(0,0,drawableLine.getMinimumWidth(),DeviceUtils.dp2px(getContext(), 2));
                 ((TextView) view).setCompoundDrawables(null,null,null,drawableLine);
-//            }
+
         }
     }
 
@@ -307,13 +308,7 @@ public class MainIndicator extends LinearLayout{
             View view = getChildAt(i);
             if (view instanceof TextView) {
                 ((TextView) view).setTextColor(COLOR_TEXT_NORMAL);
-//                if (i==0 ||i == 3) {
-//                    Drawable drawable = ResFinder.getDrawable("xialahui");
-//                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-//                    ((TextView) view).setCompoundDrawables(null, null, drawable, null);
-//                }else{
                     ((TextView) view).setCompoundDrawables(null,null,null,null);
-//                }
             }
         }
     }
@@ -346,48 +341,18 @@ public class MainIndicator extends LinearLayout{
         LayoutParams lp = new LayoutParams(
                 0, LayoutParams.MATCH_PARENT);
         lp.weight = 1;
-
-//        if (index ==0 ||index == 3){
-//            tv.setGravity(Gravity.RIGHT);
-//        }else {
-            tv.setGravity(Gravity.CENTER_HORIZONTAL);
-//        }
+        tv.setLayoutParams(lp);
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setTextColor(COLOR_TEXT_NORMAL);
         tv.setSingleLine();
         tv.setText(text);
-//        tv.setBackgroundColor(Color.RED);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        tv.setLayoutParams(lp);
-//        if (index ==0 ||index == 3){
-//            Drawable drawable = ResFinder.getDrawable("xialahui");
-//            drawable.setBounds(0, 0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-//            tv.setCompoundDrawables(null, null, drawable, null);
-//            //tv.setPadding(0,0,CommonUtils.px2dip(getContext(),40),0);
-//            if(index==0){
-//                tv.setPadding(0,CommonUtils.dip2px(getContext(), 5),CommonUtils.dip2px(getContext(),5),0);
-//            }
-//        }
-//        else {
-            tv.setPadding(0,CommonUtils.dip2px(getContext(), 11),0,0);
-//        }
-//        if(index == 3){
-//            tv.setPadding(0,CommonUtils.dip2px(getContext(), 5),CommonUtils.dip2px(getContext(),5),0);
-//        }
+           tv.setPadding(0,CommonUtils.dip2px(getContext(), 11),0,0);
+
         return tv;
     }
 
-    /**
-     * 初始化三角形指示器
-     */
-    private void initTriangle() {
-        mPath = new Path();
 
-        mTriangleHeight = (int) (mTriangleWidth * Math.sqrt(3) / 4); // 等边三角形
-//        mPath.moveTo(0, 0);
-//        mPath.lineTo(mTriangleWidth, 0);
-//        mPath.lineTo(mTriangleWidth / 2, -mTriangleHeight);
-//        mPath.close();
-    }
 
     /**
      * 指示器跟随手指滚动，以及容器滚动
@@ -438,7 +403,7 @@ public class MainIndicator extends LinearLayout{
             View view = getChildAt(i);
             LayoutParams lp = (LayoutParams) view
                     .getLayoutParams();
-            lp.weight = 0;
+            lp.weight = 1;
             lp.width = getScreenWidth() / mTabVisibleCount;
             view.setLayoutParams(lp);
         }

@@ -59,7 +59,7 @@ public class TopicBasePresenter extends BaseFragmentPresenter<List<Topic>> {
 
     protected MvpRecommendTopicView mTopicView;
 
-    private String mNextPageUrl = "";
+    protected String mNextPageUrl = "";
 
     private boolean isRegisterReceiver = true;
 

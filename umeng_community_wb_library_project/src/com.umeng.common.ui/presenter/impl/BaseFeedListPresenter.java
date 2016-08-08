@@ -28,7 +28,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.umeng.comm.core.beans.CommConfig;
 import com.umeng.comm.core.beans.CommUser;
@@ -36,6 +38,7 @@ import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.constants.ErrorCode;
 import com.umeng.comm.core.impl.CommunitySDKImpl;
+import com.umeng.comm.core.listeners.Listeners;
 import com.umeng.comm.core.listeners.Listeners.FetchListener;
 import com.umeng.comm.core.listeners.Listeners.OnResultListener;
 import com.umeng.comm.core.listeners.Listeners.SimpleFetchListener;
@@ -68,19 +71,21 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
     protected MvpFeedView mFeedView;
     protected String mNextPageUrl;
 
+
     private boolean isRegisterReceiver = true;
     private boolean isAttached = false;
-
-    // 是否显示置顶feed，默认为显示
-    protected boolean isShowTopFeeds = true;
 
     // feed更新时回调，用于提示
     protected OnResultListener mOnResultListener;
 
     /**
+     * 是否显示置顶feed，默认为不显示
+     */
+    private boolean isShowTopFeeds = false;
+    /**
      * 保存当前置顶feed
      */
-    protected List<FeedItem> mTopFeeds = new ArrayList();
+    private List<FeedItem> mTopFeeds = new ArrayList();
 
     /**
      * 是否需要清空数据库缓存的标志位
@@ -92,6 +97,10 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
      */
     private boolean isGuestMode = true;
 
+    /**
+     * 是否在在加载中
+     */
+    private boolean isLoading = false;
 
     public BaseFeedListPresenter(MvpFeedView view) {
         this.mFeedView = view;
@@ -100,15 +109,6 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
     public BaseFeedListPresenter(MvpFeedView view, boolean isRegisterReceiver) {
         this.mFeedView = view;
         this.isRegisterReceiver = isRegisterReceiver;
-    }
-
-    /**
-     * 设置是否显示置顶feed
-     *
-     * @param isShowTopFeeds
-     */
-    public void setIsShowTopFeeds(boolean isShowTopFeeds) {
-        this.isShowTopFeeds = isShowTopFeeds;
     }
 
     /**
@@ -125,9 +125,60 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
         isNeedRemoveOldFeeds.set(true);
     }
 
+    /**
+     * 改方法为对外统一接口，包含置顶逻辑，禁止子类重写
+     */
     @Override
-    public void loadDataFromServer() {
+    public final void loadDataFromServer() {
 //        mCommunitySDK.fetchLastestFeeds(mRefreshListener);
+        // 设置加载状态
+        if (isLoading()) {
+            return;
+        } else {
+            setLoadingState(true);
+        }
+
+        if (isShowTopFeeds()) {
+            // 由全局置顶和话题下置顶
+            loadTopFeeds(new SimpleFetchListener<FeedsResponse>() {
+
+                @Override
+                public void onStart() {
+//                    mFeedView.onRefreshStart();
+                    if (mTopFeeds != null) {
+                        mTopFeeds.clear();
+                    }
+                }
+
+                @Override
+                public void onComplete(FeedsResponse response) {
+                    if (response.errCode == ErrorCode.NO_ERROR) {
+                        mTopFeeds = response.result;
+                        for (int i = 0; i < mTopFeeds.size(); i++) {
+                            mTopFeeds.get(i).isTop = 1;
+                        }
+                    }
+                    loadDataOnRefresh();
+                }
+            });
+        } else {
+            loadDataOnRefresh();
+        }
+    }
+
+    /**
+     * 加载置顶feed，默认为全局置顶
+     *
+     * @param listener
+     */
+    protected void loadTopFeeds(FetchListener<FeedsResponse> listener) {
+        mCommunitySDK.fetchTopFeeds(listener);
+    }
+
+    /**
+     * 加载对应列表feed
+     */
+    protected void loadDataOnRefresh() {
     }
 
     /**
@@ -143,8 +194,11 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
         // [注意]：mFeedView.onRefreshEnd方法不可提前统一调用，该方法会被判断是否显示空视图的逻辑
         @Override
         public void onComplete(FeedsResponse response) {
+            // 更新加载状态
+            setLoadingState(false);
+
             // 根据response进行Toast
-            if (NetworkUtils.handleResponseAll(response) && (mTopFeeds == null || mTopFeeds.isEmpty())) {
+            if (NetworkUtils.handleResponseAll(response) && !isHasTopFeed()) {
                 mFeedView.onRefreshEnd();
                 return;
             }
@@ -161,8 +215,8 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
             beforeDeliveryFeeds(response);
 
             // 处理置顶逻辑
-            final List<FeedItem> newFeedItems = isShowTopFeeds ? response.result : response.resultWithoutTop;
-            if (isShowTopFeeds) {
+            final List<FeedItem> newFeedItems = response.resultWithoutTop;
+            if (isShowTopFeeds()) {
                 addTopFeedToHeader(newFeedItems);
             }
 
@@ -242,11 +296,21 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
             return;
         }
 
+        // 设置加载状态，必须在真正的请求之前设置，否则会出现bug
+        if (isLoading()) {
+            return;
+        } else {
+            setLoadingState(true);
+        }
+
         mCommunitySDK.fetchNextPageData(mNextPageUrl,
                 FeedsResponse.class, new SimpleFetchListener<FeedsResponse>() {
 
                     @Override
                     public void onComplete(FeedsResponse response) {
+                        // 更新加载状态
+                        setLoadingState(false);
+
                         mFeedView.onRefreshEnd();
                         // 根据response进行Toast
                         if (NetworkUtils.handleResponseAll(response)) {
@@ -258,7 +322,7 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
                         }
                         mNextPageUrl = response.nextPageUrl;
                         // 去掉重复的feed
-                        final List<FeedItem> feedItems = isShowTopFeeds ? response.result : response.resultWithoutTop;
+                        final List<FeedItem> feedItems = response.resultWithoutTop;
                         if (feedItems != null && feedItems.size() > 0) {
                             // 追加数据
                             appendFeedItems(feedItems, false);
@@ -403,8 +467,8 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
         super.attach(context);
         if (isRegisterReceiver && !isAttached) {
             registerBroadcast();
-            isAttached = true;
         }
+        isAttached = true;
         // 启动页面是判断是否登录，关注列表页
         if (!CommonUtils.isLogin(mContext)) {
             mFeedView.showLoginView();
@@ -413,9 +477,10 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
 
     @Override
     public void detach() {
-        if (isAttached) {
+        if (isRegisterReceiver && isAttached) {
             unRegisterBroadcast();
         }
+        isAttached = false;
         super.detach();
     }
 
@@ -426,8 +491,10 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
     }
 
     protected void unRegisterBroadcast() {
+
         mContext.unregisterReceiver(mLoginReceiver);
         BroadcastUtils.unRegisterBroadcast(mContext, mReceiver);
+
     }
 
     /**
@@ -481,14 +548,51 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
     /**
      * 从server加载数据。【注意：该接口仅仅在登录成功的时候调用，需要对此种情况有特殊的逻辑处理】</br>
      */
-    protected void fetchDataFromServerByLogin() {
-//        mCommunitySDK.fetchLastestFeeds(mLoginRefreshListener);
+    private void fetchDataFromServerByLogin() {
+        if(!isRefreshDataAfterLogin()){
+            return;
+        }
+
+        if (isShowTopFeeds()) {
+            // 由全局置顶和话题下置顶
+            loadTopFeeds(new SimpleFetchListener<FeedsResponse>() {
+
+                @Override
+                public void onStart() {
+                    mFeedView.onRefreshStart();
+                    if (mTopFeeds != null) {
+                        mTopFeeds.clear();
+                    }
+                }
+
+                @Override
+                public void onComplete(FeedsResponse response) {
+                    if (response.errCode == ErrorCode.NO_ERROR) {
+                        mTopFeeds = response.result;
+                        for (int i = 0; i < mTopFeeds.size(); i++) {
+                            mTopFeeds.get(i).isTop = 1;
+                        }
+                    }
+                    loadDataAfterLogin(mLoginRefreshListener);
+                }
+            });
+        } else {
+            loadDataAfterLogin(mLoginRefreshListener);
+        }
+    }
+
+    /**
+     * 用户登录刷新数据回调
+     * @param mLoginRefreshListener
+     */
+    protected void loadDataAfterLogin(FetchListener<FeedsResponse> mLoginRefreshListener) {
+
     }
 
     /**
      * 处理登录刷新的listener</br>
      */
-    protected final FetchListener<FeedsResponse> mLoginRefreshListener = new FetchListener<FeedsResponse>() {
+    private FetchListener<FeedsResponse> mLoginRefreshListener = new FetchListener<FeedsResponse>() {
 
         @Override
         public void onStart() {
@@ -496,11 +600,11 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
 
         @Override
         public void onComplete(FeedsResponse response) {
-            // 首先清理未登录时存储的数据
-            mDatabaseAPI.getFeedDBAPI().deleteAllFeedsFromDB();
+            // 首先清理未登录时存储的数据 2016.7.19 注释掉 1，缓存大小整体清理；2，登录后会删除；3，即使不删除，也不影响缓存展示
+//            mDatabaseAPI.getFeedDBAPI().deleteAllFeedsFromDB();
             // 清理Adapter中的数据
             mFeedView.getBindDataSource().clear();
-            if (NetworkUtils.handleResponseAll(response)) {
+            if (NetworkUtils.handleResponseAll(response) && !isHasTopFeed()) {
                 mFeedView.onRefreshEnd();
                 return;
             }
@@ -510,11 +614,18 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
                 isNeedRemoveOldFeeds.set(false);
             }
             beforeDeliveryFeeds(response);
-            List<FeedItem> result = isShowTopFeeds ? response.result : response.resultWithoutTop;
-            mFeedView.getBindDataSource().addAll(result);
-            mFeedView.notifyDataSetChanged();
+            // 处理置顶逻辑
+            final List<FeedItem> newFeedItems = response.resultWithoutTop;
+            if (isShowTopFeeds()) {
+                addTopFeedToHeader(newFeedItems);
+            }
+            // 拼接数据到list中
+            int news = appendFeedItemsToHeader(newFeedItems);
+            if (mOnResultListener != null) {
+                mOnResultListener.onResult(news);
+            }
             // 保存加载的数据。如果该数据存在于DB中，则替换成最新的，否则Insert一条新纪录
-            saveDataToDB(result);
+            saveDataToDB(newFeedItems);
             mFeedView.onRefreshEnd();
         }
     };
@@ -607,5 +718,67 @@ public class BaseFeedListPresenter extends BaseFeedPresenter implements Filter<F
         } else {
             mFeedView.gotoPostFeedActivity();
         }
+    }
+
+    /**
+     * 是否正在加载中
+     *
+     * @return
+     */
+    protected boolean isLoading() {
+        return isLoading;
+    }
+
+    /**
+     * 设置Loading的状态
+     *
+     * @param loading
+     */
+    public void setLoadingState(boolean loading) {
+        isLoading = loading;
+    }
+
+    /**
+     * 该方法与fetchNextPageData()作用相同
+     */
+    @Override
+    public void loadMoreData() {
+        super.loadMoreData();
+        fetchNextPageData();
+    }
+
+    /**
+     * 是否存在置顶feed
+     *
+     * @return
+     */
+    protected boolean isHasTopFeed() {
+        return mTopFeeds != null && !mTopFeeds.isEmpty();
+    }
+
+    /**
+     * 是否显示置顶feed
+     *
+     * @return
+     */
+    protected boolean isShowTopFeeds() {
+        return isShowTopFeeds;
+    }
+
+    /**
+     * 设置是否显示置顶feed
+     *
+     * @param isShowTopFeeds
+     */
+    public void setIsShowTopFeeds(boolean isShowTopFeeds) {
+        this.isShowTopFeeds = isShowTopFeeds;
+    }
+
+    /**
+     * 用户登录后是否刷新数据
+     * @return
+     */
+    public boolean isRefreshDataAfterLogin(){
+        return false;
     }
 }

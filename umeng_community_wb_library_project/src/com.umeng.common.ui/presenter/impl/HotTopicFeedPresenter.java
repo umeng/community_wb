@@ -27,24 +27,9 @@ public class HotTopicFeedPresenter extends TopicFeedPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
-        int days = 1;
-
-        switch (hottype) {
-            case 0:
-                days = 1;
-                break;
-            case 1:
-                days = 3;
-                break;
-            case 2:
-                days = 7;
-                break;
-            case 3:
-                days = 30;
-                break;
-        }
-        mCommunitySDK.fetchTopicHotestFeeds(mId, mRefreshListener, days, 0);
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
+        mCommunitySDK.fetchTopicHotestFeeds(mId, mRefreshListener, hottype, 0);
     }
 
     @Override
@@ -57,7 +42,7 @@ public class HotTopicFeedPresenter extends TopicFeedPresenter {
     }
 
     @Override
-    public boolean isAddToFeedList() {
+    public boolean isAddToFeedList(FeedItem feedItem) {
         return false;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <com.umeng.common.ui.widgets.WrapperGridView
         android:id="@+id/umeng_comm_msg_gridview"
@@ -11,6 +11,7 @@
         android:columnWidth="80dp"
         android:focusable="false"
         android:horizontalSpacing="@dimen/umeng_comm_dimen_4px"
+        android:listSelector="@android:color/transparent"
         android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="@dimen/umeng_comm_dimen_4px" />

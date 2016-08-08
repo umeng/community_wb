@@ -9,12 +9,15 @@ import java.util.Comparator;
 /**
  * Created by wangfei on 15/12/2.
  */
-public class RecommendTopicFeedPresenter extends TopicFeedPresenter{
+public class RecommendTopicFeedPresenter extends TopicFeedPresenter {
+
     public RecommendTopicFeedPresenter(MvpFeedView view) {
         super(view);
     }
+
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchTopicRecommendFeed(mId, mRefreshListener);
     }
 
@@ -23,7 +26,7 @@ public class RecommendTopicFeedPresenter extends TopicFeedPresenter{
     }
 
     @Override
-    public boolean isAddToFeedList() {
+    public boolean isAddToFeedList(FeedItem feedItem) {
         return false;
     }
 

@@ -5,13 +5,13 @@
     android:padding="@dimen/umeng_comm_dimen_20px">
 
     <TextView
-        android:id="@+id/umeng_comm_report_comment_tv"
+        android:id="@+id/umeng_comm_report_user_comment_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:background="?attr/umeng_comm_more_radius_top"
         android:gravity="center"
-        android:text="@string/umeng_comm_spam_content"
+        android:text="@string/umeng_comm_spam_user"
         android:textColor="?attr/umeng_comm_comment_action_dialog_text"
         android:textSize="@dimen/text_big18_size" />
 
@@ -20,25 +20,80 @@
         layout="@layout/umeng_comm_divide_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/umeng_comm_dimen_1px"
+        android:layout_below="@id/umeng_comm_report_user_comment_tv" />
+    <TextView
+        android:id="@+id/umeng_comm_report_comment_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/umeng_comm_action_dialog_middle_bg"
+        android:layout_below="@id/umeng_comm_report_line"
+        android:gravity="center"
+        android:text="@string/umeng_comm_spam_content"
+        android:textColor="?attr/umeng_comm_comment_action_dialog_text"
+        android:textSize="@dimen/text_big18_size" />
+
+    <include
+        android:id="@+id/umeng_comm_report_line1"
+        layout="@layout/umeng_comm_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/umeng_comm_dimen_1px"
         android:layout_below="@id/umeng_comm_report_comment_tv" />
+
 
     <TextView
         android:id="@+id/umeng_comm_reply_comment_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/umeng_comm_report_line"
+        android:layout_below="@id/umeng_comm_report_line1"
         android:layout_centerHorizontal="true"
-        android:background="?attr/umeng_comm_more_radius_bottom"
+        android:background="?attr/umeng_comm_action_dialog_middle_bg"
         android:gravity="center"
         android:text="@string/umeng_comm_reply"
         android:textColor="?attr/umeng_comm_comment_action_dialog_text"
         android:textSize="@dimen/text_big18_size" />
+    <include
+        android:id="@+id/umeng_comm_report_line2"
+        layout="@layout/umeng_comm_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/umeng_comm_dimen_1px"
+        android:layout_below="@id/umeng_comm_reply_comment_tv" />
+    <TextView
+        android:id="@+id/umeng_comm_delete_comment_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/umeng_comm_action_dialog_middle_bg"
+        android:layout_below="@id/umeng_comm_report_line2"
+        android:gravity="center"
+        android:text="@string/umeng_comm_delete"
+        android:textColor="?attr/umeng_comm_comment_action_dialog_text"
+        android:textSize="@dimen/text_big18_size" />
+    <include
+        android:id="@+id/umeng_comm_report_line3"
+        layout="@layout/umeng_comm_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/umeng_comm_dimen_1px"
+        android:layout_below="@id/umeng_comm_delete_comment_tv" />
+    <TextView
+        android:id="@+id/umeng_comm_copy_comment_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/umeng_comm_more_radius_bottom"
+        android:layout_below="@id/umeng_comm_report_line3"
+        android:gravity="center"
+        android:text="@string/umeng_comm_copy"
+        android:textColor="?attr/umeng_comm_comment_action_dialog_text"
+        android:textSize="@dimen/text_big18_size" />
+
+
 
     <TextView
         android:id="@+id/umeng_comm_cancel_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/umeng_comm_reply_comment_tv"
+        android:layout_below="@id/umeng_comm_copy_comment_tv"
         android:layout_marginTop="@dimen/umeng_comm_dimen_30px"
         android:background="?attr/umeng_comm_more_radius_middle"
         android:gravity="center"

@@ -28,7 +28,8 @@ public class FavoritesFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchFavoritesFeed(mRefreshListener);
     }
 
@@ -120,5 +121,18 @@ public class FavoritesFeedPresenter extends FeedListPresenter {
     @Override
     protected boolean isReomveFeedOnDeleteComplete() {
         return false;
+    }
+
+    @Override
+    protected void onCancelFavoritesFeed(FeedItem feedItem) {
+        Iterator<FeedItem> iterator = mFeedView.getBindDataSource().iterator();
+        while (iterator.hasNext()) {
+            FeedItem tempFeedItem = iterator.next();
+            if (!tempFeedItem.isCollected || tempFeedItem.category != CATEGORY.FAVORITES) {
+                iterator.remove();
+            }
+        }
+        mFeedView.notifyDataSetChanged();
+        checkToShowEmptyView();
     }
 }

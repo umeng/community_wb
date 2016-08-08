@@ -24,16 +24,11 @@
 
 package com.umeng.comm.ui.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.ImageButton;
 
 import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.beans.ImageItem;
@@ -50,28 +45,14 @@ import com.umeng.comm.ui.fragments.FeedDetailFragment;
 import com.umeng.common.ui.activities.BaseFragmentActivity;
 import com.umeng.common.ui.dialogs.FeedActionDialog;
 import com.umeng.common.ui.mvpview.MvpFeedDetailActivityView;
-import com.umeng.common.ui.mvpview.MvpFeedDetailView;
 import com.umeng.common.ui.presenter.impl.FeedDetailActivityPresenter;
-import com.umeng.common.ui.util.BroadcastUtils;
 import com.umeng.common.ui.widgets.BaseView;
-import com.umeng.common.ui.widgets.CommentEditTextHalf;
 
 
 /**
  * 某条Feed的详情页面,会根据feed id每次都会从服务器获取最新数据,暂时没有使用数据库缓存.
  */
-public class FeedDetailActivity extends BaseFragmentActivity implements OnClickListener,
-        MvpFeedDetailView, MvpFeedDetailActivityView {
-
-    /**
-     * 评论布局
-     */
-    private View mCommentLayout;
-    /**
-     * 评论ditText
-     */
-    private CommentEditTextHalf mCommentEditText;
-
+public class FeedDetailActivity extends BaseFragmentActivity implements OnClickListener, MvpFeedDetailActivityView {
     /**
      * 目标feed的id
      */
@@ -83,15 +64,7 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 
     FeedItem mFeedItem;
     /**
-     * 刷新按钮
-     */
-    private ImageButton mRefreshButton;
-    /**
-     * 布局监听器,监听布局高度，用以计算评论时布局应该滚动的高度
-     */
-    private OnGlobalLayoutListener mGlobalLayoutListener;
-    /**
-     * 
+     *
      */
     private View mRootView;
 
@@ -106,6 +79,7 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 
     private BaseView mBaseView;
     private View mFavoriteImg;
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -117,14 +91,14 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
         // 设置Fragment的container id
         setFragmentContainerId(ResFinder.getId("umeng_comm_feed_container"));
         mActivityPresenter = new FeedDetailActivityPresenter(this);
+        mActivityPresenter.setIsRegisterReceiver(true);
         mActivityPresenter.attach(this);
         initViews();
         initFeed(getIntent());
-        BroadcastUtils.registerFeedUpdateBroadcast(this, mReceiver);
     }
 
     /**
-     * 
+     *
      */
     protected final void onNewIntent(Intent paramIntent) {
         super.onNewIntent(paramIntent);
@@ -156,16 +130,16 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
             // 初始化fragment
             initFragment(mFeedItem);
 
-            if (extraBundle.containsKey(Constants.TAG_IS_COMMENT)){
+            if (extraBundle.containsKey(Constants.TAG_IS_COMMENT)) {
                 mFeedFrgm.mIsShowComment = true;
             }
         }
         fetchFeedInfo(mRootView);
         checkFeedItem();
         mActionDialog.attachView(this);
-        if(mFeedItem != null && mFeedItem.isCollected){
+        if (mFeedItem != null && mFeedItem.isCollected) {
             mFavoriteImg.setSelected(true);
-        }else{
+        } else {
             mFavoriteImg.setSelected(false);
         }
     }
@@ -174,7 +148,7 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
      * 检查Feed Item的有效性,如果该Feed已经被删除,那么提示相关信息,并且退出该Activity
      */
     private void checkFeedItem() {
-        if (mFeedItem != null && mFeedItem.status >= FeedItem.STATUS_SPAM&&mFeedItem.status != FeedItem.STATUS_LOCK) {
+        if (mFeedItem != null && mFeedItem.status >= FeedItem.STATUS_SPAM && mFeedItem.status != FeedItem.STATUS_LOCK) {
             ToastMsg.showShortMsgByResName("umeng_comm_feed_deleted");
             finish();
         }
@@ -188,21 +162,6 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
         mRootView = findViewById(ResFinder.getId("umeng_comm_feed_detail_root"));
         mBaseView = (BaseView) findViewById(ResFinder.getId("umeng_comm_baseview"));
         mBaseView.forceLayout();
-
-        findViewById(ResFinder.getId("umeng_comm_feed_container")).setOnTouchListener(
-                new OnTouchListener() {
-
-                    @SuppressLint("ClickableViewAccessibility")
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (mCommentLayout != null) {
-                            mCommentLayout.setVisibility(View.GONE);
-                            hideInputMethod(mCommentEditText);
-                            return true;
-                        }
-                        return false;
-                    }
-                });
     }
 
     /**
@@ -216,7 +175,7 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 
     /**
      * 检测该条feed是否有效。由于在Response中构造了一个默认的Feed，此时需要验证其有效性。</br>
-     * 
+     *
      * @param feedItem
      * @return
      */
@@ -227,7 +186,7 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 
     /**
      * 初始化feed detail fragment</br>
-     * 
+     *
      * @param feedItem
      */
     private void initFragment(FeedItem feedItem) {
@@ -249,11 +208,11 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 //                });
         findViewById(ResFinder.getId("umeng_comm_title_more_btn")).setOnClickListener(
                 new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActionDialog.show();
-            }
-        });
+                    @Override
+                    public void onClick(View view) {
+                        mActionDialog.show();
+                    }
+                });
         findViewById(ResFinder.getId("umeng_comm_title_favorite_btn")).setOnClickListener(
                 new LoginOnViewClickListener() {
                     @Override
@@ -290,40 +249,11 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
         }
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // 删除监听器,避免内存泄露
-        mRootView.getViewTreeObserver().removeGlobalOnLayoutListener(
-                mGlobalLayoutListener);
-    }
-
     @Override
     public void deleteFeedSuccess() {
         // BroadcastUtils.sendFeedDeleteBroadcast(getApplicationContext(),
         // mFeedItem);
         finish();
-    }
-
-    @Override
-    public void fetchLikesComplete(String nextUrl) {
-
-    }
-
-    @Override
-    public void fetchCommentsComplete() {
-
-    }
-
-    @Override
-    public void showAllComment(boolean result) {
-
-    }
-
-    @Override
-    public void showOwnerComment(boolean result) {
-
     }
 
     @Override
@@ -362,30 +292,16 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 
     @Override
     public void forbidUserComplete() {
-
     }
 
     @Override
     public void cancelForbidUserComplete() {
-
     }
 
     @Override
     public void fetchFeedFaild() {
 //        finish();
     }
-
-    /**
-     * 此时仅仅关心详情页的收藏字段
-     */
-    private BroadcastUtils.DefalutReceiver mReceiver = new BroadcastUtils.DefalutReceiver() {
-        public void onReceiveUpdateFeed(Intent intent) {
-            FeedItem newFeedItem = getFeed(intent);
-            if (newFeedItem.id.equals(mFeedItem.id)) {
-                mFeedItem.category = newFeedItem.category;
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -397,12 +313,13 @@ public class FeedDetailActivity extends BaseFragmentActivity implements OnClickL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        ShareSDKManager.getInstance().getCurrentSDK().onActivityResult(this,requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
+        ShareSDKManager.getInstance().getCurrentSDK().onActivityResult(this, requestCode, resultCode, data);
     }
 
+    @Override
     protected void onDestroy() {
-        BroadcastUtils.unRegisterBroadcast(this, mReceiver);
+        mActivityPresenter.detach();
         super.onDestroy();
     }
 }

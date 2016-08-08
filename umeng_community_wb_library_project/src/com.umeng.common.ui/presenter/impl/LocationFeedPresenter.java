@@ -50,7 +50,8 @@ public class LocationFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         if (mLocation == null) {
             Log.d("", "####obtain location is null...");
             return;

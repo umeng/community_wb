@@ -42,9 +42,6 @@ public class LikedMeFragment extends CommentReceivedFragment {
 
     protected ReceivedCommentAdapter createListViewAdapter() {
         LikeMeFeedAdapter adapter = new LikeMeFeedAdapter(getActivity());
-        adapter.setUserInfoClassName(mUserInfoClass);
-        adapter.setTopicDetailClassName(mTopicDetailClassName);
-        adapter.setFeedDetailClassName(mFeedDetailClassName);
         return adapter;
     }
 }

@@ -20,6 +20,7 @@ ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/ma
 uses-sdk
 ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:8:5-10:41
 MERGED from [com.umeng.wsq:umeng_community_wb_library_project:2.6.2] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:support-v4:22.0.0] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/AndroidManifest.xml:20:5-43
 	android:targetSdkVersion
 		ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:10:9-38
 		INJECTED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml
@@ -137,6 +138,7 @@ ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/ma
 application
 ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:69:5-382:19
 MERGED from [com.umeng.wsq:umeng_community_wb_library_project:2.6.2] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/AndroidManifest.xml:11:5-12:19
+MERGED from [com.android.support:support-v4:22.0.0] /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/AndroidManifest.xml:22:5-20
 	android:label
 		ADDED from /Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/src/main/AndroidManifest.xml:74:9-41
 	android:hardwareAccelerated

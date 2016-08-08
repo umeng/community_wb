@@ -47,13 +47,15 @@ public class NearbyFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
-        LocationSDKManager.getInstance().getCurrentSDK()
-                .requestLocation(mContext, new SimpleFetchListener<Location>() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
+        LocationSDKManager.getInstance().getCurrentSDK().requestLocation(mContext,
+                new SimpleFetchListener<Location>() {
 
                     @Override
                     public void onComplete(Location location) {
                         if (location == null) {
+                            setLoadingState(false);
                             mFeedView.onRefreshEnd();
                             return;
                         }
@@ -87,4 +89,5 @@ public class NearbyFeedPresenter extends FeedListPresenter {
     protected Comparator<FeedItem> getFeedCompartator() {
         return mComparator;
     }
+
 }

@@ -47,7 +47,8 @@ public class CommentReceivedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchReceivedComments(0, mCommentListener);
     }
 
@@ -60,13 +61,14 @@ public class CommentReceivedPresenter extends FeedListPresenter {
 
         @Override
         public void onComplete(FeedCommentResponse response) {
+            setLoadingState(false);
             if (NetworkUtils.handleResponseAll(response)) {
                 mFeedView.onRefreshEnd();
                 return;
             }
-            if(Constants.IS_CLEAR_DATA_AFTER_REFRESH){
+            if (Constants.IS_CLEAR_DATA_AFTER_REFRESH) {
                 mNextPageUrl = response.nextPageUrl;
-            }else {
+            } else {
                 if (TextUtils.isEmpty(mNextPageUrl) && mUpdateNextPageUrl.get()) {
                     mNextPageUrl = response.nextPageUrl;
                     mUpdateNextPageUrl.set(false);
@@ -80,7 +82,7 @@ public class CommentReceivedPresenter extends FeedListPresenter {
 
     @Override
     public void fetchNextPageData() {
-        if(!isCanLoadMore()){
+        if (!isCanLoadMore()) {
             mFeedView.onRefreshEnd();
             return;
         }
@@ -89,16 +91,25 @@ public class CommentReceivedPresenter extends FeedListPresenter {
             mFeedView.onRefreshEnd();
             return;
         }
+
+        // 设置加载状态，必须在真正的请求之前设置，否则会出现bug
+        if (isLoading()) {
+            return;
+        } else {
+            setLoadingState(true);
+        }
+
         mCommunitySDK.fetchNextPageData(mNextPageUrl, FeedCommentResponse.class,
                 new SimpleFetchListener<FeedCommentResponse>() {
                     @Override
                     public void onComplete(FeedCommentResponse response) {
+                        setLoadingState(false);
+                        mFeedView.onRefreshEnd();
                         if (NetworkUtils.handleResponseAll(response)) {
                             return;
                         }
                         mNextPageUrl = response.nextPageUrl;
                         appendFeedItems(response.result, false);
-                        mFeedView.onRefreshEnd();
                     }
                 });
     }

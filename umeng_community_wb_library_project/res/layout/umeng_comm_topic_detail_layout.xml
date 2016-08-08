@@ -38,6 +38,6 @@
     </LinearLayout>
     
     <include
-        android:id="@+id/umeng_comm_title_layout" 
-        layout="@layout/umeng_comm_title_layout" />
+        android:id="@+id/umeng_comm_actionbar_fixed_id"
+        layout="@layout/umeng_comm_setting_title_bar" />
 </RelativeLayout>

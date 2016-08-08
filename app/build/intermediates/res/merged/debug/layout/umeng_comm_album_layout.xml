@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/umeng_comm_album_title"
-        layout="@layout/umeng_comm_title_layout"
+        android:id="@+id/umeng_comm_actionbar_fixed_id"
+        layout="@layout/umeng_comm_setting_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/umeng_comm_dimen_96px"
         android:layout_alignParentTop="true" />
@@ -17,7 +17,7 @@
         layout="@layout/umeng_comm_divide_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/umeng_comm_dimen_1px"
-        android:layout_below="@id/umeng_comm_album_title" />
+        android:layout_below="@id/umeng_comm_actionbar_fixed_id" />
 
     <com.umeng.common.ui.widgets.RefreshGvLayout
         android:id="@+id/umeng_comm_album_swipe_layout"

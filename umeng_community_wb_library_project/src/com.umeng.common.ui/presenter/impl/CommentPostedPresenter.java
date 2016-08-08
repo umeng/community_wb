@@ -27,9 +27,7 @@ package com.umeng.common.ui.presenter.impl;
 
 import com.umeng.common.ui.mvpview.MvpFeedView;
 
-/**
- * @author mrsimple
- */
+
 public class CommentPostedPresenter extends CommentReceivedPresenter {
 
     public CommentPostedPresenter(MvpFeedView feedViewInterface) {
@@ -37,8 +35,7 @@ public class CommentPostedPresenter extends CommentReceivedPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
         mCommunitySDK.fetchPostedComments(0, mCommentListener);
     }
-
 }

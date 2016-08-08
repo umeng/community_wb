@@ -26,9 +26,12 @@ package com.umeng.common.ui.presenter.impl;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -46,15 +49,20 @@ import com.umeng.comm.core.beans.ImageItem;
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.constants.ErrorCode;
 import com.umeng.comm.core.image.ImageUploader;
+import com.umeng.comm.core.listeners.Listeners;
 import com.umeng.comm.core.listeners.Listeners.CommListener;
 import com.umeng.comm.core.listeners.Listeners.FetchListener;
 import com.umeng.comm.core.nets.Response;
+import com.umeng.comm.core.nets.responses.LoginResponse;
 import com.umeng.comm.core.nets.responses.PostCommentResponse;
+import com.umeng.comm.core.nets.responses.SimpleResponse;
 import com.umeng.comm.core.nets.uitls.NetworkUtils;
 import com.umeng.comm.core.sdkmanager.ImageUploaderManager;
+import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.comm.core.utils.ToastMsg;
+import com.umeng.common.ui.colortheme.ColorQueque;
 import com.umeng.common.ui.dialogs.ConfirmDialog;
 import com.umeng.common.ui.mvpview.MvpCommentView;
 import com.umeng.common.ui.presenter.BasePresenter;
@@ -78,7 +86,9 @@ public class CommentPresenter extends BasePresenter {
         mCommentView = commentView;
         mFeedItem = feedItem;
     }
-
+    public void setShowReplyCommentBtn(boolean is){
+        isShowReplyCommentBtn = is;
+    }
     public void setFeedItem(FeedItem feedItem) {
         this.mFeedItem = feedItem;
     }
@@ -322,20 +332,10 @@ public class CommentPresenter extends BasePresenter {
         CommUser loginUser = CommConfig.getConfig().loginedUser;
         // 自己创建的评论可以删除
         if (comment.creator.id.equals(loginUser.id)) {
-//            showConfirmDialog(comment, ResFinder.getString("umeng_comm_delete_comment"),
-//                    new DialogInterface.OnClickListener() {
-//
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            deleteComment(comment);
-//                        }
-//                    });
             showSelectDialog(position, comment, true);
         } else if (isMyFeed(comment, loginUser.id)) { // 在自己发布的feed页面可以删除或者回复他人的评论
             showSelectDialog(position, comment, true);
         } else {
-//            boolean hasDeletePermission = (loginUser.permisson == Permisson.ADMIN && loginUser.subPermissions
-//                    .contains(SubPermission.DELETE_CONTENT));
             boolean hasDeletePermission = comment.permission >= Constants.PERMISSION_CODE_DELETE;
             showSelectDialog(position, comment, hasDeletePermission);
         }
@@ -359,7 +359,7 @@ public class CommentPresenter extends BasePresenter {
     /**
      * 弹出举报或者回复对话框
      */
-    private void showSelectDialog(final int position, final Comment comment, final boolean delete) {
+    protected void showSelectDialog(final int position, final Comment comment, final boolean delete) {
         final Dialog selectDialog = new Dialog(mContext,
                 ResFinder.getStyle("umeng_comm_action_dialog_fullscreen"));
 
@@ -375,38 +375,100 @@ public class CommentPresenter extends BasePresenter {
 
         TextView reportTextView = (TextView) selectDialog.findViewById(ResFinder
                 .getId("umeng_comm_report_comment_tv"));
-        if (delete) {
-            reportTextView.setText(ResFinder.getString("umeng_comm_delete_feed_tips"));
+        TextView reportUserTextView = (TextView) selectDialog.findViewById(ResFinder
+                .getId("umeng_comm_report_user_comment_tv"));
+        TextView deleteTextView = (TextView) selectDialog.findViewById(ResFinder
+                .getId("umeng_comm_delete_comment_tv"));
+        TextView copyTextView = (TextView) selectDialog.findViewById(ResFinder
+                .getId("umeng_comm_copy_comment_tv"));
+        TextView replyTextView = (TextView) selectDialog.findViewById(ResFinder
+                .getId("umeng_comm_reply_comment_tv"));
+        if (isSelfComment(comment.creator)) {
+            reportTextView.setVisibility(View.GONE);
+            reportUserTextView.setVisibility(View.GONE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line")).setVisibility(View.GONE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line1")).setVisibility(View.GONE);
+            replyTextView.setBackgroundDrawable(ColorQueque.getDrawable("umeng_comm_more_radius_top"));
+        } else {
+            reportTextView.setVisibility(View.VISIBLE);
+            reportUserTextView.setVisibility(View.VISIBLE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line")).setVisibility(View.VISIBLE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line1")).setVisibility(View.VISIBLE);
+            replyTextView.setBackgroundDrawable(ColorQueque.getDrawable("umeng_comm_action_dialog_middle_bg"));
         }
+
+
+        // 有删除权限则不需要举报按钮
+        if (delete) {
+            deleteTextView.setVisibility(View.VISIBLE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line2")).setVisibility(View.VISIBLE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line1")).setVisibility(View.GONE);
+            reportTextView.setVisibility(View.GONE);
+        } else {
+            deleteTextView.setVisibility(View.GONE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line2")).setVisibility(View.GONE);
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line1")).setVisibility(View.VISIBLE);
+            reportTextView.setVisibility(View.VISIBLE);
+        }
+
         reportTextView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 selectDialog.dismiss();
-                String tips = delete ? ResFinder.getString("umeng_comm_delete_comment") : ResFinder
-                        .getString("umeng_comm_confirm_spam");
+
+                String tips = ResFinder.getString("umeng_comm_confirm_spam");
                 showConfirmDialog(comment, tips, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (delete) {
-                            deleteComment(comment);
-                        } else {
-                            spamComment(comment.id);
-                        }
+                        spamComment(comment.id);
                     }
                 });
             }
         });
 
-        TextView replyTextView = (TextView) selectDialog.findViewById(ResFinder
-                .getId("umeng_comm_reply_comment_tv"));
+        deleteTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectDialog.dismiss();
+                String tips = ResFinder.getString("umeng_comm_delete_comment");
+                showConfirmDialog(comment, tips, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteComment(comment);
+                    }
+                });
+            }
+        });
+        reportUserTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectDialog.dismiss();
+                String tips = ResFinder.getString("umeng_comm_confirm_spam");
+                showConfirmDialog(comment, tips, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reportCommentUser(comment.creator);
+                    }
+                });
+            }
+        });
+        copyTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectDialog.dismiss();
+                copyToClipboard(comment);
+            }
+        });
         // 简版sdk，评论操作不显示回复按钮
         if(!isShowReplyCommentBtn){
             replyTextView.setVisibility(View.GONE);
-            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line")).setVisibility(View.GONE);
-            reportTextView.setBackgroundResource(ResFinder.getResourceId(ResFinder.ResType.DRAWABLE,
-                    "umeng_comm_radius_bg"));
+            selectDialog.findViewById(ResFinder.getId("umeng_comm_report_line1")).setVisibility(View.GONE);
+//            reportTextView.setBackgroundResource(ResFinder.getResourceId(ResFinder.ResType.DRAWABLE,
+//                    "umeng_comm_radius_bg"));
         }else {
             replyTextView.setOnClickListener(new OnClickListener() {
 
@@ -427,5 +489,60 @@ public class CommentPresenter extends BasePresenter {
         });
 
         selectDialog.show();
+    }
+    private boolean isSelfComment(CommUser user) {
+        if (user.id.equals(CommConfig.getConfig().loginedUser.id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private void reportCommentUser(final CommUser user) {
+        Listeners.SimpleFetchListener<LoginResponse> loginListener = new Listeners.SimpleFetchListener<LoginResponse>() {
+            @Override
+            public void onComplete(LoginResponse response) {
+                if (response.errCode != ErrorCode.NO_ERROR) {
+                    return;
+                }
+                // 举报feed
+                mCommunitySDK.spamUser(user.id,
+                        new Listeners.FetchListener<SimpleResponse>() {
+
+                            @Override
+                            public void onStart() {
+                            }
+
+                            @Override
+                            public void onComplete(SimpleResponse response) {
+                                if (NetworkUtils.handleResponseComm(response)) {
+                                    return;
+                                }
+                                if (response.errCode == ErrorCode.NO_ERROR) {
+                                    ToastMsg.showShortMsgByResName(
+                                            "umeng_comm_discuss_spammer_success");
+                                } else if (response.errCode == ErrorCode.REPORT_SAME_FEED) {
+                                    ToastMsg.showShortMsgByResName(
+                                            "umeng_comm_discuss_spammered");
+                                } else {
+                                    ToastMsg.showShortMsgByResName("umeng_comm_discuss_spammer_failed");
+                                }
+                            }
+                        });
+            }
+        };
+        CommonUtils.checkLoginAndFireCallback(mContext, loginListener);
+    }
+    @SuppressLint("NewApi")
+    private void copyToClipboard(Comment comment) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ClipData data = ClipData.newPlainText("feed_text", comment.text);
+            android.content.ClipboardManager mClipboard = (android.content.ClipboardManager) mContext
+                    .getSystemService(Context.CLIPBOARD_SERVICE);
+            mClipboard.setPrimaryClip(data);
+        } else {
+            android.text.ClipboardManager mClipboard = (android.text.ClipboardManager) mContext
+                    .getSystemService(Context.CLIPBOARD_SERVICE);
+            mClipboard.setText(comment.text);
+        }
     }
 }

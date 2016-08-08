@@ -28,6 +28,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.umeng.comm.core.beans.FeedItem;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.adapters.viewholders.ReceivedCommentViewHolder;
 
 
@@ -36,11 +37,9 @@ import com.umeng.common.ui.adapters.viewholders.ReceivedCommentViewHolder;
  */
 public class ReceivedCommentAdapter extends CommonAdapter<FeedItem, ReceivedCommentViewHolder> {
 
-    public boolean showReplyBtn = false;
+    private NavigationCommand mNavigationCommand;
 
-    private Class mUserInfoClass;
-    private Class mTopicDetailClassName;
-    private Class mFeedDetailClassName;
+    public boolean showReplyBtn = false;
 
     public ReceivedCommentAdapter(Context context) {
         super(context);
@@ -58,21 +57,11 @@ public class ReceivedCommentAdapter extends CommonAdapter<FeedItem, ReceivedComm
 
     @Override
     protected void setItemData(final int position, ReceivedCommentViewHolder viewHolder, View rootView) {
-        viewHolder.setFeedDetailClassName(mFeedDetailClassName);
-        viewHolder.setTopicDetailClassName(mTopicDetailClassName);
-        viewHolder.setUserInfoClassName(mUserInfoClass);
+        viewHolder.setNavigationCommand(mNavigationCommand);
         viewHolder.showFeedItem(getItem(position), showReplyBtn);
     }
 
-    public void setUserInfoClassName(Class userInfoClassName) {
-        this.mUserInfoClass = userInfoClassName;
-    }
-
-    public void setTopicDetailClassName(Class topicDetailClassName) {
-        this.mTopicDetailClassName = topicDetailClassName;
-    }
-
-    public void setFeedDetailClassName(Class feedDetailClassName) {
-        this.mFeedDetailClassName = feedDetailClassName;
+    public void setNavigationCommand(NavigationCommand command){
+        mNavigationCommand = command;
     }
 }

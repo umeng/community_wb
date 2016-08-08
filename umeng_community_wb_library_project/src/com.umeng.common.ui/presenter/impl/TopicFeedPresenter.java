@@ -26,6 +26,8 @@ package com.umeng.common.ui.presenter.impl;
 
 import com.umeng.comm.core.beans.FeedItem;
 import com.umeng.comm.core.beans.Topic;
+import com.umeng.comm.core.listeners.Listeners;
+import com.umeng.comm.core.nets.responses.FeedsResponse;
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.common.ui.mvpview.MvpFeedView;
 
@@ -43,7 +45,13 @@ public class TopicFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadTopFeeds(Listeners.FetchListener<FeedsResponse> listener) {
+        mCommunitySDK.fetchTopFeedsWithTopicId(mId, listener);
+    }
+
+    @Override
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchTopicFeed(mId, mRefreshListener);
     }
 
@@ -75,7 +83,16 @@ public class TopicFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public boolean isAddToFeedList() {
-        return true;
+    public boolean isAddToFeedList(FeedItem feedItem) {
+        boolean isAddToFeedList = false;
+        if (feedItem.topics != null && !feedItem.topics.isEmpty()) {
+            for (Topic topic : feedItem.topics) {
+                if (topic.id.equals(mId)) {
+                    isAddToFeedList =  true;
+                    break;
+                }
+            }
+        }
+        return isAddToFeedList;
     }
 }

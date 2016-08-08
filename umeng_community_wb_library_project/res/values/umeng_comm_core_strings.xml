@@ -16,5 +16,6 @@
     <string name="umeng_comm_user_unusable">操作失败,用户被删除或者禁言</string>
     <string name="umeng_comm_device_forbidden">该设备已经被屏蔽，请联系社区管理员</string>
     <string name="umeng_comm_not_network">抱歉,没有网络连接</string>
+    <string name="umeng_comm_duplicate_content">短时间内不能发送相同内容</string>
 
 </resources>

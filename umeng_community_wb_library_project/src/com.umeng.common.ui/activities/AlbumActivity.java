@@ -85,11 +85,11 @@ public class AlbumActivity extends BaseActivity implements MvpAlbumView {
     private void initTitleLayout() {
         ViewFinder viewFinder = new ViewFinder(getWindow().getDecorView());
 
-        ImageButton settingButton = viewFinder.findViewById(ResFinder.getId("umeng_comm_title_setting_btn"));
+        Button settingButton = viewFinder.findViewById(ResFinder.getId("umeng_comm_save_bt"));
         // 目前将设置功能移到发现页面，此时暂时隐藏设置按钮
         settingButton.setVisibility(View.INVISIBLE);
         // back button
-        findViewById(ResFinder.getId("umeng_comm_title_back_btn")).setOnClickListener(
+        findViewById(ResFinder.getId("umeng_comm_setting_back")).setOnClickListener(
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -98,7 +98,7 @@ public class AlbumActivity extends BaseActivity implements MvpAlbumView {
                 });
 
         TextView titleTextView = (TextView) findViewById(ResFinder
-                .getId("umeng_comm_title_tv"));
+                .getId("umeng_comm_setting_title"));
         titleTextView.setText(ResFinder.getString("umeng_comm_user_gallery"));
 
         // 初始化下拉刷新Layout

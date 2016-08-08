@@ -35,21 +35,14 @@ import com.umeng.comm.core.listeners.Listeners.OnItemViewClickListener;
 import com.umeng.comm.core.listeners.Listeners.OnResultListener;
 import com.umeng.comm.ui.adapters.viewholders.FeedItemViewHolder;
 import com.umeng.common.ui.adapters.CommonAdapter;
+import com.umeng.common.ui.adapters.FeedBaseAdapter;
 
 
 /**
  * Feed消息流 适配器
  */
-public class FeedAdapter extends CommonAdapter<FeedItem, FeedItemViewHolder> {
-    // 评论的点击事件，因为要操作host页面,因此需要外部传递Listener
-    OnItemViewClickListener<FeedItem> mClickListener;
-    /**
-     * 是否显示距离
-     */
-    private boolean mShowDistance = false;
-    private boolean isShowMedal = true;
+public class FeedAdapter extends FeedBaseAdapter< FeedItemViewHolder> {
 
-    private ArrayMap<String, FeedItem> mArrayMap;
 
     public FeedAdapter(Context context) {
         super(context);
@@ -59,14 +52,6 @@ public class FeedAdapter extends CommonAdapter<FeedItem, FeedItemViewHolder> {
     protected FeedItemViewHolder createViewHolder() {
         mArrayMap = new ArrayMap<String, FeedItem>();
         return new FeedItemViewHolder(mArrayMap);
-    }
-
-    public void setShowDistance() {
-        mShowDistance = true;
-    }
-
-    public void setShowMedals(boolean isShowMedal) {
-        this.isShowMedal = isShowMedal;
     }
 
     @Override
@@ -90,21 +75,6 @@ public class FeedAdapter extends CommonAdapter<FeedItem, FeedItemViewHolder> {
             Log.e("", "### FeedAdapter中的Context不是Activity类型,无法分享");
         }
     }
-
-    public void setCommentClickListener(OnItemViewClickListener<FeedItem> clickListener) {
-        mClickListener = clickListener;
-    }
-
-    /**
-     * 该回调用于更新UI。用于点赞 or评论后更新
-     */
-    private OnResultListener mListener = new OnResultListener() {
-
-        @Override
-        public void onResult(int status) {
-            notifyDataSetChanged();
-        }
-    };
 
 } // end of FeedAdapter
 

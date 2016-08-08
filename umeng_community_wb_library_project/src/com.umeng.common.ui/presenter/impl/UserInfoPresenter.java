@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.umeng.comm.core.CommunitySDK;
+import com.umeng.comm.core.beans.CommConfig;
 import com.umeng.comm.core.beans.CommUser;
 import com.umeng.comm.core.beans.Topic;
 import com.umeng.comm.core.constants.ErrorCode;
@@ -270,7 +271,9 @@ public class UserInfoPresenter implements BaseActivityPresenter {
                 mHasLoadDataFromService = true;
                 mUserInfoView.setToggleButtonStatus(response.hasFollowed);
                 CommUser user = response.result;
-
+                if (CommonUtils.isMyself(user)){
+                    CommonUtils.saveLoginUserInfo(mActivity,user);
+                }
                 Log.d("", "### 用户信息 : " + response.toString());
                 if (!TextUtils.isEmpty(user.id)) {
 //                    saveUserInfo(user);

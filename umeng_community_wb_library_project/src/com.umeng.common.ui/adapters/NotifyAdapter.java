@@ -31,8 +31,10 @@ import android.view.View.OnClickListener;
 
 import com.umeng.comm.core.beans.Notification;
 import com.umeng.comm.core.constants.Constants;
+import com.umeng.comm.core.imageloader.ImgDisplayOption;
 import com.umeng.comm.core.sdkmanager.ImageLoaderManager;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.adapters.viewholders.NotifyMsgViewHolder;
 
 
@@ -41,7 +43,7 @@ import com.umeng.common.ui.adapters.viewholders.NotifyMsgViewHolder;
  */
 public class NotifyAdapter extends CommonAdapter<Notification, NotifyMsgViewHolder> {
 
-    private Class mUserInfoClass;
+    private NavigationCommand mNavigationCommand;
 
     public NotifyAdapter(Context context) {
         super(context);
@@ -55,24 +57,24 @@ public class NotifyAdapter extends CommonAdapter<Notification, NotifyMsgViewHold
     @Override
     protected void setItemData(int position, NotifyMsgViewHolder viewHolder, View rootView) {
         final Notification item = getItem(position);
+        ImgDisplayOption option = ImgDisplayOption.getOptionByGender(item.from.gender);
         ImageLoaderManager.getInstance().getCurrentSDK()
-                .displayImage(item.from.iconUrl, viewHolder.userImageView);
+                .displayImage(item.from.iconUrl, viewHolder.userImageView, option);
         viewHolder.userImageView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, mUserInfoClass);
-                intent.putExtra(Constants.TAG_USER, item.from);
-                mContext.startActivity(intent);
+                if(mNavigationCommand != null){
+                    mNavigationCommand.navigateToUseProfile(item.from);
+                }
             }
         });
-        viewHolder.userNameTextView.setText(ResFinder.getString("umeng_comm_come_from")
-                + item.from.name);
+        viewHolder.userNameTextView.setText(ResFinder.getString("umeng_comm_come_from") + item.from.name);
         viewHolder.timeTextView.setText(item.timeStamp);
         viewHolder.notifyTextView.setText(item.msg);
     }
 
-    public void setUserInfoClassName(Class userInfoClassName) {
-        this.mUserInfoClass = userInfoClassName;
+    public void setNavigationCommand(NavigationCommand command){
+        this.mNavigationCommand = command;
     }
 }

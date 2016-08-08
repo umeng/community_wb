@@ -26,8 +26,8 @@
         android:singleLine="true"
         android:background="?attr/umeng_comm_focus_togglebutton"
         android:textColor="?attr/umeng_comm_focus_togglebutton_text"
-        android:textOff="@string/umeng_comm_follow_topic"
-        android:textOn="@string/umeng_comm_topic_followed"
+        android:textOff=""
+        android:textOn=""
         android:textSize="13dp" />
 
     <LinearLayout
@@ -75,7 +75,22 @@
             android:textColor="?attr/umeng_comm_active_user_msgcolor"
             android:textSize="10dp" />
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/umeng_comm_user_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/umeng_comm_dimen_20px"
+        android:layout_alignLeft="@id/umeng_commm_active_user_layout"
+        android:layout_toRightOf="@id/umeng_comm_active_user_togglebutton"
+        android:drawableLeft="?attr/umeng_comm_nearby_location_icon"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:visibility="gone"
+        android:drawablePadding="@dimen/umeng_comm_dimen_6px"
+        android:textColor="?attr/umeng_comm_active_user_msgcolor"
+        android:layout_below="@id/umeng_commm_active_user_layout"
+        android:layout_marginTop="15dp"
+        android:textSize="@dimen/umeng_comm_text_18px" />
     <include
         android:layout_width="match_parent"
         android:layout_height="1dp"

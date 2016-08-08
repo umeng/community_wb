@@ -24,8 +24,11 @@
 package com.umeng.common.ui.widgets;
 
 import android.content.Context;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -50,7 +53,7 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
     private int mTouchSlop;
 
     /**
-     * 
+     * ListView基类
      */
     protected T mAbsListView;
 
@@ -58,7 +61,9 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
      * ListView滚动监听器,用于外部
      */
     private OnScrollListener mListViewOnScrollListener;
-
+    /**
+     * 滚动回调监听器
+     */
     private OnResultListener mScrollListener;
 
     /**
@@ -73,28 +78,35 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
      * 抬起时的y坐标, 与mYDown一起用于滑动到底部时判断是上拉还是下拉
      */
     protected int mLastY;
+
     /**
      * 是否在加载中 ( 上拉加载更多 )
      */
     protected boolean isLoading = false;
-
-    private int mColor1;
-    private int mColor2;
-    private int mColor3;
-    private int mColor4;
+    /**
+     * 下拉圈颜色
+     */
+    private int mColor1, mColor2, mColor3, mColor4;
 
     /**
      * ListView的加载中footer
      */
     protected View mFooterView;
-
-    private int mScrollDirection = 0; // 0:代表向下滚动；1：向上滚动
+    /**
+     * 0:代表向下滚动；1：向上滚动
+     */
+    private int mScrollDirection = 0;
+    /**
+     * motion event gesture detector
+     */
+    private GestureDetectorCompat mGestureDetectorCompat;
 
     /**
      * @param context
      */
     public RefreshLayout(Context context) {
         this(context, null);
+        init(context);
     }
 
     public RefreshLayout(Context context, AttributeSet attrs) {
@@ -111,7 +123,46 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
         mColor2 = ResFinder.getResourceId(ResType.COLOR, "umeng_comm_lv_header_color2");
         mColor3 = ResFinder.getResourceId(ResType.COLOR, "umeng_comm_lv_header_color3");
         mColor4 = ResFinder.getResourceId(ResType.COLOR, "umeng_comm_lv_header_color4");
+        init(context);
+    }
 
+    private void init(Context context) {
+        mGestureDetectorCompat = new GestureDetectorCompat(context, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                if (motionEvent.getRawY() > motionEvent1.getRawY()) {
+                    mScrollDirection = 1;
+                } else {
+                    mScrollDirection = 0;
+                }
+                return false;
+            }
+        });
     }
 
     @SuppressWarnings("deprecation")
@@ -170,7 +221,7 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
 
     private boolean dealTouchEvent(MotionEvent event) {
         final int action = event.getAction();
-
+        mGestureDetectorCompat.onTouchEvent(event);
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 // 按下
@@ -183,16 +234,10 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
                 break;
 
             case MotionEvent.ACTION_UP:
+                mLastY = (int) event.getRawY();
                 // 抬起
                 if (canLoad()) {
                     loadData();
-                }
-                if (mScrollListener != null) {
-                    if (isPullUp()) {
-                        mScrollDirection = 1;
-                    } else {
-                        mScrollDirection = 0;
-                    }
                 }
                 break;
             default:
@@ -203,7 +248,7 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
 
     /**
      * 是否可以加载更多, 条件是到了最底部, listview不在加载中, 且为上拉操作.
-     * 
+     *
      * @return
      */
     private boolean canLoad() {
@@ -229,11 +274,11 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
 
     /**
      * 是否是上拉操作
-     * 
+     *
      * @return
      */
     private boolean isPullUp() {
-        return mLastY > 0 && (mYDown - mLastY) >= mTouchSlop * 3;
+        return mLastY >= 0 && (mYDown - mLastY) >= mTouchSlop * 3;
     }
 
     /**
@@ -260,7 +305,7 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
 
     /**
      * 使外部可以监听到listview的滚动
-     * 
+     *
      * @param listener
      */
     public void addOnScrollListener(OnScrollListener listener) {
@@ -284,8 +329,7 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-            int totalItemCount) {
-
+                         int totalItemCount) {
         // 回调给外部的监听器
         if (mListViewOnScrollListener != null) {
             mListViewOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount,
@@ -304,7 +348,7 @@ public abstract class RefreshLayout<T extends AbsListView> extends SwipeRefreshL
 
     /**
      * 加载更多的监听器
-     * 
+     *
      * @author mrsimple
      */
     public static interface OnLoadListener {

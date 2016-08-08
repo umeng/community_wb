@@ -42,7 +42,7 @@ import com.umeng.comm.core.utils.ResFinder;
 public abstract class BaseTitleActivity extends BaseFragmentActivity {
     protected ImageView mTitleBackBtn;
     protected TextView mTitleTextView;
-    protected ImageButton mTitleRightBtn;
+    protected Button mTitleRightBtn;
 
     @Override
     protected final void onCreate(Bundle arg0) {
@@ -65,7 +65,7 @@ public abstract class BaseTitleActivity extends BaseFragmentActivity {
      * 初始化Title区域，含有一个返回按钮、文本区域、设置按钮
      */
     protected void initTitleLayout() {
-        mTitleBackBtn = findViewByIdWithFinder(ResFinder.getId("umeng_comm_title_back_btn"));
+        mTitleBackBtn = findViewByIdWithFinder(ResFinder.getId("umeng_comm_setting_back"));
         mTitleBackBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -73,8 +73,8 @@ public abstract class BaseTitleActivity extends BaseFragmentActivity {
                 finish();
             }
         });
-        mTitleTextView = findViewByIdWithFinder(ResFinder.getId("umeng_comm_title_tv"));
-        mTitleRightBtn = findViewByIdWithFinder(ResFinder.getId("umeng_comm_title_setting_btn"));
+        mTitleTextView = findViewByIdWithFinder(ResFinder.getId("umeng_comm_setting_title"));
+        mTitleRightBtn = findViewByIdWithFinder(ResFinder.getId("umeng_comm_save_bt"));
         mTitleRightBtn.setVisibility(View.GONE);
     }
 

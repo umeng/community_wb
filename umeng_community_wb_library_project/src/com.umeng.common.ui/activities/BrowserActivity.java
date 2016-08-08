@@ -25,7 +25,6 @@
 package com.umeng.common.ui.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,7 +34,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,7 +46,7 @@ public class BrowserActivity extends BaseActivity {
     WebView mWebView;
     View mBackBtn;
     TextView mTitleBtn;
-    ImageButton mActionBtn;
+    View mActionBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,7 @@ public class BrowserActivity extends BaseActivity {
     @SuppressLint("SetJavaScriptEnabled")
     private void initWidgets() {
 
-        mBackBtn = findViewById(ResFinder.getId("umeng_comm_title_back_btn"));
+        mBackBtn = findViewById(ResFinder.getId("umeng_comm_setting_back"));
         mBackBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -82,9 +80,9 @@ public class BrowserActivity extends BaseActivity {
                 finish();
             }
         });
-        mTitleBtn = (TextView) findViewById(ResFinder.getId("umeng_comm_title_tv"));
+        mTitleBtn = (TextView) findViewById(ResFinder.getId("umeng_comm_setting_title"));
         mTitleBtn.setText(ResFinder.getString("umeng_comm_url_detail"));
-        mActionBtn = (ImageButton) findViewById(ResFinder.getId("umeng_comm_title_setting_btn"));
+        mActionBtn = findViewById(ResFinder.getId("umeng_comm_save_bt"));
         mActionBtn.setVisibility(View.GONE);
 
         mProgressBar = (ProgressBar) findViewById(ResFinder.getId("umeng_comm_load_url_bar"));

@@ -25,7 +25,6 @@
 package com.umeng.common.ui.adapters;
 
 import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +36,7 @@ import com.umeng.comm.core.imageloader.ImgDisplayOption;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.comm.core.utils.ResFinder.ResType;
 import com.umeng.common.ui.adapters.viewholders.NullViewParser;
-import com.umeng.common.ui.util.SDKVersionUtils;
 import com.umeng.common.ui.widgets.SquareImageView;
-
 
 /**
  * 消息流九宫格图片的Adapter

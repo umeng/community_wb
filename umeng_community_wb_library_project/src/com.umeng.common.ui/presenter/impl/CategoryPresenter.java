@@ -270,13 +270,7 @@ public class CategoryPresenter extends BaseFragmentPresenter<List<Category>> {
             }
         });
     }
-    protected void fetchTopicComplete(List<Topic> topics, boolean fromRefersh) {
-//        parseNextpageUrl(topics, fromRefersh);
-        // 过滤已经存在的数据
-        final List<Topic> newTopics = topics;
-       mvpCategoryView.ChangeAdapter(newTopics);
 
-    }
     /**
      * 保存话题列表到数据库中,首先将话题本身的内容保存到topic表中,然后将话题与用户的关系( 关注与否 ) 插入到topic_user表中.
      *

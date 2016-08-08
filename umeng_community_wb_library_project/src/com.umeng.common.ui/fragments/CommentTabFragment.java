@@ -34,6 +34,8 @@ import android.widget.TextView;
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
+import com.umeng.common.ui.adapters.viewholders.ReceivedCommentViewHolder;
 import com.umeng.common.ui.presenter.impl.NullPresenter;
 
 
@@ -58,9 +60,7 @@ public class CommentTabFragment extends BaseFragment<Void, NullPresenter> {
     private int mCurrentTab;
     private int mTabDistance;
 
-    private Class mUserInfoClass;
-    private Class mTopicDetailClassName;
-    private Class mFeedDetailClassName;
+    private NavigationCommand mNavigationCommand;
 
     @Override
     protected int getFragmentLayout() {
@@ -70,13 +70,6 @@ public class CommentTabFragment extends BaseFragment<Void, NullPresenter> {
     @Override
     protected void initWidgets() {
         mScreenWidth = DeviceUtils.getScreenSize(getActivity()).x;
-
-//        mTitles = getResources().getStringArray(
-//                ResFinder.getResourceId(ResType.ARRAY, "umeng_comm_comments_tabs"));
-//
-//        mIndicator = (ViewPagerIndicator) findViewById(ResFinder
-//                .getId("umeng_comm_comment_indicator"));
-
         mCommentReceivedTv = findViewById(ResFinder.getId("umeng_comm_comment_received"));
         mCommentReceivedTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,9 +84,7 @@ public class CommentTabFragment extends BaseFragment<Void, NullPresenter> {
                 mViewPager.setCurrentItem(1);
             }
         });
-
         mTabCursor = findViewById(ResFinder.getId("umeng_comm_tab_cursor"));
-
         mViewPager = (ViewPager) findViewById(ResFinder.getId("umeng_comm_comment_viewPager"));
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -142,17 +133,13 @@ public class CommentTabFragment extends BaseFragment<Void, NullPresenter> {
         if (pos == 0) {
             if (mReceiveFragment == null) {
                 mReceiveFragment = new CommentReceivedFragment();
-                mReceiveFragment.setFeedDetailClassName(mFeedDetailClassName);
-                mReceiveFragment.setTopicDetailClassName(mTopicDetailClassName);
-                mReceiveFragment.setUserInfoClassName(mUserInfoClass);
+                mReceiveFragment.setNavigationCommand(mNavigationCommand);
             }
             return mReceiveFragment;
         } else if (pos == 1) {
             if (mPostedFragment == null) {
                 mPostedFragment = new CommentPostedFragment();
-                mPostedFragment.setFeedDetailClassName(mFeedDetailClassName);
-                mPostedFragment.setTopicDetailClassName(mTopicDetailClassName);
-                mPostedFragment.setUserInfoClassName(mUserInfoClass);
+                mPostedFragment.setNavigationCommand(mNavigationCommand);
             }
             return mPostedFragment;
         }
@@ -201,16 +188,8 @@ public class CommentTabFragment extends BaseFragment<Void, NullPresenter> {
         mTabCursor.startAnimation(animation);
     }
 
-    public void setUserInfoClassName(Class userInfoClassName) {
-        this.mUserInfoClass = userInfoClassName;
-    }
-
-    public void setTopicDetailClassName(Class topicDetailClassName) {
-        this.mTopicDetailClassName = topicDetailClassName;
-    }
-
-    public void setFeedDetailClassName(Class feedDetailClassName) {
-        this.mFeedDetailClassName = feedDetailClassName;
+    public void setNavigationCommand(NavigationCommand command) {
+        mNavigationCommand = command;
     }
 
 }

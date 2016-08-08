@@ -18,5 +18,5 @@ public interface MvpCategoryView extends MvpBaseRefreshView{
      */
     public void onRefreshEndNoOP();
 
-    public void ChangeAdapter(List<Topic> list);
+
 }

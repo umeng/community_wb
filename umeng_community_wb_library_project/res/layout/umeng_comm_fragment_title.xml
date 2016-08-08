@@ -44,15 +44,14 @@
     <!-- tab组件 -->
     <com.umeng.common.ui.widgets.MainIndicator
         android:id="@+id/umeng_comm_segment_view"
-        android:layout_width="match_parent"
+        android:layout_width="260dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top|center"
-        android:layout_marginLeft="15dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingRight="@dimen/action_bar_padding" />
+        />
 
     <!--<SegmentView-->
     <!--android:id="@+id/umeng_comm_segment_view"-->

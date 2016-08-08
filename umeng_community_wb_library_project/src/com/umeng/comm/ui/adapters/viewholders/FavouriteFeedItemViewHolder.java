@@ -326,19 +326,19 @@ public class FavouriteFeedItemViewHolder extends FeedItemViewHolder {
     @SuppressWarnings("deprecation")
     private void setSpamFeed(FeedItem feedItem) {
         ViewGroup.LayoutParams params = mFeedTextTv.getLayoutParams();
-        if (feedItem.status < FeedItem.STATUS_SPAM && mFeedItem.status != FeedItem.STATUS_LOCK) { // 设置成默认的状态，避免复用导致问题
+        if (feedItem.status < FeedItem.STATUS_SPAM || mFeedItem.status == FeedItem.STATUS_LOCK) { // 设置成默认的状态，避免复用导致问题
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             mFeedTextTv.setLayoutParams(params);
             mFeedTextTv.setGravity(Gravity.LEFT);
             mFeedTextTv.setBackgroundDrawable(null);
-            mFeedTextTv.setText(feedItem.text);
+//            mFeedTextTv.setText(feedItem.text);
             return;
         }
         mFeedTextTv.setVisibility(View.VISIBLE);
         String text = getToastText(feedItem.status);
         FontMetrics fm = mFeedTextTv.getPaint().getFontMetrics();
-        int textHeight = (int) Math.ceil(fm.descent - fm.ascent) + 60;
+        int textHeight = (int) Math.ceil(fm.descent - fm.ascent) + DeviceUtils.dp2px(mContext,30);
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         // params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         params.height = textHeight;

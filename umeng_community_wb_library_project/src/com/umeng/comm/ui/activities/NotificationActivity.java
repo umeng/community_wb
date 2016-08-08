@@ -24,13 +24,20 @@
 
 package com.umeng.comm.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.umeng.comm.core.beans.CommUser;
+import com.umeng.comm.core.beans.FeedItem;
+import com.umeng.comm.core.beans.Topic;
+import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
 import com.umeng.common.ui.activities.BaseFragmentActivity;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.fragments.NotificationFragment;
 
 
@@ -38,12 +45,16 @@ import com.umeng.common.ui.fragments.NotificationFragment;
  * @author mrsimple
  */
 public class NotificationActivity extends BaseFragmentActivity {
+
+    private NavigationCommand mNavigationCommand;
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(ResFinder.getLayout("umeng_comm_notify_activity"));
         initTitleLayout();
         attachFragment();
+        mNavigationCommand = new NavigationCommandImpl(this);
     }
 
     private void initTitleLayout() {
@@ -61,7 +72,7 @@ public class NotificationActivity extends BaseFragmentActivity {
 
     private void attachFragment() {
         NotificationFragment fragment = new NotificationFragment();
-        fragment.setUserInfoClassName(UserInfoActivity.class);
+        fragment.setNavigationCommand(mNavigationCommand);
         addFragment(ResFinder.getId("umeng_comm_notify_fragment_layout"), fragment);
     }
 }

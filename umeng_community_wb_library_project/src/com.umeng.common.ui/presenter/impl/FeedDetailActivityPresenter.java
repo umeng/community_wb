@@ -27,6 +27,7 @@ package com.umeng.common.ui.presenter.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -63,6 +64,9 @@ public class FeedDetailActivityPresenter extends BasePresenter {
     MvpFeedDetailActivityView mActivityView;
     FeedItem mFeedItem;
 
+    private boolean isHasRegisteredReceiver;
+    private boolean isRegisterReceiver;
+
     public FeedDetailActivityPresenter() {
     }
 
@@ -82,6 +86,26 @@ public class FeedDetailActivityPresenter extends BasePresenter {
 
     public void setFeedItem(FeedItem feedItem) {
         this.mFeedItem = feedItem;
+    }
+
+    public void setIsRegisterReceiver(boolean isRegisterReceiver) {
+        this.isRegisterReceiver = isRegisterReceiver;
+    }
+
+    @Override
+    public void attach(Context context) {
+        super.attach(context);
+        // 避免重复注册广播
+        if (!isHasRegisteredReceiver && isRegisterReceiver) {
+            BroadcastUtils.registerFeedUpdateBroadcast(mContext, mReceiver);
+            isHasRegisteredReceiver = true;
+        }
+    }
+
+    @Override
+    public void detach() {
+        BroadcastUtils.unRegisterBroadcast(mContext, mReceiver);
+        super.detach();
     }
 
     public void showDeleteConfirmDialog() {
@@ -105,6 +129,7 @@ public class FeedDetailActivityPresenter extends BasePresenter {
                     }
                 });
     }
+
     public void showReportConfirmDialog() {
         ConfirmDialog.showDialog(mContext, ResFinder.getString("umeng_comm_sure_spam"),
                 new DialogInterface.OnClickListener() {
@@ -115,6 +140,7 @@ public class FeedDetailActivityPresenter extends BasePresenter {
                     }
                 });
     }
+
     private Bundle mExtraData;
 
     public void setExtraData(Bundle extra) {
@@ -257,6 +283,7 @@ public class FeedDetailActivityPresenter extends BasePresenter {
         };
         CommonUtils.checkLoginAndFireCallback(mContext, loginListener);
     }
+
     private void reportFeedUser() {
         SimpleFetchListener<LoginResponse> loginListener = new SimpleFetchListener<LoginResponse>() {
             @Override
@@ -292,8 +319,9 @@ public class FeedDetailActivityPresenter extends BasePresenter {
         };
         CommonUtils.checkLoginAndFireCallback(mContext, loginListener);
     }
+
     public void favoritesFeed() {
-        if(mFeedItem == null){
+        if (mFeedItem == null) {
             return;
         }
         mCommunitySDK.favoriteFeed(mFeedItem.id, new SimpleFetchListener<SimpleResponse>() {
@@ -332,7 +360,7 @@ public class FeedDetailActivityPresenter extends BasePresenter {
     }
 
     public void cancelFavoritesFeed() {
-        if(mFeedItem == null){
+        if (mFeedItem == null) {
             return;
         }
         mCommunitySDK.cancelFavoriteFeed(mFeedItem.id,
@@ -380,29 +408,28 @@ public class FeedDetailActivityPresenter extends BasePresenter {
             shareItem.mTargetUrl = mFeedItem.sourceFeed.shareLink;
         }
         shareItem.mFeedId = mFeedItem.id;
-        if (mFeedItem.title.equals("null") || TextUtils.isEmpty(mFeedItem.title)){
+        if (mFeedItem.title.equals("null") || TextUtils.isEmpty(mFeedItem.title)) {
             shareItem.mTitle = "默认标题";
-        }else {
+        } else {
             shareItem.mTitle = mFeedItem.title;
         }
         ShareSDKManager.getInstance().getCurrentSDK().share(activity, shareItem);
     }
 
-    public void forbidUser(final CommUser user, String topicId){
+    @Deprecated
+    public void forbidUser(final CommUser user, String topicId) {
         mCommunitySDK.forbidUser(user.id, topicId, new SimpleFetchListener<ForbidResponse>() {
             @Override
             public void onComplete(ForbidResponse response) {
                 String tipStr = "umeng_comm_forbid_user_failed";
-                if(response != null && response.errCode == ErrorCode.NO_ERROR){
+                if (response != null && response.errCode == ErrorCode.NO_ERROR) {
                     tipStr = "umeng_comm_forbid_user_success";
                     user.status = 4;
                     mActivityView.forbidUserComplete();
                     DatabaseAPI.getInstance().getUserDBAPI().saveUserInfoToDB(user);
-                }
-                else if (response != null && response.errCode == ErrorCode.ERROR_USER_CANNOT_SPAM){
+                } else if (response != null && response.errCode == ErrorCode.ERROR_USER_CANNOT_SPAM) {
                     tipStr = "umeng_comm_forbid_cannot";
-                }
-                else if (response != null && response.errCode == ErrorCode.ERR_CODE_USER_REPEAT_FORBID){
+                } else if (response != null && response.errCode == ErrorCode.ERR_CODE_USER_REPEAT_FORBID) {
                     tipStr = "umeng_comm_forbid_user_failed_repeat";
                 }
 
@@ -411,6 +438,8 @@ public class FeedDetailActivityPresenter extends BasePresenter {
         });
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     public void cancelForbidUser(final CommUser user, String topicId) {
 //        mCommunitySDK.cancelForbidUser(user.id, topicId, new SimpleFetchListener<ForbidResponse>() {
 //            @Override
@@ -429,4 +458,21 @@ public class FeedDetailActivityPresenter extends BasePresenter {
 //            }
 //        });
     }
+
+    /**
+     * 此时仅仅关心详情页的收藏字段
+     */
+    private BroadcastUtils.DefalutReceiver mReceiver = new BroadcastUtils.DefalutReceiver() {
+        public void onReceiveUpdateFeed(Intent intent) {
+            if (mFeedItem == null) {
+                return;
+            }
+            FeedItem newFeedItem = getFeed(intent);
+            if (newFeedItem.id.equals(mFeedItem.id)) {
+                mFeedItem.category = newFeedItem.category;
+                mFeedItem.isCollected = newFeedItem.isCollected;
+             //   mActivityView.favoriteFeedComplete(newFeedItem.id, newFeedItem.isCollected);
+            }
+        }
+    };
 }

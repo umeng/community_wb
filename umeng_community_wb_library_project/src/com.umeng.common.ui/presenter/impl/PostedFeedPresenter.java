@@ -44,7 +44,8 @@ public class PostedFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchUserTimeLine(mId, mRefreshListener);
     }
 
@@ -66,6 +67,9 @@ public class PostedFeedPresenter extends FeedListPresenter {
         // [注意]：mFeedView.onRefreshEnd方法不可提前统一调用，该方法会被判断是否显示空视图的逻辑
         @Override
         public void onComplete(FeedsResponse response) {
+            // 更新加载状态
+            setLoadingState(false);
+
             // 根据response进行Toast
             if (NetworkUtils.handleResponseAll(response)) {
                 mFeedView.onRefreshEnd();
@@ -99,11 +103,7 @@ public class PostedFeedPresenter extends FeedListPresenter {
     };
     
     @Override
-    public boolean isAddToFeedList() {
+    public boolean isAddToFeedList(FeedItem feedItem) {
         return isMyFeedList();
-    }
-
-    @Override
-    protected void fetchDataFromServerByLogin() {
     }
 }

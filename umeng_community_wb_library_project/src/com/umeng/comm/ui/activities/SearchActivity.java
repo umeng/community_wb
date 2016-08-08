@@ -24,9 +24,8 @@
 
 package com.umeng.comm.ui.activities;
 
-import android.view.KeyEvent;
-
-import com.umeng.comm.ui.fragments.SearchFragment;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
+import com.umeng.common.ui.fragments.SearchFragment;
 import com.umeng.common.ui.activities.SearchBaseActivity;
 
 
@@ -35,19 +34,11 @@ import com.umeng.common.ui.activities.SearchBaseActivity;
  */
 public class SearchActivity extends SearchBaseActivity<SearchFragment> {
 
-
     @Override
     protected SearchFragment createFragment() {
-        return new SearchFragment();
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-
-            ((SearchFragment)mSearchFragment).executeSearch();
-            return true;
-        }
-        return super.onKeyUp(keyCode, event);
+        SearchFragment searchFragment = new SearchFragment();
+        searchFragment.setNavigation(new NavigationCommandImpl(this));
+        searchFragment.isShowSearchBar(false);
+        return searchFragment;
     }
 }

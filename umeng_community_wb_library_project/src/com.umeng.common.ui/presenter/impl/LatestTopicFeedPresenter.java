@@ -16,7 +16,8 @@ public class LatestTopicFeedPresenter extends TopicFeedPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchTopicFeed(mId, FeedItem.FeedOrder.DESC_COMMENT, mRefreshListener);
     }
 
@@ -25,7 +26,7 @@ public class LatestTopicFeedPresenter extends TopicFeedPresenter {
     }
 
     @Override
-    public boolean isAddToFeedList() {
+    public boolean isAddToFeedList(FeedItem feedItem) {
         return false;
     }
 

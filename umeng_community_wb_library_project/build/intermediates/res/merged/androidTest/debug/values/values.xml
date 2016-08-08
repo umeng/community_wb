@@ -556,6 +556,7 @@
     <string name="umeng_comm_do_not_spam_yourself">抱歉,不能举报自己的内容~</string>
     <string name="umeng_comm_do_not_spam_yourself_content">抱歉,不能举报自己的内容~</string>
     <string name="umeng_comm_dots"> … </string>
+    <string name="umeng_comm_duplicate_content">短时间内不能发送相同内容</string>
     <string name="umeng_comm_duplicate_name">昵称已存在，请修改昵称…</string>
     <string name="umeng_comm_dynamic">动态</string>
     <string name="umeng_comm_edittext_hint">分享新鲜事…#此处添加话题更好哦#</string>
@@ -666,6 +667,7 @@
     <string name="umeng_comm_male">男</string>
     <string name="umeng_comm_man">男士</string>
     <string name="umeng_comm_max_img_limit_reached">不能选择超过%d个图像</string>
+    <string name="umeng_comm_message">消息</string>
     <string name="umeng_comm_mine">我的</string>
     <string name="umeng_comm_more_than_max">超过了上限</string>
     <string name="umeng_comm_my_fans">粉丝</string>

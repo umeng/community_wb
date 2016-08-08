@@ -31,6 +31,7 @@ import com.umeng.comm.core.beans.CommConfig;
 import com.umeng.comm.core.beans.Notification;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.common.ui.adapters.NotifyAdapter;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.mvpview.MvpNotifyView;
 import com.umeng.common.ui.presenter.impl.NotificationPresenter;
 import com.umeng.common.ui.widgets.BaseView;
@@ -50,9 +51,9 @@ public class NotificationFragment extends BaseFragment<List<Notification>, Notif
     public NotifyAdapter mAdapter;
     RefreshLvLayout mRefreshLayout;
 
-    public Class mUserInfoClass;
-
     private BaseView mBaseView;
+
+    protected NavigationCommand mNavigationCommand;
 
     @Override
     protected int getFragmentLayout() {
@@ -86,7 +87,7 @@ public class NotificationFragment extends BaseFragment<List<Notification>, Notif
         mListView = findViewById(ResFinder.getId("umeng_comm_notify_listview"));
 
         mAdapter = new NotifyAdapter(getActivity());
-        mAdapter.setUserInfoClassName(mUserInfoClass);
+        mAdapter.setNavigationCommand(mNavigationCommand);
         mListView.setAdapter(mAdapter);
 
         mBaseView = (BaseView) mRootView.findViewById(ResFinder.getId("umeng_comm_baseview"));
@@ -122,7 +123,7 @@ public class NotificationFragment extends BaseFragment<List<Notification>, Notif
     public void onRefreshStart() {
     }
 
-    public void setUserInfoClassName(Class userInfoClassName) {
-        this.mUserInfoClass = userInfoClassName;
+    public void setNavigationCommand(NavigationCommand command){
+        mNavigationCommand = command;
     }
 }

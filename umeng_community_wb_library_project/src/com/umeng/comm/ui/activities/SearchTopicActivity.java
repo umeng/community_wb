@@ -3,8 +3,10 @@ package com.umeng.comm.ui.activities;
 
 import android.view.KeyEvent;
 
-import com.umeng.comm.ui.fragments.SearchTopicFragment;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
 import com.umeng.common.ui.activities.SearchTopicBaseActivity;
+
+import com.umeng.common.ui.fragments.SearchTopicFragment;
 
 
 /**
@@ -12,18 +14,10 @@ import com.umeng.common.ui.activities.SearchTopicBaseActivity;
  */
 public class SearchTopicActivity extends SearchTopicBaseActivity<SearchTopicFragment> {
 
-
     @Override
     protected SearchTopicFragment createSearchTopicFragment() {
-        return new SearchTopicFragment();
-    }
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-
-            ((SearchTopicFragment)mSearchFragment).executeSearch();
-            return true;
-        }
-        return super.onKeyUp(keyCode, event);
+        SearchTopicFragment searchTopicFragment = new SearchTopicFragment();
+        searchTopicFragment.setNavigation(new NavigationCommandImpl(this));
+        return searchTopicFragment;
     }
 }

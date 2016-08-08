@@ -44,26 +44,9 @@ public class RecommendFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
-        mCommunitySDK.fetchTopFeeds(new Listeners.FetchListener<FeedsResponse>() {
-            @Override
-            public void onStart() {
-                if (mTopFeeds != null) {
-                    mTopFeeds.clear();
-                }
-            }
-
-            @Override
-            public void onComplete(FeedsResponse response) {
-                if (response.errCode == ErrorCode.NO_ERROR) {
-                    mTopFeeds = response.result;
-                    for (int i = 0; i < mTopFeeds.size(); i++) {
-                        mTopFeeds.get(i).isTop = 1;
-                    }
-                }
-                mCommunitySDK.fetchRecommendedFeeds(mRefreshListener);
-            }
-        });
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
+        mCommunitySDK.fetchRecommendedFeeds(mRefreshListener);
     }
 
     @Override
@@ -85,19 +68,19 @@ public class RecommendFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadMoreData() {
-        fetchNextPageData();
-    }
-
-    @Override
     protected void saveDataToDB(List<FeedItem> newFeedItems) {
         mDatabaseAPI.getFeedDBAPI().saveRecommendFeedToDB(newFeedItems);
     }
 
     @Override
-    protected void fetchDataFromServerByLogin() {
-//        mCommunitySDK.fetchRecommendedFeeds(mLoginRefreshListener);
-//        loadDataFromServer();
+    protected void loadDataAfterLogin(Listeners.FetchListener<FeedsResponse> mLoginRefreshListener) {
+        super.loadDataAfterLogin(mLoginRefreshListener);
+        mCommunitySDK.fetchRecommendedFeeds(mLoginRefreshListener);
+    }
+
+    @Override
+    public boolean isRefreshDataAfterLogin() {
+        return true;
     }
 
     @Override

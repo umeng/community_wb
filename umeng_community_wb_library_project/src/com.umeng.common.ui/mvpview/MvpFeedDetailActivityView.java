@@ -41,7 +41,18 @@ public interface MvpFeedDetailActivityView {
 
     public void favoriteFeedComplete(String feedId, boolean isFavorite);
 
+    /**
+     * 2.6.2声明为弃用
+     * 客户端已无禁言功能
+     */
+    @Deprecated
     public void forbidUserComplete();
 
+    /**
+     * 2.6.2声明为弃用
+     * 客户端已取消无禁言功能
+     */
+    @Deprecated
+    @SuppressWarnings("unused")
     public void cancelForbidUserComplete();
 }

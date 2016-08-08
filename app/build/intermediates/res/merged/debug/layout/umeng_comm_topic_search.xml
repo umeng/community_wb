@@ -26,6 +26,6 @@
         android:id="@+id/umeng_comm_baseview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/umeng_comm_topic_search_title_layout" />
+        />
 
 </RelativeLayout>

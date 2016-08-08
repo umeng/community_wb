@@ -13,6 +13,7 @@ import com.umeng.comm.core.listeners.Listeners.SimpleFetchListener;
 import com.umeng.comm.core.nets.responses.FansResponse;
 import com.umeng.comm.core.nets.uitls.NetworkUtils;
 import com.umeng.comm.core.utils.CommonUtils;
+import com.umeng.common.ui.mvpview.MvpActiveUserFgView;
 import com.umeng.common.ui.mvpview.MvpFollowedUserView;
 import com.umeng.common.ui.util.BroadcastUtils;
 
@@ -28,7 +29,7 @@ public class FansFgPresenter extends FollowedUserFgPresenter {
     /**
      * @param followedUserView
      */
-    public FansFgPresenter(MvpFollowedUserView followedUserView, String uid) {
+    public FansFgPresenter(MvpActiveUserFgView followedUserView, String uid) {
         super(followedUserView, uid);
 //        isFollowPage = false;
         mFansDBAPI = DatabaseAPI.getInstance().getFansDBAPI();
@@ -40,14 +41,14 @@ public class FansFgPresenter extends FollowedUserFgPresenter {
 
             @Override
             public void onStart() {
-                mFollowedUserView.onRefreshStart();
+                mActiveUserFgView.onRefreshStart();
             }
 
             @Override
             public void onComplete(FansResponse response) {
                 // 根据response进行Toast
                 if (NetworkUtils.handleResponseAll(response)) {
-                    mFollowedUserView.onRefreshEnd();
+                    mActiveUserFgView.onRefreshEnd();
                     return;
                 }
                 
@@ -56,17 +57,17 @@ public class FansFgPresenter extends FollowedUserFgPresenter {
                 mFansDBAPI.saveFansToDB(mUid, fans);
 
                 // 加载完成后，首先更新粉丝的条数,因为可能在下拉刷新的时候有新的粉丝。
-                mFollowedUserView.executeCallback(fans.size());
+//                mActiveUserFgView.executeCallback(fans.size());
 
                 // 去重操作
-                List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+                List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
 //                fans.removeAll(dataSource);
                 dataSource.clear();
                 dataSource.addAll(fans);
-                mFollowedUserView.notifyDataSetChanged();
+                mActiveUserFgView.notifyDataSetChanged();
                 // 解析下一页地址
                 parseNextpageUrl(response, true);
-                mFollowedUserView.onRefreshEnd();
+                mActiveUserFgView.onRefreshEnd();
             }
         });
     }
@@ -86,8 +87,8 @@ public class FansFgPresenter extends FollowedUserFgPresenter {
                             return;
                         }
                         updateFans(results);
-                        mFollowedUserView.executeCallback(results.size());
-                        mFollowedUserView.onRefreshEnd();
+//                        mActiveUserFgView.executeCallback(results.size());
+                        mActiveUserFgView.onRefreshEnd();
                     }
                 });
 
@@ -103,10 +104,10 @@ public class FansFgPresenter extends FollowedUserFgPresenter {
         if (users == null || users.size() <= 0) {
             return;
         }
-        List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+        List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
         users.removeAll(dataSource);
         dataSource.addAll(users);
-        mFollowedUserView.notifyDataSetChanged();
+        mActiveUserFgView.notifyDataSetChanged();
     }
     
     @Override

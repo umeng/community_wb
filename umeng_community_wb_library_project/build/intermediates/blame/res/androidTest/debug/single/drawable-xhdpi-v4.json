@@ -612,12 +612,12 @@
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/umeng_comm_uncheck.png"
     },
     {
-        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/umeng_comm_comment_like_p.png",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/umeng_comm_comment_like_p.png"
-    },
-    {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/wodetuce.png",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/wodetuce.png"
+    },
+    {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/umeng_comm_comment_like_p.png",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/umeng_comm_comment_like_p.png"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/umeng_comm_switch_slider_normal.png",

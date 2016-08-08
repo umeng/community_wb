@@ -764,12 +764,12 @@
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-nodpi-v4/emoji_1f451.png"
     },
     {
-        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-nodpi-v4/emoji_1f64d.png",
-        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-nodpi-v4/emoji_1f64d.png"
-    },
-    {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-nodpi-v4/emoji_1f634.png",
         "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-nodpi-v4/emoji_1f634.png"
+    },
+    {
+        "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-nodpi-v4/emoji_1f64d.png",
+        "source": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/bundles/debug/res/drawable-nodpi-v4/emoji_1f64d.png"
     },
     {
         "merged": "/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/umeng_community_wb_library_project/build/intermediates/res/merged/androidTest/debug/drawable-nodpi-v4/emoji_1f3b1.png",

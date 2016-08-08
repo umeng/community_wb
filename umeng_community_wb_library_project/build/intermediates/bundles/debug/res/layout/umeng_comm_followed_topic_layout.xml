@@ -6,9 +6,8 @@
     android:orientation="vertical" >
 
     <include
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        layout="@layout/umeng_comm_title_layout" />
+        android:id="@+id/umeng_comm_actionbar_fixed_id"
+        layout="@layout/umeng_comm_setting_title_bar" />
 
     <include layout="@layout/umeng_comm_divide_line" />
 

@@ -6,7 +6,9 @@
     android:background="?attr/default_background_color"
     android:orientation="vertical" >
 
-    <include layout="@layout/umeng_comm_title_layout" />
+    <include
+        android:id="@+id/umeng_comm_actionbar_fixed_id"
+        layout="@layout/umeng_comm_setting_title_bar" />
 
     <include layout="@layout/umeng_comm_divide_line" />
 

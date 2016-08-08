@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/umeng_comm_find_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdgeLength="0dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/umeng_comm_feed_list_bg"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/user_haveno_login"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="80dp"
+                    android:background="?attr/umeng_comm_active_user_card_bg">
+
+                    <com.umeng.common.ui.widgets.RoundImageView
+                        android:id="@+id/userinfo_headicon_nologin"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="?attr/umeng_comm_defaul_icon" />
+
+                    <TextView
+                        android:id="@+id/user_name_tv_nologin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@id/userinfo_headicon_nologin"
+                        android:textColor="?attr/umeng_comm_find_user_nologin_text"
+                        android:textSize="16dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/umeng_comm_dimen_32px"
+                        android:src="?attr/umeng_comm_right_arrow" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/user_have_login"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="?attr/umeng_comm_active_user_card_bg">
+
+                    <View
+                        android:id="@+id/umeng_comm_center_anchor"
+                        android:layout_width="@dimen/umeng_comm_dimen_1px"
+                        android:layout_height="@dimen/umeng_comm_dimen_1px"
+                        android:layout_centerInParent="true" />
+
+                    <com.umeng.common.ui.widgets.RoundImageView
+                        android:id="@+id/userinfo_headicon"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:src="?attr/umeng_comm_defaul_icon" />
+
+                    <TextView
+                        android:id="@+id/user_name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/umeng_comm_center_anchor"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/umeng_comm_dimen_10px"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="@dimen/umeng_comm_dimen_84px"
+                        android:layout_toRightOf="@id/userinfo_headicon"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="?attr/umeng_comm_find_user_login_text"
+                        android:textSize="15dp" />
+
+                    <LinearLayout
+                        android:id="@+id/user_type_icon_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/user_name_tv"
+                        android:layout_below="@id/umeng_comm_center_anchor"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="@dimen/umeng_comm_dimen_10px"
+                        android:layout_toRightOf="@id/user_name_tv"
+                        android:orientation="horizontal" />
+
+                    <TextView
+                        android:id="@+id/user_fanscount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@id/user_name_tv"
+                        android:layout_below="@id/user_name_tv"
+                        android:textColor="?attr/umeng_comm_active_user_msgcolor"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/user_focuscount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/user_name_tv"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/user_fanscount"
+                        android:textColor="?attr/umeng_comm_active_user_msgcolor"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/user_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/user_name_tv"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/user_focuscount"
+                        android:textColor="?attr/umeng_comm_active_user_msgcolor"
+                        android:textSize="12dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/umeng_comm_dimen_32px"
+                        android:src="?attr/umeng_comm_right_arrow" />
+                </RelativeLayout>
+
+                <include layout="@layout/umeng_comm_divide_line" />
+
+                <LinearLayout
+                    android:id="@+id/lists"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/transparent"
+        android:visibility="visible" />
+</RelativeLayout>

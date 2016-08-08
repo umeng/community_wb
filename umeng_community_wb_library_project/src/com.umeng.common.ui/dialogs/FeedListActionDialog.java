@@ -143,6 +143,7 @@ public class FeedListActionDialog extends ActionDialog{
             mReportView.setVisibility(View.VISIBLE);
         } else {
             mDeleteView.setBackgroundColor(Color.WHITE);
+            mDeleteView.setVisibility(View.VISIBLE);
             mReportView.setVisibility(View.GONE);
 //            mReportUser.setVisibility(View.GONE);
         }

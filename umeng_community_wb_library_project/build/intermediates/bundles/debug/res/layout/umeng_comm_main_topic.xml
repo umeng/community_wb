@@ -12,7 +12,6 @@
         android:background="?attr/umeng_comm_feed_list_bg"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/umeng_comm_dimen_14px"
         android:paddingTop="@dimen/umeng_comm_dimen_14px">
 
         <TextView

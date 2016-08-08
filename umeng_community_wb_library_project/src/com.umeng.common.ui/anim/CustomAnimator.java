@@ -33,7 +33,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 /**
- * 
+ *
  */
 public class CustomAnimator {
 
@@ -45,7 +45,12 @@ public class CustomAnimator {
 
     private int mMarginTop = 0;
 
-    private boolean mStatus = true; // true : 显示状态，false：隐藏状态
+
+    private  boolean mStatus = true; // true : 显示状态，false：隐藏状态
+
+
+    private  boolean upAnimationStarted = false;
+
 
     private void initAnimation(View view, final boolean show) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
@@ -56,7 +61,7 @@ public class CustomAnimator {
         if (mSourcePostion == 0) {
             mMarginTop = mSourcePostion = ((MarginLayoutParams) params).topMargin;
 //            mSourcePostion = Math.max(mSourcePostion, mView.getHeight() + mView.getHeight() / 5);
-             mSourcePostion = mView.getHeight();
+            mSourcePostion = mView.getHeight();
             Log.d("", "################# view height = " + mView.getHeight());
         }
         initAnimation(show);
@@ -83,11 +88,12 @@ public class CustomAnimator {
         if (show) {
             params.topMargin = (int) (mMarginTop * (interpolatedTime));
         } else {
-            params.topMargin = mMarginTop - (int)(mSourcePostion * interpolatedTime);
+            params.topMargin = mMarginTop - (int) (mSourcePostion * interpolatedTime);
         }
     }
 
     public void startDismissAnimation(View view) {
+
         if (!mStatus) {
             return;
         }
@@ -97,6 +103,7 @@ public class CustomAnimator {
     }
 
     public void startShowAnimation(View view) {
+
         if (mStatus) {
             return;
         }

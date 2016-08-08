@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.umeng.common.ui.presenter.impl;
 
@@ -18,6 +18,7 @@ import com.umeng.comm.core.listeners.Listeners.SimpleFetchListener;
 import com.umeng.comm.core.nets.responses.FansResponse;
 import com.umeng.comm.core.nets.uitls.NetworkUtils;
 import com.umeng.comm.core.utils.CommonUtils;
+import com.umeng.common.ui.mvpview.MvpActiveUserFgView;
 import com.umeng.common.ui.mvpview.MvpFollowedUserView;
 import com.umeng.common.ui.presenter.BaseFragmentPresenter;
 import com.umeng.common.ui.util.BroadcastUtils;
@@ -26,19 +27,19 @@ import java.util.List;
 
 
 /**
- * 
+ *
  */
-public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser>> {
+public class FollowedUserFgPresenter extends ActiveUserFgPresenter {
 
     protected String mUid;
-    protected MvpFollowedUserView mFollowedUserView;
     protected FollowDBAPI mFollowDBAPI = DatabaseAPI.getInstance().getFollowDBAPI();
     protected String nextPageUrl;
 //    private boolean hasRefresh = false;
 //    protected boolean isFollowPage = true;
 
-    public FollowedUserFgPresenter(MvpFollowedUserView followedUserView, String uid) {
-        this.mFollowedUserView = followedUserView;
+    public FollowedUserFgPresenter(MvpActiveUserFgView followedUserView, String uid) {
+        super(followedUserView, true);
+
         this.mUid = uid;
     }
 
@@ -51,6 +52,7 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
     @Override
     public void detach() {
         BroadcastUtils.unRegisterBroadcast(mContext, mReceiver);
+        super.detach();
     }
 
     @Override
@@ -59,14 +61,14 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
 
             @Override
             public void onStart() {
-                mFollowedUserView.onRefreshStart();
+                mActiveUserFgView.onRefreshStart();
             }
 
             @Override
             public void onComplete(FansResponse response) {
                 // 根据response进行Toast
                 if (NetworkUtils.handleResponseAll(response)) {
-                    mFollowedUserView.onRefreshEnd();
+                    mActiveUserFgView.onRefreshEnd();
                     if (response.errCode == ErrorCode.NO_ERROR) {
                         nextPageUrl = "";
                     }
@@ -78,16 +80,17 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
                 if (CommonUtils.isMyself(new CommUser(mUid))) {
                     mFollowDBAPI.follow(followedUsers);
                 }
-                mFollowedUserView.executeCallback(followedUsers.size());
+//                mActiveUserFgView.executeCallback(followedUsers.size());
                 // 更新GridView
-                List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+                List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
 //                followedUsers.removeAll(dataSource);
                 dataSource.clear();
                 dataSource.addAll(followedUsers);
-                mFollowedUserView.notifyDataSetChanged();
+                mActiveUserFgView.notifyDataSetChanged();
                 // 解析下一页地址
                 parseNextpageUrl(response, true);
-                mFollowedUserView.onRefreshEnd();
+                dealResult(response, true);
+                mActiveUserFgView.onRefreshEnd();
             }
         });
     }
@@ -121,14 +124,14 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
                     public void onComplete(List<CommUser> fans) {
                         if (CommonUtils.isActivityAlive(convertContextToActivity())
                                 && !CommonUtils.isListEmpty(fans)) {
-                            List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+                            List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
                             fans.removeAll(dataSource);
                             if (fans.size() > 0) {
                                 dataSource.addAll(fans);
-                                mFollowedUserView.notifyDataSetChanged();
+                                mActiveUserFgView.notifyDataSetChanged();
                             }
-                            mFollowedUserView.executeCallback(fans.size());
-                            mFollowedUserView.onRefreshEnd();
+//                            mActiveUserFgView.executeCallback(fans.size());
+                            mActiveUserFgView.onRefreshEnd();
                         }
                     }
                 });
@@ -137,7 +140,7 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
     @Override
     public void loadMoreData() {
         if (TextUtils.isEmpty(nextPageUrl)) {
-            mFollowedUserView.onRefreshEnd();
+            mActiveUserFgView.onRefreshEnd();
             return;
         }
 
@@ -151,38 +154,39 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
                             if (response.errCode == ErrorCode.NO_ERROR) {
                                 nextPageUrl = "";
                             }
-                            mFollowedUserView.onRefreshEnd();
+                            mActiveUserFgView.onRefreshEnd();
                             return;
                         }
                         // 保存到数据库
                         mFollowDBAPI.follow(response.result);
                         appendUsers(response.result);
                         parseNextpageUrl(response, false);
-                        mFollowedUserView.onRefreshEnd();
+                        dealResult(response, false);
+                        mActiveUserFgView.onRefreshEnd();
                     }
                 });
     }
 
     /**
      * 追加已关注的用户，并刷新adapter</br>
-     * 
+     *
      * @param newUsers 新关注的好友
      */
     protected void appendUsers(List<CommUser> newUsers) {
-        List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+        List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
         newUsers.removeAll(dataSource);
         dataSource.addAll(newUsers);
-        mFollowedUserView.notifyDataSetChanged();
+        mActiveUserFgView.notifyDataSetChanged();
     }
 
     /**
      * 在其他页面对某个用户进行取消关注、关注之后需要从关注列表中移除或者添加
-     * 
+     *
      * @param user
      * @param type
      */
     protected void onUserFollowStateChange(CommUser user, BroadcastUtils.BROADCAST_TYPE type) {
-        List<CommUser> dataSource = mFollowedUserView.getBindDataSource();
+        List<CommUser> dataSource = mActiveUserFgView.getBindDataSource();
         if (type == BroadcastUtils.BROADCAST_TYPE.TYPE_USER_FOLLOW) {
             if (!dataSource.contains(user)) {
                 dataSource.add(user);
@@ -193,7 +197,7 @@ public class FollowedUserFgPresenter extends BaseFragmentPresenter<List<CommUser
             // 从DB中移除
             mFollowDBAPI.unfollow(user);
         }
-        mFollowedUserView.notifyDataSetChanged();
+        mActiveUserFgView.notifyDataSetChanged();
     }
 
     protected void parseNextpageUrl(FansResponse response, boolean fromRefersh) {

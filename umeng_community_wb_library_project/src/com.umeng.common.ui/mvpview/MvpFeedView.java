@@ -88,4 +88,14 @@ public interface MvpFeedView extends MvpBaseRefreshView {
      * 滚动到顶部</br>
      */
     public void scrollToTop();
+
+    /**
+     * 显示空白页面
+     */
+    public void showEmptyView();
+
+    /**
+     * 隐藏空白页面
+     */
+    public void hideEmptyView();
 }

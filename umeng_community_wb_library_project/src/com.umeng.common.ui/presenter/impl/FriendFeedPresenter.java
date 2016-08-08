@@ -41,7 +41,8 @@ public class FriendFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchFriendsFeed(mRefreshListener);
     }
 
@@ -58,18 +59,18 @@ public class FriendFeedPresenter extends FeedListPresenter {
         mDatabaseAPI.getFeedDBAPI().loadFriendsFeedsFromDB(mDbFetchListener);
     }
 
-    private Comparator<FeedItem> mComparator = new Comparator<FeedItem>() {
+//    private Comparator<FeedItem> mComparator = new Comparator<FeedItem>() {
+//
+//        @Override
+//        public int compare(FeedItem lhs, FeedItem rhs) {
+//            return rhs.publishTime.compareTo(lhs.publishTime);
+//        }
+//    };
 
-        @Override
-        public int compare(FeedItem lhs, FeedItem rhs) {
-            return rhs.publishTime.compareTo(lhs.publishTime);
-        }
-    };
-
-    @Override
-    protected Comparator<FeedItem> getFeedCompartator() {
-        return mComparator;
-    }
+//    @Override
+//    protected Comparator<FeedItem> getFeedCompartator() {
+//        return mComparator;
+//    }
 
     @Override
     protected void onCancelFollowUser(CommUser user) {

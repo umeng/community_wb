@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/umeng_comm_actionbar_fixed_id"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/default_background_color"
     android:focusableInTouchMode="true"
-    android:tag="@string/umeng_comm_actionbar_tag"
     android:orientation="vertical">
 
     <!-- title -->
@@ -51,15 +52,30 @@
             android:background="@drawable/umeng_comm_tv_style"
             android:textSize="@dimen/text_big16_size" />
 
-        <Button
-            android:id="@+id/umeng_comm_sixin"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+        <ToggleButton
+            android:id="@+id/umeng_comm_favourite_btn"
+            android:layout_width="@dimen/umeng_comm_dimen_40px"
+            android:layout_height="@dimen/umeng_comm_dimen_40px"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_toRightOf="@id/umeng_comm_setting_title"
-            android:background="?attr/umeng_comm_chat_icon"
-            android:visibility="gone" />
+            android:layout_marginRight="5dp"
+            android:background="?attr/umeng_comm_favour_icon"
+            android:contentDescription="@string/umeng_comm_new_post"
+            android:textOff=""
+            android:textOn=""
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/umeng_comm_post_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/umeng_comm_favourite_btn"
+            android:background="?attr/umeng_comm_xie_icon"
+            android:contentDescription="@string/umeng_comm_new_post"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
     <include layout="@layout/umeng_comm_divide_line" />

@@ -2,186 +2,200 @@
 <items version="2" >
 
     <item
-        jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/android-support-v4.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="f37e0ce0bed340ea952894c6cbf2063fc00d4b13">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/android-support-v4_4c025810abdfff874b6332b8b811281c45891ff5.jar" />
-    </item>
-    <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_community_location.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="57eb1319289c1e7ac3ccf2599cea53c592062d58">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_community_location_a74ea9219aaa3e2fc7fd9c23814cf3377b223b1c.jar" />
+        sha1="b5b3df3256d8d51e1c48aced3038f73e62041b8c">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_community_location_a74ea9219aaa3e2fc7fd9c23814cf3377b223b1c/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/mta-sdk-1.6.2.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="ea1e173f97ae961e4ec098c0e21df55915769968">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/mta-sdk-1.6.2_7bf0af4833419791c6984a44f1a4a10aea405a27.jar" />
+        sha1="63c6d6a719f0568d28c4f741b3b5713ff42516f6">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/mta-sdk-1.6.2_7bf0af4833419791c6984a44f1a4a10aea405a27/classes.dex" />
+    </item>
+    <item
+        jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/libs/internal_impl-22.0.0.jar"
+        jumboMode="true"
+        revision="24.0.0"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-22.0.0_efe4f9f044fef8e1bc4f661f488d4ba814a59b88/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/SocialSDK_WeiXin_2.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="46ed6ae4785a591e3ff042853b2f2bbd4d4a4aa8">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/SocialSDK_WeiXin_2_5828a13e7e77076065e0b4fbb8edbb479e2aef06.jar" />
+        sha1="1e65dde05787378882586d139d71c7ab0e409415">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/SocialSDK_WeiXin_2_5828a13e7e77076065e0b4fbb8edbb479e2aef06/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/android-support-v7-recyclerview.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="06cfd9ed57894be00d586ad2e3c9037148dc6ad9">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/android-support-v7-recyclerview_bfcefe86d65941d31302c64d905c36869ff04046.jar" />
+        sha1="4684d9541e6ad1bc7b0fc3ef69a2543d1b7e1d67">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/android-support-v7-recyclerview_bfcefe86d65941d31302c64d905c36869ff04046/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/SocialSDK_Sina.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="75f5091480dccc34f60590eb3962442ca20f51c9">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/SocialSDK_Sina_d5789f0c1a3f53a2616198452d2097b142ca548b.jar" />
+        sha1="68057d254fcef133ef86b811fdefa11674083b83">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/SocialSDK_Sina_d5789f0c1a3f53a2616198452d2097b142ca548b/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="df7fe6249c4413c54b2fbbe949d5cc876c0268a2">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/instant-run_7e662cd480fad2146b29eb348ac049cc79d32dd4.jar" />
+        sha1="4b0dac877e728a4bf2783b281b54078536401ae4">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_7e662cd480fad2146b29eb348ac049cc79d32dd4/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/com.umeng.message_v2.7.0.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="b0cffe486d445aef10fcf51dcb7f813d469aeadb">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/com.umeng.message_v2.7.0_5c958cd2c0e97011ff8728192a77c4c0126f662e.jar" />
+        sha1="9d3a7006b621671825caa93f7b07c7d2e6d03374">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/com.umeng.message_v2.7.0_5c958cd2c0e97011ff8728192a77c4c0126f662e/classes.dex" />
+    </item>
+    <item
+        jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.0"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-22.0.0_18f96802a3aa753639b37305b7877d40f52b4a96/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/wire-runtime-1.7.0.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="cddaf7b5acb8ae58684147e69672e44b6533371c">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/wire-runtime-1.7.0_667a90baef496cb5e0f5e4ae2e84e45b2ab1eec7.jar" />
+        sha1="90b4f461990d525e5a08a52819243801640a6627">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/wire-runtime-1.7.0_667a90baef496cb5e0f5e4ae2e84e45b2ab1eec7/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_activeandroid.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="829a2015a51fc2050ef48ab23940b7c43a677aaf">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_activeandroid_266a8c1a978b742dc41f835b96b82960f7573003.jar" />
+        sha1="1c530070d8a5e9459b47abd0098453f9f44dabcd">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_activeandroid_266a8c1a978b742dc41f835b96b82960f7573003/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_community_push.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="af9b03b247dcff3d9de88f3541d5ee7af7241d03">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_community_push_9a6b9707f4b9c73e4e5b0c2262a6cc47933d9e31.jar" />
+        sha1="f17c25a8c3096274a98260d52bc7f763dc60823e">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_community_push_9a6b9707f4b9c73e4e5b0c2262a6cc47933d9e31/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_community_sdk_core.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="d229f390c60c64a989965159539a1321f6cd6a12">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_community_sdk_core_d6d492e8f5b84c27273134077a122ec0c9b48628.jar" />
+        sha1="5d3d0f588f51eb06d8bf89a51743456d7e3d7ce2">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_community_sdk_core_d6d492e8f5b84c27273134077a122ec0c9b48628/classes.dex" />
+    </item>
+    <item
+        jar="/Users/umeng/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="true"
+        revision="24.0.0"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-22.0.0_ae5d68ef2cd18b05e5ab6b5ed79a9c94d13becf1/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/weiboSDKCore_3.1.4.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="a166c4da5148a4f734763487e872ffebb9f58b55">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/weiboSDKCore_3.1.4_0262c4a5e5ead3950019f1015318f7d61aa3a87e.jar" />
+        sha1="a1012a2b4af2b4f39be827657f413822222ef086">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/weiboSDKCore_3.1.4_0262c4a5e5ead3950019f1015318f7d61aa3a87e/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_social_sdk.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="b3281c3d40368efc96c27fa6743500ad2fc4f849">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_social_sdk_b63a49e9d9184e6e32c9fecdf4eff6e0e2aa678d.jar" />
+        sha1="2cc3700d974a8d18a837acae61f7646f379645e6">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_social_sdk_b63a49e9d9184e6e32c9fecdf4eff6e0e2aa678d/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_community_sdk_login.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="22a7ffdcef461094e544c5188fd1b68cc618211f">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_community_sdk_login_6d5bc9bf866237ccece4f0c24b425b46a05f9c02.jar" />
+        sha1="a2b7899a2a5c5a360f921a05ce503eedc58fd8ae">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_community_sdk_login_6d5bc9bf866237ccece4f0c24b425b46a05f9c02/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="0a8e71f348bfd79bbd78021c46edde568c345f58">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_818cf1e0fb451d81d625e231331266390b705e08.jar" />
+        sha1="9b9437ed568341fb7293fc1a06ce33b891a291c3">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_818cf1e0fb451d81d625e231331266390b705e08/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/okio-0.6.1.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="620803eacf7b128f9f2f354048d2ee6216755fc6">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/okio-0.6.1_eb870e37b03bbf9dd2971432e3e47265821519ae.jar" />
+        sha1="7fa172710286830569c332420cf2a38a12af7366">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/okio-0.6.1_eb870e37b03bbf9dd2971432e3e47265821519ae/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/net_core.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="2e41df432c5fa7fe9ac4dd0a94a1ea691feb8446">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/net_core_d0d09ff6db6ee32183584b06059fb69114b7363f.jar" />
+        sha1="35a14f086cba8df23a2a26a1eff3a97d90e5452e">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/net_core_d0d09ff6db6ee32183584b06059fb69114b7363f/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/httpmime-4.1.3.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="7863742db770e8352f14bb2fb9d2e0b4376081c2">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/httpmime-4.1.3_e2db316186c9719c3f964b9de8937a0f895783e1.jar" />
+        sha1="74cb3f6d6200a1a5d08ae6e2f1cdd5428379f7b2">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/httpmime-4.1.3_e2db316186c9719c3f964b9de8937a0f895783e1/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/umeng_community_share.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="9c7a690c58ba98a6da9a84824254cf333f8ad5ed">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/umeng_community_share_76ae11a491ffdb5cb53178339142bc09b460da4f.jar" />
+        sha1="09a8ee9f5eb266377a761bea7776c9c429b5e7a0">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/umeng_community_share_76ae11a491ffdb5cb53178339142bc09b460da4f/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/org.apache.http.legacy.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="bcc862490e22e67e6e17de38d1f5198e4622474e">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/org.apache.http.legacy_8d1d55d6da946a69868db7f333a17ed99bd86567.jar" />
+        sha1="e5b11e58a323ec02454e38931dc73df2e15cdee0">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/org.apache.http.legacy_8d1d55d6da946a69868db7f333a17ed99bd86567/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/open_sdk_r5509.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="869f52feaed96a1fab7a2e17f3e28349591d52d8">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/open_sdk_r5509_00d1621a0e0679c398a62906c80d7ed52befe6b2.jar" />
+        sha1="62820a2b38b402ef696ba3a35bd0f6a89beacd67">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/open_sdk_r5509_00d1621a0e0679c398a62906c80d7ed52befe6b2/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/SocialSDK_WeiXin_1.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="25363c4b013204fcb2ee1ad89f708637169695f1">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/SocialSDK_WeiXin_1_345bf50fbafc85ada40da134a19bb444cbde1c6a.jar" />
+        sha1="81bda3afdf86486c28315aca8dc1485276704163">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/SocialSDK_WeiXin_1_345bf50fbafc85ada40da134a19bb444cbde1c6a/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/SocialSDK_QQZone_3.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="c7f1193fcaea49c3dae452c609b49d76e7d6c9f8">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/SocialSDK_QQZone_3_a71f4816f8945c6f3a00770ac8a8928289df9340.jar" />
+        sha1="9ff5305581a3f1d7c77b428e1e8d8f16e19507c8">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/SocialSDK_QQZone_3_a71f4816f8945c6f3a00770ac8a8928289df9340/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/AMap_Location_V2.5.0_20160526.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="37ee439ed1a3552c8e5ed75925dac62f00b9ce43">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/AMap_Location_V2.5.0_20160526_ecc65c5f89acf35ee3467525c422a2cfa339dbdc.jar" />
+        sha1="9ee3138874bf7e837bf83fa3c421eabb86f4de2f">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/AMap_Location_V2.5.0_20160526_ecc65c5f89acf35ee3467525c422a2cfa339dbdc/classes.dex" />
     </item>
     <item
         jar="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/exploded-aar/com.umeng.wsq/umeng_community_wb_library_project/2.6.2/jars/libs/universal-image-loader-1.9.4.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="82cd8d00a245f9e018f6600dd68bf0abeea5d129">
-        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/pre-dexed/debug/universal-image-loader-1.9.4_dd0619e81a446718637f44beac7781b26b8a49b0.jar" />
+        sha1="970cdf0f8839f19820a62cf73dc443b0bc5e4a74">
+        <dex dex="/Users/umeng/Documents/umenggit/umeng_community_demo_weibo/app/build/intermediates/transforms/dex/debug/folders/1000/8/universal-image-loader-1.9.4_dd0619e81a446718637f44beac7781b26b8a49b0/classes.dex" />
     </item>
 
 </items>

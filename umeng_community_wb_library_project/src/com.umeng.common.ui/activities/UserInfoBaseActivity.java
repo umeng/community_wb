@@ -26,13 +26,17 @@ package com.umeng.common.ui.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalFocusChangeListener;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -51,6 +55,7 @@ import com.umeng.comm.core.sdkmanager.ImageLoaderManager;
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.DeviceUtils;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.anim.CustomAnimator;
 import com.umeng.common.ui.anim.UserInfoAnimator;
 import com.umeng.common.ui.colortheme.ColorQueque;
@@ -65,30 +70,19 @@ import com.umeng.common.ui.widgets.RoundImageView;
 import com.umeng.common.ui.widgets.SquareImageView;
 
 
+
 /**
  * 用户个人信息页面, 包含已发布的消息、已关注的话题、已关注的人三个fragment, 以及用户的头像、个人基本信息等.
  */
 public abstract  class UserInfoBaseActivity extends BaseFragmentActivity implements OnClickListener,
         MvpUserInfoView {
 
-//    /**
-//     * 已发送Feed的Fragment
-//     */
-//    protected PostedFeedsFragment mPostedFragment = null;
-//
-//    /**
-//     * 关注的好友Fragment
-//     */
-//    protected FollowedUserFragment mFolloweredUserFragment;
-//
-//    /**
-//     * 粉丝Fragment
-//     */
-//    protected FansFragment mFansFragment;
-
     protected TextView mUserNameTv;
+
     private RoundImageView mHeaderImageView;
+
     protected ImageView mGenderImageView;
+
     protected ImageView mFollowToggleButton;
     /**
      * 该用户为传递进来的user，可能是好友、陌生人等身份
@@ -116,6 +110,10 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
      * 我的粉丝标签, 用于切换Fragment
      */
     protected TextView mFansTextView;
+    /**
+     * action bar ‘个人中心’
+     */
+    protected TextView mTitleText;
     /**
      * 我的fans用户数量标签
      */
@@ -145,19 +143,28 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
     protected UserInfoPresenter mPresenter;
 
     protected View mHeaderView;
+
     protected View mTitleView;
-    protected View messageBtn;
+
+    protected ImageView messageBtn;
     /**
      * 举报用户的Dialog
      */
     protected UserReportDialog mReportDialog;
 
     protected View mTabCursor;
+
     protected int mScreenWidth;
+
     protected int mCurrentTab;
+
     protected LinearLayout typeContainer;
+
     protected SquareImageView mUserMedalImg;
+
     protected ImgDisplayOption mUserMedalImgOption;
+
+    protected NavigationCommand command;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,11 +218,7 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
 
     @SuppressWarnings("deprecation")
     protected void initUIComponents() {
-        // 设置Fragment
-//        addFragment(ResFinder.getId("umeng_comm_user_info_fragment_container"),
-//                mPostedFragment);
 
-        // 选中的某个tab时的文字颜色
         mSelectedColor = ColorQueque.getColor("umeng_comm_indicator_highlight");
 
         // 初始化feed、好友、粉丝、back、设置的listener
@@ -223,13 +226,18 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
         findViewById(ResFinder.getId("umeng_comm_follow_user_layout")).setOnClickListener(
                 this);
         findViewById(ResFinder.getId("umeng_comm_my_fans_layout")).setOnClickListener(this);
-        findViewById(ResFinder.getId("umeng_comm_title_back_btn")).setOnClickListener(this);
+        findViewById(ResFinder.getId("umeng_comm_setting_back")).setOnClickListener(this);
 
         // 举报用户的Dialog
         mReportDialog = new UserReportDialog(this);
         mReportDialog.setTargetUid(mUser.id);
 
-        messageBtn = findViewById(ResFinder.getId("umeng_comm_title_chat_btn"));
+        messageBtn = (ImageView) findViewById(ResFinder.getId("umeng_comm_post_btn"));
+        if(Build.VERSION.SDK_INT>=16){
+            messageBtn.setBackground(ResFinder.getDrawable("umeng_comm_chat_btn"));
+        }else{
+            messageBtn.setBackgroundDrawable(ResFinder.getDrawable("umeng_comm_chat_btn"));
+        }
         CommUser mLoginedUser = CommConfig.getConfig().loginedUser;
         if (mLoginedUser != null && !mLoginedUser.id.equals(mUser.id)
                 && (mUser.permisson == Permisson.ADMIN
@@ -246,23 +254,16 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
                     UserInfoBaseActivity.this.startActivity(i);
                 }
             }
-//            {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent i = new Intent(UserInfoActivity.this, MessageChatActivity.class);
-//                    i.putExtra("uid", mUser.id);
-//                    i.putExtra("userName", mUser.name);
-//                    UserInfoActivity.this.startActivity(i);
-//                }
-//            }
+
             );
         } else {
             messageBtn.setVisibility(View.GONE);
         }
 
-        View settingButton = findViewById(ResFinder.getId("umeng_comm_title_more_btn"));
+        Button settingButton = (Button) findViewById(ResFinder.getId("umeng_comm_save_bt"));
+        settingButton.setCompoundDrawablesWithIntrinsicBounds(ResFinder.getDrawable("umeng_comm_feed_detail_more"),null,null,null);
         if (mUser.permisson == Permisson.ADMIN){
-            settingButton.setVisibility(View.INVISIBLE);
+            settingButton.setVisibility(View.GONE);
         }
         settingButton.setOnClickListener(new LoginOnViewClickListener() {
 
@@ -280,7 +281,9 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             }
         }
-
+        // action bar title '个人中'
+        mTitleText = (TextView) findViewById(ResFinder.getId("umeng_comm_setting_title"));
+        mTitleText.setText(ResFinder.getString("umeng_comm_user_center"));
         //
         mPostedTv = mViewFinder.findViewById(ResFinder.getId("umeng_comm_posted_msg_tv"));
         mPostedTv.setTextColor(mSelectedColor);
@@ -377,7 +380,7 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
     protected void initHeaderView() {
         mHeaderView = findViewById(ResFinder.getId("umeng_comm_portrait_layout"));
         mHeaderView.getViewTreeObserver().addOnGlobalFocusChangeListener(mChangeListener);
-        mTitleView = findViewById(ResFinder.getId("umeng_comm_title_layout"));
+        mTitleView = findViewById(ResFinder.getId("umeng_comm_actionbar_fixed_id"));
     }
 
     protected CustomAnimator mCustomAnimator = new UserInfoAnimator();
@@ -385,6 +388,7 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
 
         @Override
         public void onResult(int status) {
+            com.umeng.comm.core.utils.Log.e("xxxxxxxxx","animation  ");
             if (status == 1) {// dismiss
                 mCustomAnimator.startDismissAnimation(mHeaderView);
             } else if (status == 0) { // show
@@ -397,9 +401,11 @@ public abstract  class UserInfoBaseActivity extends BaseFragmentActivity impleme
 
         @Override
         public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+            Log.d("global","on global changed");
             int pos = mHeaderView.getHeight() - mHeaderView.getPaddingTop()
                     + mTitleView.getHeight() / 2;
             mCustomAnimator.setStartPosition(pos);
+            com.umeng.comm.core.utils.Log.e("xxxxxxxxx","pos = "+pos);
             mHeaderView.getViewTreeObserver().removeOnGlobalFocusChangeListener(mChangeListener);
         }
     };

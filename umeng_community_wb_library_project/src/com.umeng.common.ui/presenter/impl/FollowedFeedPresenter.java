@@ -24,6 +24,8 @@
 package com.umeng.common.ui.presenter.impl;
 
 import com.umeng.comm.core.beans.FeedItem;
+import com.umeng.comm.core.listeners.Listeners;
+import com.umeng.comm.core.nets.responses.FeedsResponse;
 import com.umeng.common.ui.mvpview.MvpFeedView;
 
 import java.util.List;
@@ -45,8 +47,8 @@ public class FollowedFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
-//        mCommunitySDK.fetchLastestFeeds(mRefreshListener);
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchMyFollowedFeeds(mRefreshListener);
     }
 
@@ -61,8 +63,8 @@ public class FollowedFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    protected void fetchDataFromServerByLogin() {
-//        super.fetchDataFromServerByLogin();
+    protected void loadDataAfterLogin(Listeners.FetchListener<FeedsResponse> mLoginRefreshListener) {
+        super.loadDataAfterLogin(mLoginRefreshListener);
         mCommunitySDK.fetchMyFollowedFeeds(mLoginRefreshListener);
     }
 
@@ -75,7 +77,12 @@ public class FollowedFeedPresenter extends FeedListPresenter {
     }
 
     @Override
-    public boolean isAddToFeedList() {
+    public boolean isAddToFeedList(FeedItem feedItem) {
+        return true;
+    }
+
+    @Override
+    public boolean isRefreshDataAfterLogin() {
         return true;
     }
 }

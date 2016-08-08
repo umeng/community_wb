@@ -24,29 +24,29 @@
 
 package com.umeng.common.ui.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.umeng.comm.core.utils.CommonUtils;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.adapters.viewholders.NavigationCommand;
 import com.umeng.common.ui.presenter.BaseFragmentPresenter;
 import com.umeng.common.ui.util.FontUtils;
 import com.umeng.common.ui.util.ViewFinder;
 
 
-
 /**
  * Fragment基类,在该类中定义了Fragment的初始化流程.Fragment中首先会通过
- *
+ * <p/>
  * 函数加载该页面的视图,然后通过该页面的根视图构造一个ViewFinder,用户可以通过findViewById很方便的查找子视图。
  * 由于友盟微社区采用MVP架构，因此下一步用户需要覆写{@link #createPresenters()}返回该Fragment对应的Presenter;
  * 再下一步是用户通过{@link #initWidgets()} 初始化各个子视图,如果有一些事件处理则通过
  * {@link #initEventHandlers()}处理。
- * 
+ *
  * @param <T> 该Fragment加载的数据类型,例如Feed流列表的类型为List<FeedItem>
  * @param <P> 继承自BaseFragmentPresenter基类的Presenter类型
  */
@@ -68,15 +68,25 @@ public abstract class BaseFragment<T, P extends BaseFragmentPresenter<T>> extend
      * 该页面对应的Presenter
      */
     protected P mPresenter;
+    protected FragmentManager mFragmentManager = null;
+    protected NavigationCommand command;
+    // feedlist需要保存command对象，否则进程恢复后，command对象为null，crash
+    private static final String KEY_NAVIGATION_COMMEND = "navigation_command";
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                                   Bundle savedInstanceState) {
+
+        // 恢复进程 恢复command对象
+        if (savedInstanceState != null) {
+            command = (NavigationCommand) savedInstanceState.getSerializable(KEY_NAVIGATION_COMMEND);
+        }
+
         CommonUtils.saveComponentImpl(getActivity());// 注意此处必须保存登录组件的信息
         mLayoutInflater = inflater;
         mRootView = mLayoutInflater.inflate(getFragmentLayout(), container, false);
         mViewFinder = new ViewFinder(mRootView);
-        if(mPresenter == null){
+        if (mPresenter == null) {
             mPresenter = createPresenters();
         }
         initWidgets();
@@ -87,14 +97,25 @@ public abstract class BaseFragment<T, P extends BaseFragmentPresenter<T>> extend
             mPresenter.attach(getActivity());
         }
         // using tag to find action bar not id
-        View v = mRootView.findViewWithTag(ResFinder.getString("umeng_comm_actionbar_tag"));
-        if(v!=null){
-        if(isShowActionbar()){
-            v.setVisibility(View.VISIBLE);
-        }else{
-            v.setVisibility(View.GONE);
-        }}
+        View v = mRootView.findViewById(ResFinder.getId("umeng_comm_actionbar_fixed_id"));
+        if (v != null) {
+            if (isShowActionbar()) {
+                v.setVisibility(View.VISIBLE);
+            } else {
+                v.setVisibility(View.GONE);
+            }
+        }
         return mRootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_NAVIGATION_COMMEND, command);
+    }
+
+    public void setNavigation(NavigationCommand command) {
+        this.command = command;
     }
 
     public boolean isShowActionbar() {
@@ -128,7 +149,7 @@ public abstract class BaseFragment<T, P extends BaseFragmentPresenter<T>> extend
     /**
      * 创建该Fragment对应的Presenter,其中Presenter可以有多个，但是返回的Presenter只有一个,
      * 返回的Presenter赋值给了mPresenter变量
-     * 
+     *
      * @return
      */
     protected P createPresenters() {

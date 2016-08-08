@@ -40,10 +40,9 @@ public class ActiveUserViewHolder extends ViewHolder {
     public RoundImageView mImageView;
     public TextView mUserNameTextView;
     public ToggleButton mToggleButton;
-//    public ImageView mGenderImageView;
     public TextView mMsgFansTextView;
     public View mView;
-
+    public TextView mUserDistance;
     @Override
     protected int getItemLayout() {
         return ResFinder.getLayout("umeng_comm_active_user_item");
@@ -62,5 +61,6 @@ public class ActiveUserViewHolder extends ViewHolder {
                 .getId("umeng_comm_active_user_msg"));
         mView = findViewById(ResFinder
                 .getId("umeng_commm_active_user_layout"));
+        mUserDistance = findViewById(ResFinder.getId("umeng_comm_user_distance"));
     }
 }

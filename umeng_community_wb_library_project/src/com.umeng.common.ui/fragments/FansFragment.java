@@ -30,6 +30,7 @@ import com.umeng.comm.core.beans.CommConfig;
 import com.umeng.comm.core.beans.CommUser;
 import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.utils.ResFinder;
+import com.umeng.common.ui.presenter.impl.ActiveUserFgPresenter;
 import com.umeng.common.ui.presenter.impl.FansFgPresenter;
 import com.umeng.common.ui.presenter.impl.FollowedUserFgPresenter;
 
@@ -41,38 +42,18 @@ import java.util.List;
 public class FansFragment extends FollowedUserFragment {
 
     @Override
-    protected void initWidgets() {
-        super.initWidgets();
-        mBaseView.setEmptyViewText(ResFinder.getString("umeng_comm_no_fans"));
-    }
-
-    @Override
-    protected FollowedUserFgPresenter createPresenters() {
+    protected ActiveUserFgPresenter createPresenters() {
         String uid = getArguments().getString(Constants.USER_ID_KEY);
         return new FansFgPresenter(this, uid);
     }
 
-    public static FansFragment newFansFragment(String uid) {
-        FansFragment fansFragment = new FansFragment();
+    public static FansFragment newFanFragment(String uid) {
+        FansFragment followedUserFragment = new FansFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.USER_ID_KEY, uid);
-        fansFragment.mUserId = uid;
-        fansFragment.setArguments(bundle);
-        return fansFragment;
+        followedUserFragment.setArguments(bundle);
+        followedUserFragment.mUserId = uid;
+        return followedUserFragment;
     }
 
-    @Override
-    public void updateFollowedState(String uId, boolean followedState) {
-        super.updateFollowedState(uId, followedState);
-        if(mUserId.equals(uId)){
-            List<CommUser> data = mAdapter.getDataSource();
-            if(followedState){
-                data.remove(CommConfig.getConfig().loginedUser);
-                data.add(0,CommConfig.getConfig().loginedUser);
-            }else{
-                data.remove(CommConfig.getConfig().loginedUser);
-            }
-            mAdapter.notifyDataSetChanged();
-        }
-    }
 }

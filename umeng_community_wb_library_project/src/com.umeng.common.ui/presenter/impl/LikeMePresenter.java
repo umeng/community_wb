@@ -48,8 +48,8 @@ public class LikeMePresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
-
+    public void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
         mCommunitySDK.fetchLikedRecords(CommConfig.getConfig().loginedUser.id,
                 new SimpleFetchListener<LikeMeResponse>() {
 
@@ -60,6 +60,9 @@ public class LikeMePresenter extends FeedListPresenter {
 
                     @Override
                     public void onComplete(LikeMeResponse response) {
+                        // 更新加载状态
+                        setLoadingState(false);
+
                         if(NetworkUtils.handleResponseAll(response) ){
                             mFeedView.onRefreshEnd();
                             return ;
@@ -91,10 +94,21 @@ public class LikeMePresenter extends FeedListPresenter {
             mFeedView.onRefreshEnd();
             return;
         }
+
+        // 设置加载状态，必须在真正的请求之前设置，否则会出现bug
+        if (isLoading()) {
+            return;
+        } else {
+            setLoadingState(true);
+        }
+
         mCommunitySDK.fetchNextPageData(mNextPageUrl, LikeMeResponse.class,
                 new SimpleFetchListener<LikeMeResponse>() {
                     @Override
                     public void onComplete(LikeMeResponse response) {
+                        // 更新加载状态
+                        setLoadingState(false);
+
                         if (NetworkUtils.handleResponseAll(response)) {
                             if ( response.errCode == ErrorCode.NO_ERROR ) {
                                 mNextPageUrl = "";

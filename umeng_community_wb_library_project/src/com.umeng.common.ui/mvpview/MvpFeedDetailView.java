@@ -26,7 +26,7 @@ package com.umeng.common.ui.mvpview;
 /**
  * Feed Detail View
  */
-public interface MvpFeedDetailView{
+public interface MvpFeedDetailView extends MvpCommentView, MvpLikeView {
 
     public void fetchLikesComplete(String nextUrl);
 
@@ -36,5 +36,5 @@ public interface MvpFeedDetailView{
 
     public void showOwnerComment(boolean result);
 
-
+    public void updateForwardCount(int count);
 }

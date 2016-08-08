@@ -2,6 +2,7 @@ package com.umeng.common.ui.adapters;
 
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.umeng.comm.core.utils.DeviceUtils;
 
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.common.ui.colortheme.ColorQueque;
+import com.umeng.common.ui.configure.FindCell;
 
 import java.util.ArrayList;
 
@@ -26,11 +28,12 @@ import java.util.ArrayList;
  */
 public class MyAdapterInFind extends BaseAdapter{
     Context context;
-    ArrayList<String> list;
+    ArrayList<FindCell> list;
     private int unReadcount;
-    public MyAdapterInFind(Context context,ArrayList<String> list){
+    public MyAdapterInFind(Context context,ArrayList<FindCell> list){
         this.context = context;
         this.list = list;
+
     }
     @Override
     public int getCount() {
@@ -40,7 +43,7 @@ public class MyAdapterInFind extends BaseAdapter{
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return list.get(position);
     }
 
     public void setUnReadcount(int unReadcount) {
@@ -79,13 +82,13 @@ public class MyAdapterInFind extends BaseAdapter{
         if (convertView ==null){
             convertView =  LayoutInflater.from(context).inflate(ResFinder.getLayout("umeng_comm_my_adapter"), null);
         }
-        String name = list.get(position);
+        FindCell cell = list.get(position);
         ImageView icon = (ImageView)convertView.findViewById(ResFinder.getId("umeng_comm_item_icon"));
-        icon.setImageDrawable(ColorQueque.getDrawable(getIconName(name)));
+        icon.setImageDrawable(ColorQueque.getDrawable(cell.drawable));
         TextView tv = (TextView)convertView.findViewById(ResFinder.getId("umeng_comm_my_tv"));
-        tv.setText(name);
-        convertView.setTag(name);
-        if (name.equals(ResFinder.getString("umeng_comm_user_notification"))){
+        tv.setText(cell.name);
+        convertView.setTag(cell.style);
+        if (cell.style.equals("umeng_comm_user_notification")){
             View redPoint = convertView.findViewById(ResFinder.getId("umeng_comm_notify_badge_view"));
                     if (unReadcount > 0) {
             if (CommonUtils.isLogin(context)) {
@@ -119,6 +122,8 @@ public class MyAdapterInFind extends BaseAdapter{
         } else if(name.equals(ResFinder.getString("umeng_comm_recommend_user"))){
             return "umeng_comm_recommend_user_icon";
         } else if(name.equals(ResFinder.getString("umeng_comm_recommend_topic"))){
+            return "umeng_comm_recommend_topic_icon";
+        }else if(name.equals(ResFinder.getString("umeng_comm_setting"))){
             return "umeng_comm_recommend_topic_icon";
         }
         return "umeng_comm_mypics_icon";

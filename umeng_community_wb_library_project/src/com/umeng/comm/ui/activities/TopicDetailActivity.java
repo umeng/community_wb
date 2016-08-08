@@ -31,12 +31,16 @@ import com.umeng.comm.core.constants.Constants;
 import com.umeng.comm.core.listeners.Listeners.OnResultListener;
 import com.umeng.comm.core.utils.ResFinder;
 import com.umeng.comm.core.utils.ResFinder.ResType;
-import com.umeng.comm.ui.fragments.ActiveUserFragment;
-import com.umeng.comm.ui.fragments.HotTopicFeedFragment;
-import com.umeng.comm.ui.fragments.LatestTopicFeedFragment;
-import com.umeng.comm.ui.fragments.RecommendTopicFeedFragment;
-import com.umeng.comm.ui.fragments.TopicFeedFragment;
+import com.umeng.comm.ui.adapters.viewholders.NavigationCommandImpl;
 import com.umeng.common.ui.activities.TopicDetailBaseActivity;
+import com.umeng.common.ui.configure.TopicItem;
+import com.umeng.common.ui.configure.parseJson;
+import com.umeng.common.ui.fragments.ActiveUserFragment;
+import com.umeng.common.ui.fragments.HotTopicFeedFragment;
+import com.umeng.common.ui.fragments.LastestTopicFeedFragment;
+import com.umeng.common.ui.fragments.RecommendTopicFeedFragment;
+import com.umeng.common.ui.fragments.TopicFeedFragment;
+import com.umeng.common.ui.presenter.impl.LatestTopicFeedPresenter;
 
 
 /**
@@ -47,22 +51,62 @@ public class TopicDetailActivity extends TopicDetailBaseActivity {
     /**
      * 话题详情的Fragment
      */
-    private TopicFeedFragment mDetailFragment;
-    private ActiveUserFragment mActiveUserFragment;
-    private HotTopicFeedFragment hotTopicFeedFragment;
-    private RecommendTopicFeedFragment recommendTopicFeedFragment;
-    private LatestTopicFeedFragment lastestTopicFeedFragment;
-
+//    private TopicFeedFragment mDetailFragment;
+//    private ActiveUserFragment mActiveUserFragment;
+//    private HotTopicFeedFragment hotTopicFeedFragment;
+//    private RecommendTopicFeedFragment recommendTopicFeedFragment;
+//    private LastestTopicFeedFragment lastestTopicFeedFragment;
 
 
 
     @Override
     protected void initTitles() {
-        mTitles = getResources().getStringArray(
-                ResFinder.getResourceId(ResType.ARRAY, "umeng_comm_topic_detail_tabs"));
+        if (parseJson.topicItems.size() == 0) {
+            mTitles = getResources().getStringArray(
+                    ResFinder.getResourceId(ResType.ARRAY, "umeng_comm_topic_detail_tabs"));
+
+        }
+        else {
+            mTitles = new String[parseJson.topicItems.size()];
+            for (int i = 0 ;i<mTitles.length;i++){
+                mTitles[i] = parseJson.topicItems.get(i).title;
+            }
+        }
+        command = new NavigationCommandImpl(this);
+        initFragment();
+
     }
 
+    public void initFragment(){
+        if (parseJson.topicItems.size() == 0){
+            TopicFeedFragment mDetailFragment = TopicFeedFragment.newTopicFeedFrmg(mTopic);
+            mDetailFragment.setNavigation(command);
+            mDetailFragment.setOnAnimationListener(mListener);
+            LastestTopicFeedFragment lastestTopicFeedFragment = LastestTopicFeedFragment.newTopicFeedFrmg(mTopic);
+            lastestTopicFeedFragment.setNavigation(command);
+            lastestTopicFeedFragment.setOnAnimationListener(mListener);
+            RecommendTopicFeedFragment recommendTopicFeedFragment = RecommendTopicFeedFragment.newTopicFeedFrmg(mTopic);
+            recommendTopicFeedFragment.setNavigation(command);
+            recommendTopicFeedFragment.setOnAnimationListener(mListener);
+            HotTopicFeedFragment hotTopicFeedFragment = HotTopicFeedFragment.newTopicFeedFrmg(mTopic);
+            hotTopicFeedFragment.setNavigation(command);
+            hotTopicFeedFragment.setOnAnimationListener(mListener);
+            ActiveUserFragment mActiveUserFragment = ActiveUserFragment.newActiveUserFragment(mTopic);
+            mActiveUserFragment.setNavigation(command);
+            fragments.clear();
+            fragments.add(mDetailFragment);
+            fragments.add(lastestTopicFeedFragment);
+            fragments.add(recommendTopicFeedFragment);
+            fragments.add(hotTopicFeedFragment);
+            fragments.add(mActiveUserFragment);
+        }else {
+            fragments.clear();
+            for(TopicItem item:parseJson.topicItems){
+                fragments.add(getFragmentByname(item));
+            }
+        }
 
+    }
 
     @Override
     protected int getLayout() {
@@ -85,36 +129,8 @@ public class TopicDetailActivity extends TopicDetailBaseActivity {
      * @return
      */
     protected Fragment getFragment(int pos) {
-        if (pos == 0) {
-            if (mDetailFragment == null) {
-                mDetailFragment = TopicFeedFragment.newTopicFeedFrmg(mTopic);
-            }
-            mDetailFragment.setOnAnimationListener(mListener);
-            return mDetailFragment;
-        } else if (pos == 1) {
-            if (lastestTopicFeedFragment == null) {
-                lastestTopicFeedFragment = LatestTopicFeedFragment.newTopicFeedFrmg(mTopic);
-            }
-            lastestTopicFeedFragment.setOnAnimationListener(mListener);
-            return lastestTopicFeedFragment;
-        }else if (pos == 2) {
-            if (recommendTopicFeedFragment == null) {
-                recommendTopicFeedFragment = RecommendTopicFeedFragment.newTopicFeedFrmg(mTopic);
-            }
-            recommendTopicFeedFragment.setOnAnimationListener(mListener);
-            return recommendTopicFeedFragment;
-        }else if (pos == 3) {
-            if (hotTopicFeedFragment == null) {
-                hotTopicFeedFragment = HotTopicFeedFragment.newTopicFeedFrmg(mTopic);
-            }
-            hotTopicFeedFragment.setOnAnimationListener(mListener);
-            return hotTopicFeedFragment;
-        }else if (pos == 4) {
-            if (mActiveUserFragment == null) {
-                mActiveUserFragment = ActiveUserFragment.newActiveUserFragment(mTopic);
-            }
-            mActiveUserFragment.setOnAnimationListener(mListener);
-            return mActiveUserFragment;
+        if (pos<fragments.size()){
+            return fragments.get(pos);
         }
         return null;
     }

@@ -104,6 +104,8 @@ public class SearchPresenter extends FeedListPresenter {
 
                     @Override
                     public void onComplete(FeedsResponse response) {
+                        setLoadingState(false);
+                        mFeedView.onRefreshEnd();
                         if (response.errCode == ErrorCode.UNLOGIN_ERROR){
                             LoginHelper.UnLogin((Activity) mContext, new LoginListener() {
                                 @Override
@@ -180,7 +182,8 @@ public class SearchPresenter extends FeedListPresenter {
     }
 
     @Override
-    public void loadDataFromServer() {
+    protected void loadDataOnRefresh() {
+        super.loadDataOnRefresh();
     }
 
     @Override

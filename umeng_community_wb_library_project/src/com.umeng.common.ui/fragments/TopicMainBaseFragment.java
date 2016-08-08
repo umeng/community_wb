@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.umeng.comm.core.utils.ResFinder;
 
+import com.umeng.common.ui.configure.MainTopicItem;
 import com.umeng.common.ui.configure.parseJson;
 
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ public abstract class TopicMainBaseFragment extends Fragment {
     public View mRootView;
     public TextView button1,button3,button4;
     protected View.OnClickListener switchListener;
-
+    protected ArrayList<MainTopicItem> list = new ArrayList<MainTopicItem>();
     public void initSwitchView(){
+
         if (topicBaseFragments.size()==1){
             button1 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_one"));
             button3 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_three"));
@@ -40,10 +42,10 @@ public abstract class TopicMainBaseFragment extends Fragment {
             button1 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_one"));
             button3 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_three"));
             button4 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_four"));
-            if (parseJson.topic.size() == 2){
+            if (list.size() == 2){
 
-                button1.setText(parseJson.topic.get(0));
-                button4.setText(parseJson.topic.get(1));
+                button1.setText(list.get(0).title);
+                button4.setText(list.get(1).title);
             }
             button3.setVisibility(View.GONE);
             button1.setOnClickListener(switchListener);
@@ -54,16 +56,16 @@ public abstract class TopicMainBaseFragment extends Fragment {
             button1 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_one"));
             button3 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_three"));
             button4 = (TextView)mRootView.findViewById(ResFinder.getId("umeng_switch_button_four"));
-            if (parseJson.topic.size() == 3){
+            if (list.size() == 3){
 
-                button1.setText(parseJson.topic.get(0));
-                button3.setText(parseJson.topic.get(1));
-                button4.setText(parseJson.topic.get(2));
+                button1.setText(list.get(0).title);
+                button3.setText(list.get(1).title);
+                button4.setText(list.get(2).title);
             }
             button1.setOnClickListener(switchListener);
             button3.setOnClickListener(switchListener);
             button4.setOnClickListener(switchListener);
-            if (parseJson.ttc.size()==0){
+            if (list.size()==0){
                 button4.setSelected(true);
             }else {
                 button1.setSelected(true);

@@ -49,15 +49,17 @@ import com.umeng.common.ui.listener.LikeonClickListener;
 public class ActiveUserAdapter extends
         CommonAdapter<CommUser, ActiveUserViewHolder> {
 
-    private String mDynamicStr = ResFinder.getString("umeng_comm_user_post_dynamic");
-    private String mFansStr = ResFinder.getString("umeng_comm_fans_num");
+    protected String mDynamicStr = ResFinder.getString("umeng_comm_user_post_dynamic");
+    protected String mFansStr = ResFinder.getString("umeng_comm_fans_num");
 
-    private RecommendTopicAdapter.FollowListener<CommUser> mFollowListener;
-    private UMImageLoader mImageLoader;
+    protected RecommendTopicAdapter.FollowListener<CommUser> mFollowListener;
+    protected UMImageLoader mImageLoader;
 
-    private static final String DIVIDER = "       ";
-    private LikeonClickListener likeonClickListener;
-    private boolean isFromFindPage;// 是否来自于发现页面。如果来自发现页面，则需要单独的逻辑处理
+    protected static final String DIVIDER = "       ";
+    protected LikeonClickListener likeonClickListener;
+    protected boolean isFromFindPage;// 是否来自于发现页面。如果来自发现页面，则需要单独的逻辑处理
+
+    private boolean isShowFollowBtn = true;
 
     /**
      * @param context
@@ -89,18 +91,24 @@ public class ActiveUserAdapter extends
         String genderRes;
         if (user.gender == Gender.MALE) {
             genderRes = "umeng_comm_male_icon";//umeng_comm_gender_male
-//            genderResId = ResFinder.getResourceId(ResType.DRAWABLE, "umeng_comm_gender_male");
         } else {
             genderRes = "umeng_comm_female_icon";//umeng_comm_gender_female
-//            genderResId = ResFinder.getResourceId(ResType.DRAWABLE, "umeng_comm_gender_female");
-        }
-        viewHolder.mToggleButton.setBackgroundDrawable(ColorQueque.getDrawable("umeng_comm_focus_togglebutton_bg"));
-        viewHolder.mToggleButton.setTextOn("");
-        viewHolder.mToggleButton.setTextOff("");
 
-        Drawable genderImg = ColorQueque.getDrawable(genderRes);
-        genderImg.setBounds(0, 0, CommonUtils.dip2px(mContext, 10), CommonUtils.dip2px(mContext, 10));
-        viewHolder.mUserNameTextView.setCompoundDrawables(null, null, genderImg, null);
+        }
+        if (isShowFollowBtn) {
+            viewHolder.mToggleButton.setBackgroundDrawable(ColorQueque.getDrawable("umeng_comm_focus_togglebutton_bg"));
+            viewHolder.mToggleButton.setTextOn("");
+            viewHolder.mToggleButton.setTextOff("");
+            viewHolder.mToggleButton.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.mToggleButton.setVisibility(View.GONE);
+        }
+
+        if (isShowUserGender()) {
+            Drawable genderImg = ColorQueque.getDrawable(genderRes);
+            genderImg.setBounds(0, 0, CommonUtils.dip2px(mContext, 10), CommonUtils.dip2px(mContext, 10));
+            viewHolder.mUserNameTextView.setCompoundDrawables(null, null, genderImg, null);
+        }
 
         // 粉丝数
         String text = buildMsgFansStr(user);
@@ -115,7 +123,7 @@ public class ActiveUserAdapter extends
 
     /**
      * 是否来自于发现页面</br>
-     * 
+     *
      * @param fromFindPage
      */
     public void setFromFindPage(boolean fromFindPage) {
@@ -127,7 +135,7 @@ public class ActiveUserAdapter extends
     }
 
     public void setFollowStatus(final ActiveUserViewHolder viewHolder, final CommUser user,
-            boolean status) {
+                                boolean status) {
         viewHolder.mToggleButton.setChecked(status);
         viewHolder.mToggleButton.setOnClickListener(new OnClickListener() {
 
@@ -144,28 +152,12 @@ public class ActiveUserAdapter extends
             return;
         }
         rootView.setOnClickListener(
-//                new Listeners.LoginOnViewClickListener() {
-//
-//            @Override
-//            protected void doAfterLogin(View v) {
-//                Intent intent = new Intent();
-//                ComponentName componentName = new ComponentName(mContext,
-//                        UserInfoActivity.class);
-//                intent.setComponent(componentName);
-//                intent.putExtra(Constants.TAG_USER, user);
-//                ((Activity) mContext).startActivity(intent);
-//            }
-//        }//// TODO: 16/1/22 fanshe 
+
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         likeonClickListener.onClickListener(user);
-//                                        Intent intent = new Intent();
-//                ComponentName componentName = new ComponentName(mContext,
-//                        UserInfoActivity.class);
-//                intent.setComponent(componentName);
-//                intent.putExtra(Constants.TAG_USER, user);
-//                ((Activity) mContext).startActivity(intent);
+
                     }
                 }
         );
@@ -175,12 +167,11 @@ public class ActiveUserAdapter extends
         this.likeonClickListener = likeonClickListener;
     }
 
-    private String buildMsgFansStr(CommUser user) {
+    protected String buildMsgFansStr(CommUser user) {
         StringBuilder builder = new StringBuilder(mDynamicStr).append(" ");
         int feedCount = user.feedCount;
         String feedCountStr = CommonUtils.getLimitedCount(feedCount);
         builder.append(feedCountStr);
-
         builder.append(DIVIDER).append(mFansStr);
 
         int fansCount = user.fansCount;
@@ -189,4 +180,21 @@ public class ActiveUserAdapter extends
         return builder.toString();
     }
 
+    /**
+     * 是否显示用户性别图标
+     *
+     * @return
+     */
+    protected boolean isShowUserGender() {
+        return true;
+    }
+
+    /**
+     * 设置是否显示加关注按钮
+     *
+     * @param isShowFollowBtn
+     */
+    public void isShowFollowBtn(boolean isShowFollowBtn) {
+        this.isShowFollowBtn = isShowFollowBtn;
+    }
 }

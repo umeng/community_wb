@@ -77,9 +77,7 @@ public class ReceivedCommentViewHolder extends ViewHolder {
 
     private ArrayMap<String, CommUser> mSourceFeedCreators = new ArrayMap<String, CommUser>();
 
-    private Class mUserInfoClass;
-    private Class mTopicDetailClassName;
-    private Class mFeedDetailClassName;
+    private NavigationCommand mNavigationCommand;
 
     private boolean isParseTopicAndUser = true;
 
@@ -94,16 +92,8 @@ public class ReceivedCommentViewHolder extends ViewHolder {
         initWidgets();
     }
 
-    public void setUserInfoClassName(Class userInfoClassName) {
-        this.mUserInfoClass = userInfoClassName;
-    }
-
-    public void setTopicDetailClassName(Class topicDetailClassName) {
-        this.mTopicDetailClassName = topicDetailClassName;
-    }
-
-    public void setFeedDetailClassName(Class feedDetailClassName) {
-        this.mFeedDetailClassName = feedDetailClassName;
+    public void setNavigationCommand(NavigationCommand command) {
+        mNavigationCommand = command;
     }
 
     @Override
@@ -392,18 +382,14 @@ public class ReceivedCommentViewHolder extends ViewHolder {
     }
 
     private void startUserInfoActivity(CommUser user) {
-        if (mUserInfoClass != null) {
-            Intent intent = new Intent(mContext, mUserInfoClass);
-            intent.putExtra(Constants.TAG_USER, user);
-            mContext.startActivity(intent);
+        if (mNavigationCommand != null) {
+            mNavigationCommand.navigateToUseProfile(user);
         }
     }
 
     private void startTopicDetailActivity(Topic topic) {
-        if (mTopicDetailClassName != null) {
-            Intent intent = new Intent(mContext, mTopicDetailClassName);
-            intent.putExtra(Constants.TAG_TOPIC, topic);
-            mContext.startActivity(intent);
+        if (mNavigationCommand != null) {
+            mNavigationCommand.navigateToTopicDetail(topic);
         }
     }
 
@@ -414,13 +400,9 @@ public class ReceivedCommentViewHolder extends ViewHolder {
             ToastMsg.showShortMsgByResName("umeng_comm_feed_deleted");
             return;
         }
-        if (mFeedDetailClassName != null) {
-            Intent intent = new Intent(mContext, mFeedDetailClassName);
-            String commentId = mFeedItem.sourceFeed.extraData.getString(HttpProtocol.COMMENT_ID_KEY);
-            mFeedItem.sourceFeed.extraData.clear();
-            intent.putExtra(Constants.FEED, mFeedItem.sourceFeed);
-            mContext.startActivity(intent);
-            mFeedItem.sourceFeed.extraData.putString(HttpProtocol.COMMENT_ID_KEY, commentId);
+
+        if (mNavigationCommand != null) {
+            mNavigationCommand.navigateToFeedDetail(mFeedItem.sourceFeed,true);
         }
     }
 
@@ -429,18 +411,9 @@ public class ReceivedCommentViewHolder extends ViewHolder {
             ToastMsg.showShortMsgByResName("umeng_comm_invalid_feed");
             return;
         }
-        if (mFeedDetailClassName != null) {
-            Intent intent = new Intent(mContext, mFeedDetailClassName);
-            intent.setExtrasClassLoader(ImageItem.class.getClassLoader());
-            intent.putExtra(Constants.FEED, feedItem);
-            String commentId = feedItem.extraData.getString(HttpProtocol.COMMENT_ID_KEY);
-            // 传递评论的id
-            intent.putExtra(HttpProtocol.COMMENT_ID_KEY, commentId);
-//            Intent intent = new Intent(getActivity(), FeedDetailActivity.class);
-//            intent.putExtra(Constants.TAG_FEED, feedItem);
-            intent.putExtra(Constants.TAG_IS_COMMENT, true);
-            intent.putExtra(Constants.TAG_IS_SCROLL, true);
-            mContext.startActivity(intent);
+
+        if (mNavigationCommand != null) {
+            mNavigationCommand.navigateToReplayComment(feedItem);
         }
     }
 
@@ -451,7 +424,7 @@ public class ReceivedCommentViewHolder extends ViewHolder {
         }
         if (temp == null) {
             temp = new FeedItem();
-            if(isParseTopicAndUser){
+            if (isParseTopicAndUser) {
                 temp.topics = feedItem.topics;
                 temp.atFriends = feedItem.atFriends;
             }

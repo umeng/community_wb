@@ -106,6 +106,7 @@ public abstract class CommonAdapter<T, H extends ViewParser> extends BaseAdapter
         }
     }
 
+
     public void addDatasOnly(List<T> newDatas) {
         mDataSet.addAll(newDatas);
     }
